@@ -6,10 +6,13 @@ import ReactDOMServer from 'react-dom/server';
 import { StaticRouter } from 'react-router';
 import Helmet from 'react-helmet';
 
-import App from './src/app';
+import App from '../src/app'
+import mongoose from './db/mongoose';
+import {usersModel} from './models/userModel';
 
 const app = express();
 const port = process.env.PORT || 4000;
+
 app.use(bodyparser.json());
 app.use(express.static('build/public'));
 
@@ -24,6 +27,21 @@ app.get('*', (req, res) => {
     res.send(template);
 });
 
+
+app.get('/user', (request, response) => {
+    var user = new usersModel({
+        username: 'Dhilip',
+        password: 'dhilipdhili',
+        emailId: 'dhilip1211@gmi.com'
+    });
+    user.save().then((doc) => {
+        response.send(doc);
+    }, (e) => {
+        response.status(404).send(e);
+    })
+});
+
+
 const loadHtml = (content) => {
     const helmet = Helmet.renderStatic();
     return (`
@@ -33,9 +51,7 @@ const loadHtml = (content) => {
                 ${helmet.title.toString()}
             </head>
             <body>
-                <div id="root">
-                    ${content}
-                </div>
+                <div id="root">${content}</div>
                 <script src="client_bundle.js"></script>
             </body>
         </html>`);
