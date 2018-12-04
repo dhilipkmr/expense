@@ -10,7 +10,7 @@
     "webpack:start": "nodemon --watch build --exec node build/bundle.js",
     "dev": "npm-run-all --parallel webpack:*",
     "build": "webpack --mode=production --config webpack.client.js && webpack --config webpack.server.js",
-    "start": "node bundle/bundle.js"
+    "start": "node build/bundle.js"
   },
   "author": "Dhilip",
   "license": "ISC",
