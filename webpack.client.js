@@ -1,4 +1,5 @@
 const path = require('path');
+const CleanWebpackPlugin = require('clean-webpack-plugin');
 
 module.exports = {
     target: 'node',
@@ -26,5 +27,14 @@ module.exports = {
             }
         ]
     },
-    mode: 'development'
+    mode: 'development',
+    devtool: 'eval-source-map',
+    devServer: {
+        contentBase: './dist',
+        hot: true,
+        open: true
+    },
+    plugins: [
+        new CleanWebpackPlugin('dist')
+      ]
 }

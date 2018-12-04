@@ -9,8 +9,8 @@
     "webpack:server": "webpack --config webpack.server.js --watch",
     "webpack:start": "nodemon --watch build --exec node build/bundle.js",
     "dev": "npm-run-all --parallel webpack:*",
-    "build": "webpack --config webpack.client.js && webpack --config webpack.server.js",
-    "start": "node build/bundle.js"
+    "build": "webpack --mode=production --config webpack.client.js && webpack --config webpack.server.js",
+    "start": "NODE_ENV=development webpack-dev-server --mode=development --hot"
   },
   "author": "Dhilip",
   "license": "ISC",
@@ -26,6 +26,7 @@
     "babel-preset-react": "^6.24.1",
     "babel-preset-stage-0": "^6.24.1",
     "body-parser": "^1.18.3",
+    "clean-webpack-plugin": "^1.0.0",
     "express": "^4.16.4",
     "heroku": "^7.18.10",
     "isomorphic-fetch": "^2.2.1",
@@ -42,6 +43,7 @@
     "thunk": "0.0.1",
     "webpack": "^4.16.5",
     "webpack-cli": "^3.1.0",
+    "webpack-dev-server": "^3.1.10",
     "webpack-node-externals": "^1.7.2"
   },
   "devDependencies": {
