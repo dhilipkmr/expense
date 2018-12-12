@@ -1,5 +1,5 @@
-import 'babel-polyfill'
-import './config/config';
+import 'babel-polyfill';
+import env from './config/config';
 import express from 'express';
 import bodyParser from 'body-parser';
 import React from 'react';
@@ -10,6 +10,7 @@ import Helmet from 'react-helmet';
 import App from '../src/app'
 import mongoose from './db/mongoose';
 import {usersModel} from './models/userModel';
+
 
 const app = express();
 const port = process.env.PORT || 4000;
