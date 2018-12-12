@@ -57,7 +57,7 @@ app.post('/signin', (request, response) => {
      });
  });
 
-app.get('/', (req, res) => {
+app.get('*', (req, res) => {
     const context = {};
     const content = ReactDOMServer.renderToString(
         <StaticRouter>
