@@ -1,6 +1,7 @@
 import 'babel-polyfill'
+import './config/config';
 import express from 'express';
-import bodyparser from 'body-parser';
+import bodyParser from 'body-parser';
 import React from 'react';
 import ReactDOMServer from 'react-dom/server';
 import { StaticRouter } from 'react-router';
@@ -13,8 +14,46 @@ import {usersModel} from './models/userModel';
 const app = express();
 const port = process.env.PORT || 4000;
 
-app.use(bodyparser.json());
+app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.json());
 app.use(express.static('build/public'));
+
+app.post('/signup', (request, response) => {
+   const {username = '', password = '', emailId = ''} = request.body;
+    var user = new usersModel({
+        username: username,
+        password: password,
+        emailId: emailId
+    });
+    usersModel.find({username: username}).then((res)=> {
+        if (res.length > 0) {
+            response.send({error: true, msg: 'Username already Exists'});
+        } else {
+            user.save().then((doc) => {
+                response.send(doc);
+            }, (e) => {
+                response.status(500).send(e);
+            })
+        }
+    }, (e) => {
+        response.send(e);
+        console.log(e);
+    });
+});
+
+app.post('/signin', (request, response) => {
+    const {username = '', password = '', emailId = ''} = request.body;
+     usersModel.find({username: username, password: password}).then((res)=> {
+         if (res.length > 0) {
+             response.send({error: false, msg: 'success'});
+         } else {
+            response.send({error:true, msg: 'No user account found'});
+         }
+     }, (e) => {
+         response.send(e);
+         console.log(e);
+     });
+ });
 
 app.get('*', (req, res) => {
     const context = {};
@@ -28,20 +67,6 @@ app.get('*', (req, res) => {
 });
 
 
-app.get('/user', (request, response) => {
-    var user = new usersModel({
-        username: 'Dhilip',
-        password: 'dhilipdhili',
-        emailId: 'dhilip1211@gmi.com'
-    });
-    user.save().then((doc) => {
-        response.send(doc);
-    }, (e) => {
-        response.status(404).send(e);
-    })
-});
-
-
 const loadHtml = (content) => {
     const helmet = Helmet.renderStatic();
     return (`
@@ -49,6 +74,8 @@ const loadHtml = (content) => {
             <head>
                 ${helmet.meta.toString()}
                 ${helmet.title.toString()}
+                <link rel="stylesheet" type="text/css" href="../src/pages/styles/home.css">
+                <link rel="stylesheet" type="text/css" href="../src/pages/styles/common.css">
             </head>
             <body>
                 <div id="root">${content}</div>

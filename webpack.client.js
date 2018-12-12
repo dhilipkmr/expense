@@ -24,6 +24,8 @@ module.exports = {
                         }]
                     ]
                 }
+            }, {
+                test: /\.css$/
             }
         ]
     },

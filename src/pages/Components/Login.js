@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import Helmet from 'react-helmet';
-import {getUserInfo} from '../ApiCalls/ApiCalls';
+import {signup, signin} from '../apiCalls/ApiCalls';
 
 class Login extends Component {
   constructor(props) {
@@ -23,17 +23,20 @@ class Login extends Component {
   }
 
   signUp() {
-    console.log(this);
+    signup({username: this.state.username, password: this.state.password});
   }
 
   signIn() {
-    const params = [];
-    params.push(encodeURIComponent('username') + '=' + encodeURIComponent(this.state.username));
-    params.push(encodeURIComponent('password') + '=' + encodeURIComponent(this.state.password));
-    const parameters = params.join('&');
-    console.log(this.props);
-    getUserInfo(parameters);
-
+    signin({username: this.state.username, password: this.state.password}).then((resp) => {
+      if (resp.data && !resp.data.error) {
+        console.log(this);
+        this.props.history.push('/home', {});
+      } else {
+        console.log('Failed to SignIn', resp);
+      }
+    }).catch((err) => {
+      console.log('Failed to SignIn', err);
+    });
   }
 
   render() {

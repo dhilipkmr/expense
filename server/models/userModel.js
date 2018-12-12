@@ -9,8 +9,7 @@ export const usersModel = mongoose.model('Users', {
     },
     emailId: {
         type: String,
-        required: true,
-        minlength: 5,
+        required: false,
         trim: true
     },
     password: {

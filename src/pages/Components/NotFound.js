@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 import Helmet from 'react-helmet';
 import {NavLink} from 'react-router-dom';
 
-class Login extends Component {
+class NotFound extends Component {
   constructor(props) {
     super(props);
     this.head = this.head.bind(this);
@@ -40,4 +40,4 @@ class Login extends Component {
     );
   }
 }
-export default Login;
+export default NotFound;

@@ -1,6 +1,7 @@
 import {createStore, applyMiddleware} from 'redux';
+import thunk from 'redux-thunk';
+import {createLogger} from 'redux-logger';
 import Reducers from './Reducers';
-import thunk from 'thunk';
 
 const initialStoreContent = {
   hasLoggedIn: false,
@@ -8,4 +9,8 @@ const initialStoreContent = {
   config: {}
 }
 
-const store = createStore(Reducers, initialStoreContent, applyMiddleware(thunk));
+const loggerMiddleware = createLogger();
+const store = createStore(Reducers, initialStoreContent, applyMiddleware(
+  thunk
+));
+export default store;
