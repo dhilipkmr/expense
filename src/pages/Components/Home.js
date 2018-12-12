@@ -9,7 +9,10 @@ export default class Home extends Component {
 
   render() {
     return (
-      <div className="blueBg">Home Page</div>
+      <div className="container-fluid">
+        <h1>Expense Home</h1>
+        <p></p> 
+      </div>
     );
   }
 }

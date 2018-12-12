@@ -18,6 +18,7 @@ const port = process.env.PORT || 4000;
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 app.use(express.static('build/public'));
+app.use('/styles', express.static('src/pages/styles'));
 
 app.post('/signup', (request, response) => {
    const {username = '', password = '', emailId = ''} = request.body;
@@ -56,7 +57,7 @@ app.post('/signin', (request, response) => {
      });
  });
 
-app.get('*', (req, res) => {
+app.get('/', (req, res) => {
     const context = {};
     const content = ReactDOMServer.renderToString(
         <StaticRouter>
@@ -75,8 +76,10 @@ const loadHtml = (content) => {
             <head>
                 ${helmet.meta.toString()}
                 ${helmet.title.toString()}
-                <link rel="stylesheet" type="text/css" href="../src/pages/styles/home.css">
-                <link rel="stylesheet" type="text/css" href="../src/pages/styles/common.css">
+                <meta name="viewport" content="width=device-width, initial-scale=1.0">
+                <link rel="stylesheet" type="text/css" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css">
+                <link rel="stylesheet" type="text/css" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.bundle.min.js">
+                <link rel="stylesheet" type="text/css" href="/styles/common.css">
             </head>
             <body>
                 <div id="root">${content}</div>
