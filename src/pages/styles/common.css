@@ -1,3 +1,21 @@
-.blueBg {
-  background-image: linear-gradient(to bottom right, #2962FF , #82B1FF);
+*,
+*::after,
+*::before {
+	-moz-box-sizing: border-box;
+  box-sizing: border-box;
+  font-family: 'Open Sans', sans-serif;
 }
+
+.blueBg {
+  background-image: linear-gradient(141deg, #9fb8ad 0%, #1fc8db 51%, #2cb5e8 75%)
+}
+.hidden {
+  display: none;
+}
+.zi1{
+  z-index: 1;
+}
+.zi2{
+  z-index: 2;
+}
+
