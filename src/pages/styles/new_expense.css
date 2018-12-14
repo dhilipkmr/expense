@@ -1,0 +1,42 @@
+.newExpenseContainer {
+  background-color: white;
+  min-height: 70%;
+  margin: 10px;
+  position: fixed;
+  top: 0;
+  margin: 50px;
+  padding-top: 20px;
+  border-radius: 20px;
+  justify-content: space-between;
+  flex-direction: column;
+  display: flex;
+}
+.amountInput {
+  margin-bottom: 10px;
+  text-align: center;
+}
+.categoryInput{ 
+  margin-bottom: 10px;
+  text-align: center;
+}
+.spentDay {
+  text-align: center;
+  margin-bottom: 10px;
+}
+.dayIp {
+  width: 14%;
+  margin: 5px;
+}
+.submitBtn{
+  color: white;
+  background-color: #4688F1;
+  padding: 15px;
+  font-size: 14px;
+}
+.expIncBtns {
+  padding-top: 10px;
+}
+.selectedType{
+background: #4688F1;
+    color: white;
+}

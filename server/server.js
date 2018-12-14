@@ -91,6 +91,7 @@ const loadHtml = (content) => {
                 <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.1.3/js/bootstrap.bundle.min.js">
                 <link rel="stylesheet" type="text/css" href="/styles/common.css">
                 <link rel="stylesheet" type="text/css" href="/styles/home.css">
+                <link rel="stylesheet" type="text/css" href="/styles/new_expense.css">
                 <link href="https://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet">
             </head>
             <body>

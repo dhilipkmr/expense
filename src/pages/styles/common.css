@@ -19,3 +19,17 @@
   z-index: 2;
 }
 
+input[type=text] {
+  background: transparent;
+  border: none;
+  border-bottom: 1px solid #757575;
+}
+input:focus,
+select:focus,
+textarea:focus,
+button:focus {
+    outline: none;
+}
+.textCenter {
+  text-align: center;
+}
