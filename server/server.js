@@ -89,6 +89,6 @@ const loadHtml = (content) => {
 };
 
 app.listen(port, () => {
-    console.log('process.env',process.env);
+    console.log('process.env',port);
     console.log('Server has started on port: ', port);
 });
