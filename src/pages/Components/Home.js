@@ -6,8 +6,19 @@ export default class Home extends Component {
     super(props);
     this.leftMenuClick = this.leftMenuClick.bind(this);
     this.state = {
-      visibleLeftMenu: false,
-      visibleRightMenu: false
+      showWeek: true,
+      showMonth: false,
+      showYear: false,
+    }
+  }
+
+  changeExpenseDayFormat(format) {
+    if (format === 'week') {
+      this.setState({showWeek: true, showMonth: false, showYear: false});
+    } else if (format === 'month') {
+      this.setState({showWeek: false, showMonth: true, showYear: false});
+    } else if (format === 'year') {
+      this.setState({showWeek: false, showMonth: false, showYear: true});
     }
   }
 
@@ -35,7 +46,7 @@ export default class Home extends Component {
   }
 
   render() {
-    // const {visibleLeftMenu = false, visibleRightMenu = false} = this.state;
+    const {showWeek, showMonth, showYear} = this.state;
     return (
       <div className="">
         {this.renderLeftMenuBar()}
@@ -49,9 +60,9 @@ export default class Home extends Component {
               </div>
               <div className="heading">Expense Home</div>
               <div className="expenseDaysBtn">
-                <span className="dayTypeBtn">Week</span>
-                <span className="dayTypeBtn">Month</span>
-                <span className="dayTypeBtn">Year</span>
+                <span className={'dayTypeBtn ' + (showWeek ? 'dayTypeBtn-active' : '')} onClick={() => {this.changeExpenseDayFormat('week')}}>Week</span>
+                <span className={'dayTypeBtn ' + (showMonth ? 'dayTypeBtn-active' : '')} onClick={() => {this.changeExpenseDayFormat('month')}}>Month</span>
+                <span className={'dayTypeBtn ' + (showYear ? 'dayTypeBtn-active' : '')} onClick={() => {this.changeExpenseDayFormat('year')}}>Year</span>
               </div>
             </div>
           </div>
@@ -59,7 +70,7 @@ export default class Home extends Component {
             <div ref="otherHalfLandingTxt">
               <div className="newContainer">
                 <div className="new">
-                  <span className="dayTypeBtn">Add New</span>
+                  <span className="newBtn">Add New</span>
                 </div>
               </div>
             </div>

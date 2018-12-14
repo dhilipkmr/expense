@@ -107,7 +107,7 @@
 }
 
 .dayTypeBtn {
-  color: #5f5e5e;
+  /* color: #5f5e5e;
   background-color: white;
   border-radius: 20px;
   border-color: white;
@@ -115,12 +115,22 @@
   font-size: 14px;
   margin: 5%;
   font-weight: bold;
-  box-shadow: 0 3px 6px 0 rgba(0,0,0,0.3);
+  box-shadow: 0 3px 6px 0 rgba(0,0,0,0.3); */
+  color: white;
+  padding: 6px 7px;
+  font-size: 14px;
+  margin: 5%;
+  font-weight: bold;
+  transition: all 500ms;
 }
-.dayTypeBtn:hover {
+.dayTypeBtn-active {
+  border-bottom: 1px solid white;
+  
+}
+/* .dayTypeBtn:hover {
   box-shadow: 0 6px 12px 0 rgba(0,0,0,0.3);
   cursor: pointer;
-}
+} */
 .newContainer {
   position: fixed;
   right: 0;
@@ -131,4 +141,15 @@
 .new {
   position: relative;
   text-align: center;
+}
+.newBtn {
+  color: #5f5e5e;
+  background-color: white;
+  border-radius: 20px;
+  border-color: white;
+  padding: 6px 15px;
+  font-size: 14px;
+  margin: 5%;
+  font-weight: bold;
+  box-shadow: 0 3px 6px 0 rgba(0,0,0,0.3);
 }
