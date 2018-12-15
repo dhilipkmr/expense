@@ -2,7 +2,10 @@
 /node_modules
 
 # production
-/build
+/build/bundle.js
 
 # misc
 package-lock.json
+.DS_Store
+src/.DS_Store
+src/pages/.DS_Store
