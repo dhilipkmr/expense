@@ -1,4 +1,5 @@
 import mongoose from 'mongoose';
+import expenseSchema from './expenseModel';
 
 export const usersModel = mongoose.model('Users', {
     username: {
@@ -17,5 +18,6 @@ export const usersModel = mongoose.model('Users', {
         required: true,
         minlength: 8,
         trim: true
-    }
+    },
+    expense: [expenseSchema]
 });

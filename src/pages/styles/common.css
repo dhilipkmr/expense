@@ -19,10 +19,10 @@
   z-index: 2;
 }
 
-input[type=text] {
+input[type=text], input[type=number] {
   background: transparent;
   border: none;
-  border-bottom: 1px solid #757575;
+  border-bottom: 1px solid #cccccc;
 }
 input:focus,
 select:focus,

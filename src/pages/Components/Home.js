@@ -6,7 +6,7 @@ export default class Home extends Component {
   constructor(props) {
     super(props);
     this.leftMenuClick = this.leftMenuClick.bind(this);
-    this.addNewExpense = this.addNewExpense.bind(this);
+    this.newExpense = this.newExpense.bind(this);
     this.state = {
       showWeek: true,
       showMonth: false,
@@ -46,8 +46,8 @@ export default class Home extends Component {
     );
   }
 
-  addNewExpense() {
-    this.setState({showNewExpense: true});
+  newExpense(val) {
+    this.setState({showNewExpense: val});
     this.refs.backDrop.classList.toggle('backDrop');
   }
 
@@ -79,7 +79,7 @@ export default class Home extends Component {
               <div ref="otherHalfLandingTxt">
                 <div className="newContainer">
                   <div className="new">
-                    <span className="newBtn" onClick={this.addNewExpense}>Add New</span>
+                    <span className="newBtn" onClick={() => this.newExpense(true)}>Add New</span>
                   </div>
                 </div>
               </div>
@@ -88,7 +88,7 @@ export default class Home extends Component {
         </div>
         {showNewExpense ? 
           <div>
-             <NewExpense />
+             <NewExpense newExpense={this.newExpense}/>
           </div> : null}
       </div>
     );

@@ -26,12 +26,14 @@
 .dayIp {
   width: 14%;
   margin: 5px;
+  text-align: center;
 }
 .submitBtn{
   color: white;
   background-color: #4688F1;
   padding: 15px;
   font-size: 14px;
+  font-weight: bold;
 }
 .expIncBtns {
   padding-top: 10px;
@@ -39,4 +41,11 @@
 .selectedType{
 background: #4688F1;
     color: white;
+}
+
+.errorDiv {
+  color: b71c1c;
+  font-size: 10px;
+  font-weight: 300;
+  letter-spacing: 0.2;
 }

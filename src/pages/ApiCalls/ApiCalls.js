@@ -10,3 +10,7 @@ export const signin = (params) => {
   return axios.post(url, {...params});
 }
 
+export const new_expense = (params) => {
+  const url = '/new_expense/';
+  return axios.post(url, {...params});
+}

@@ -54,6 +54,7 @@ app.post('/signup', (request, response) => {
 
 app.post('/signin', (request, response) => {
     const {username = '', password = '', emailId = ''} = request.body;
+    console.log(request.session.user);
      usersModel.find({username: username, password: password}).then((res)=> {
          if (res.length > 0) {
             request.session.user = username;
@@ -78,6 +79,21 @@ app.get('*', (req, res) => {
     res.send(template);
 });
 
+app.post('/new_expense', (request, response) => {
+    const { amount, category, date, type} = request.body;
+    const newExpense = {amount, category, date, type}
+    usersModel.findOneAndUpdate(
+        { username: 'dhilipk13'},
+        { $push: {expense: newExpense}},
+        function (err, document) {
+            if (err) {
+                console.log('Failed to save new Expense', err);
+            } else {
+                const lastIndex = document._doc.expense.length - 1;
+                response.send({error: false,...document._doc.expense[lastIndex]._doc});
+            }
+        });
+});
 
 const loadHtml = (content) => {
     const helmet = Helmet.renderStatic();
