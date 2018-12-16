@@ -1,7 +1,8 @@
 import mongoose from 'mongoose';
-import expenseSchema from './expenseModel';
+import Expenses from './expenseModel';
 
-export const usersModel = mongoose.model('Users', {
+const Users = mongoose.model('Users', {
+    _id: mongoose.Schema.Types.ObjectId,
     username: {
         type: String,
         required: true,
@@ -19,5 +20,11 @@ export const usersModel = mongoose.model('Users', {
         minlength: 8,
         trim: true
     },
-    expense: [expenseSchema]
+    expense: [
+        {
+            type: mongoose.Schema.Types.ObjectId, 
+            ref: 'Expenses'
+        }
+    ]
 });
+export default Users;

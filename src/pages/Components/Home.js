@@ -9,15 +9,20 @@ export default class Home extends Component {
     this.leftMenuClick = this.leftMenuClick.bind(this);
     this.newExpense = this.newExpense.bind(this);
     this.state = {
-      showWeek: true,
-      showMonth: false,
+      showWeek: false,
+      showMonth: true,
       showYear: false,
       showNewExpense: false
     }
   }
   componentDidMount() {
+    
+  }
+
+  getExpense() {
     get_expense_data().then((resp) => {
       console.log(resp.data);
+      // standing, spent, transactions[name, percent]
       this.setState({...resp.data});
     }, (err) => {
       console.log('Unable to Get Expense Details', err);
@@ -61,8 +66,20 @@ export default class Home extends Component {
   }
 
   clickViewMore(e) {
+    this.getExpense();
     this.refs.svgViewMore.classList.toggle('rotateViewMore');
     this.refs.transactedCard.classList.toggle('showAllTransaction');
+  }
+  renderTransactioncard() {
+    return (
+      <div className="transactedCardInner">
+        <div className="cardInnerheading">
+          <span className="cat_name">Food</span>
+          <span className="cat_percent">75%</span>
+        </div>
+        <div className="progressBar progressBar1 bl textCenter"></div>
+      </div>
+    )
   }
 
   render() {
@@ -94,25 +111,7 @@ export default class Home extends Component {
                 <div>
                   <div ref="transactedCard" className="transactedCard transition2a ">
                     <div className="transactScroller">
-                      <div className="transactedCardInner">
-                        <div className="cardInnerheading">
-                          <span className="cat_name">Food</span>
-                          <span className="cat_percent">75%</span>
-                        </div>
-                        <div className="progressBar progressBar1 bl textCenter">
-                          75%
-                        </div>
-                      </div>
-                      <div className="transactedCardInner">
-                      </div>
-                      <div className="transactedCardInner">
-                      </div>
-                      <div className="transactedCardInner">
-                      </div>
-                      <div className="transactedCardInner">
-                      </div>
-                      <div className="transactedCardInner">
-                      </div>
+                      {this.renderTransactioncard()}
                     </div>
                   </div>
                   <div className="viewMoreArrow" onClick={() => this.clickViewMore()}>

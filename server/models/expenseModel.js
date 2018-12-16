@@ -1,6 +1,11 @@
 import mongoose from 'mongoose';
+import Users from './userModel';
 
-const expenseSchema = new mongoose.Schema({
+const Expenses = mongoose.model('Expenses', {
+  user_id: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Users'
+  },
   amount: {
       type: String,
       required: true,
@@ -9,7 +14,6 @@ const expenseSchema = new mongoose.Schema({
   category: {
       type: String,
       required: true,
-      minlength: 8,
       trim: true,
       default: 'others'
   },
@@ -26,4 +30,4 @@ const expenseSchema = new mongoose.Schema({
     default: Date.now()
   }
 });
-export default expenseSchema;
+export default Expenses;

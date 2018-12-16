@@ -9,9 +9,10 @@ import Helmet from 'react-helmet';
 var session = require('express-session');
 
 import App from '../src/app'
-import mongoose from './db/mongoose';
-import {usersModel} from './models/userModel';
-
+import mongoose1 from './db/mongoose';
+import mongoose from 'mongoose';
+import Users from './models/userModel';
+import Expenses from './models/expenseModel';
 
 const app = express();
 const port = process.env.PORT;
@@ -28,23 +29,24 @@ app.use('/styles', express.static('src/pages/styles'));
 app.use(express.static('src/pages/static'));
 
 app.post('/signup', (request, response) => {
+    // Users.deleteMany({});
    const {username = '', password = '', emailId = ''} = request.body;
-    var user = new usersModel({
+    var user = new Users({
+        _id: mongoose.Types.ObjectId(),
         username: username,
         password: password,
         emailId: emailId
     });
-    usersModel.find({username: username}).then((res)=> {
+    Users.find({username: username}).then((res)=> {
         if (res.length > 0) {
             response.send({error: true, msg: 'Username already Exists'});
         } else {
             user.save().then((doc) => {
-                request.session.user = doc.username;
-                console.log(' doc.username', doc.username);
-                response.send(doc);
+                request.session._userId = doc._id;
+                response.send({error: false, msg: 'Saved Successfully'});
             }, (e) => {
                 response.status(500).send(e);
-            })
+            });
         }
     }, (e) => {
         response.send(e);
@@ -55,9 +57,9 @@ app.post('/signup', (request, response) => {
 app.post('/signin', (request, response) => {
     const {username = '', password = '', emailId = ''} = request.body;
     console.log(request.session.user);
-     usersModel.find({username: username, password: password}).then((res)=> {
+     Users.find({username: username, password: password}).then((res)=> {
          if (res.length > 0) {
-            request.session.user = username;
+            request.session._userId = res[0]._id;
             response.send({error: false, msg: 'success'});
          } else {
             response.send({error:true, msg: 'No user account found'});
@@ -68,36 +70,38 @@ app.post('/signin', (request, response) => {
      });
  });
 
-app.get('*', (req, res) => {
-    const context = {};
-    const content = ReactDOMServer.renderToString(
-        <StaticRouter>
-            <App location={req.url} context={context}/>
-        </StaticRouter>
-    );
-    const template = loadHtml(content);
-    res.send(template);
-});
-
 app.post('/new_expense', (request, response) => {
     const { amount, category, date, type} = request.body;
     const newExpense = {amount, category, date, type}
-    usersModel.findOneAndUpdate(
-        { username: 'dhilipk13'},
-        { $push: {expense: newExpense}},
-        function (err, document) {
-            if (err) {
-                console.log('Failed to save new Expense', err);
-            } else {
-                const lastIndex = document._doc.expense.length - 1;
-                response.send({error: false,...document._doc.expense[lastIndex]._doc});
-            }
-        });
+    var newExpenseInstance = new Expenses({
+        user_id: request.session._userId || "5c1632fa58e9f72d9f93579d",
+        ...newExpense
+    });
+    newExpenseInstance.save().then((doc) => {
+        // request.session.user = doc.username;
+        console.log(' doc.username', doc);
+        response.send(doc);
+    }, (err) => {
+        console.log('Failed to save new Expense', err);
+        response.status(500).send(err);
+    });
+
+    // Users.findOneAndUpdate(
+    //     { username: 'dhilipk13'},
+    //     { $push: {expense: newExpense}},
+    //     function (err, document) {
+    //         if (err) {
+    //             console.log('Failed to save new Expense', err);
+    //         } else {
+    //             const lastIndex = document._doc.expense.length - 1;
+    //             response.send({error: false,...document._doc.expense[lastIndex]._doc});
+    //         }
+    //     });
 });
 
 app.get('/get_expense_data', (request, response) => {
-    usersModel.findOne({ username: 'dhilipk13'}).then((doc) => {
-        response.send({...doc._doc.expense});
+    Expenses.find({ user_id: request.session._userId }).then((doc) => {
+        response.send({...doc[0]._doc});
     }, (err) => {
         console.log('Failed to get Expense Details', err);
     });
@@ -123,6 +127,17 @@ const loadHtml = (content) => {
             </body>
         </html>`);
 };
+
+app.get('*', (req, res) => {
+    const context = {};
+    const content = ReactDOMServer.renderToString(
+        <StaticRouter>
+            <App location={req.url} context={context}/>
+        </StaticRouter>
+    );
+    const template = loadHtml(content);
+    res.send(template);
+});
 
 app.listen(port, () => {
     console.log('process.env',port);
