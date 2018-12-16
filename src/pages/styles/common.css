@@ -33,3 +33,10 @@ button:focus {
 .textCenter {
   text-align: center;
 }
+
+.white {
+  color: white;
+}
+.bl {
+  color: black;
+}

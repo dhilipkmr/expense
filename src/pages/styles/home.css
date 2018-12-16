@@ -2,7 +2,6 @@
   /* background-image: linear-gradient(141deg, #9fb8ad 0%, #1fc8db 51%, #2cb5e8 75%); */
   /* background-image: linear-gradient(to bottom, #2d6bfd, #22c1c3); */
   background-color: #4688F1;
-  height: 50vh;
   border-bottom-left-radius: 15px;
   border-bottom-right-radius: 15px;
   box-shadow: 0 3px 6px 0 rgba(0,0,0,0.3);
@@ -93,6 +92,13 @@
   color: white;
   font-weight: bold;
 }
+.subHeading {
+  font-size: 14px;
+  padding: 10px;
+  text-align: center;
+  color: white;
+  font-weight: bold;
+}
 
 .firstHalfTxt {
   transition: all 500ms;
@@ -120,10 +126,10 @@
   padding: 6px 7px;
   font-size: 14px;
   margin: 5%;
-  font-weight: bold;
-  transition: all 500ms;
+  /* transition: all 500ms; */
 }
 .dayTypeBtn-active {
+  font-weight: bold;
   border-bottom: 1px solid white;
   
 }
@@ -152,4 +158,111 @@
   margin: 5%;
   font-weight: bold;
   box-shadow: 0 3px 6px 0 rgba(0,0,0,0.3);
+}
+
+.transactedCard {
+  max-height: 25%;
+  overflow: hidden;
+  background-color: white;
+  border-radius: 10px;
+  padding: 2%;
+  margin: 2% 4%;
+  box-shadow: 0 4px 8px 0 rgba(0,0,0,0.4)
+
+}
+.transactedCardInner {
+  min-height: 10%;
+  background-color: white;
+  border-radius: 10px;
+  margin: 2% 1%;
+  box-shadow: 0 3px 6px 0 rgba(0,0,0,0.3);
+}
+
+.viewMoreArrow {
+  text-align: center;
+  padding-top: 10px;
+}
+.viewMoreArrow path {
+  fill: white;
+}
+.viewMoreArrow:hover {
+  cursor: pointer;
+}
+.rotateViewMore {
+  transform: rotateZ(180deg);
+}
+
+.showAllTransaction {
+  max-height: 60vh;
+  overflow: scroll;
+}
+
+.progressBar {
+  height: 7px;
+  color: #fff;
+  margin: 10px;
+  position: relative;
+  font-size: 14px;
+  min-width: 200px;
+  padding-top: 5px;
+  padding-bottom: 5px;
+}
+
+.progressBar:before {
+  content: '';
+  position: absolute;
+  width: 100%;
+  height: 7px;
+  left: 0;
+  top: 0;
+  z-index: 0;
+  background: #dee9fb;
+  border-radius: 20px;
+}
+.progressBar:after {
+  content: '';
+  position: absolute;
+  width: 100%;
+  height: 7px;
+  left: 0;
+  top: 0;
+  z-index: 1;
+  background-image: linear-gradient(141deg, #4688f1, #4688f1);
+  transition: 0.8s;
+  display: block;
+  animation: animate 1 4s;
+  border-radius: 20px;
+
+}
+.progressBar1:after {
+  max-width: 75%;
+}
+
+@keyframes animate {
+  0% {
+    width: 0;
+  }
+  100% {
+    width: 100%;
+  }
+}
+
+.cardInnerheading {
+  margin: 2% 4%;
+  padding-top: 10px;
+  padding-bottom: 5px;
+}
+
+.cat_name {
+  text-align: left;
+  color: #757575;
+  font-weight: bold;
+  font-size: 14px;
+}
+
+.cat_percent {
+  float: right;
+  color: #757575;
+  font-weight: bold;
+  font-size: 14px;
 }

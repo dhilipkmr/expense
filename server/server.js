@@ -95,6 +95,13 @@ app.post('/new_expense', (request, response) => {
         });
 });
 
+app.get('/get_expense_data', (request, response) => {
+    usersModel.findOne({ username: 'dhilipk13'}).then((doc) => {
+        response.send({...doc._doc.expense});
+    }, (err) => {
+        console.log('Failed to get Expense Details', err);
+    });
+});
 const loadHtml = (content) => {
     const helmet = Helmet.renderStatic();
     return (`
