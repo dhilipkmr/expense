@@ -9,8 +9,8 @@ class Login extends Component {
     this.signUp = this.signUp.bind(this);
     this.signIn = this.signIn.bind(this);
     this.state = {
-      username: '',
-      password: ''
+      username: 'dhilip',
+      password: 'dhilipdhilip'
     }
   }
 

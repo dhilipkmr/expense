@@ -74,7 +74,7 @@ app.post('/new_expense', (request, response) => {
     const { amount, category, date, type} = request.body;
     const newExpense = {amount, category, date, type}
     var newExpenseInstance = new Expenses({
-        user_id: request.session._userId || "5c1632fa58e9f72d9f93579d",
+        user_id: request.session._userId,
         ...newExpense
     });
     newExpenseInstance.save().then((doc) => {
@@ -100,12 +100,18 @@ app.post('/new_expense', (request, response) => {
 });
 
 app.get('/get_expense_data', (request, response) => {
-    Expenses.find({ user_id: request.session._userId }).then((doc) => {
-        response.send({...doc[0]._doc});
-    }, (err) => {
-        console.log('Failed to get Expense Details', err);
+    Expenses.aggregate([
+        {$match: { user_id: mongoose.Types.ObjectId(request.session._userId) }},
+        {$project: { _id: 0, amount: 1}}
+    ]).allowDiskUse(true).exec((err, data) => {
+        if (err) {
+            respond.send(500).send(err);
+        } else {
+            response.send({...data});
+        }
     });
 });
+
 const loadHtml = (content) => {
     const helmet = Helmet.renderStatic();
     return (`
@@ -141,5 +147,5 @@ app.get('*', (req, res) => {
 
 app.listen(port, () => {
     console.log('process.env',port);
-    console.log('Server has started on port: ', port);
+    console.log('Server Started on Port: ', port);
 });

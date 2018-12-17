@@ -9,3 +9,4 @@ package-lock.json
 .DS_Store
 src/.DS_Store
 src/pages/.DS_Store
+src/pages/static/img/.DS_Store
