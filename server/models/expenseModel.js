@@ -7,7 +7,7 @@ const Expenses = mongoose.model('Expenses', {
     ref: 'Users'
   },
   amount: {
-      type: String,
+      type: Number,
       required: true,
       trim: true
   },
@@ -24,10 +24,30 @@ const Expenses = mongoose.model('Expenses', {
     default: 'expense'
   },
   date: {
-    type: String,
+    type: Date,
     required: false,
     trim: true,
     default: Date.now()
+  },
+  ww: {
+    type: Number,
+    required: false,
+    trim: true
+  },
+  dow: {
+    type: Number,
+    required: false,
+    trim: true
+  },
+  mm: {
+    type: Number,
+    required: false,
+    trim: true
+  },
+  yy: {
+    type: Number,
+    required: false,
+    trim: true
   }
 });
 export default Expenses;

@@ -2,6 +2,7 @@ import React, {Component} from 'react';
 import Helmet from 'react-helmet';
 import NewExpense from './NewExpense';
 import {get_expense_data} from '../apiCalls/ApiCalls';
+import {MONTH, YEAR, WEEK} from '../constants/constants';
 
 export default class Home extends Component {
   constructor(props) {
@@ -9,34 +10,34 @@ export default class Home extends Component {
     this.leftMenuClick = this.leftMenuClick.bind(this);
     this.newExpense = this.newExpense.bind(this);
     this.state = {
-      showWeek: false,
-      showMonth: true,
-      showYear: false,
+      activeTab: MONTH,
       showNewExpense: false
     }
   }
   componentDidMount() {
-    
+    console.log(this.state);
+    this.getExpense();
   }
 
   getExpense() {
-    get_expense_data().then((resp) => {
+    const tab = this.state.activeTab;
+    const mm = new Date().getMonth() + 1;
+    const dow = Math.ceil(new Date().getDate() / 7);
+    const ww = new Date().getDay();
+    const yy = new Date().getFullYear();
+    const params = {tab, mm, dow, ww, yy};
+    get_expense_data(params).then((resp) => {
       console.log(resp.data);
-      // standing, spent, transactions[name, percent]
-      this.setState({...resp.data});
+      this.setState({transactionData: resp.data});
     }, (err) => {
       console.log('Unable to Get Expense Details', err);
     });
   }
 
-  changeExpenseDayFormat(format) {
-    if (format === 'week') {
-      this.setState({showWeek: true, showMonth: false, showYear: false});
-    } else if (format === 'month') {
-      this.setState({showWeek: false, showMonth: true, showYear: false});
-    } else if (format === 'year') {
-      this.setState({showWeek: false, showMonth: false, showYear: true});
-    }
+  changeExpenseDayFormat(activeTab) {
+    this.setState({activeTab: activeTab}, () => {
+      this.getExpense();
+    });
   }
 
   leftMenuClick() {
@@ -66,24 +67,29 @@ export default class Home extends Component {
   }
 
   clickViewMore(e) {
-    this.getExpense();
     this.refs.svgViewMore.classList.toggle('rotateViewMore');
     this.refs.transactedCard.classList.toggle('showAllTransaction');
   }
+
   renderTransactioncard() {
-    return (
-      <div className="transactedCardInner">
-        <div className="cardInnerheading">
-          <span className="cat_name">Food</span>
-          <span className="cat_percent">75%</span>
-        </div>
-        <div className="progressBar progressBar1 bl textCenter"></div>
-      </div>
-    )
+    if (this.state.transactionData) {
+
+    } else {
+      // return (
+      //   <div className="transactedCardInner">
+      //     <div className="cardInnerheading">
+      //       <span className="cat_name"></span>
+      //       <span className="cat_percent"></span>
+      //     </div>
+      //     <div className="progressBar progressBar1 bl textCenter"></div>
+      //   </div>
+      // );
+      return null;
+    }
   }
 
   render() {
-    const {showWeek, showMonth, showYear, showNewExpense, standing = 100, spent = 50} = this.state;
+    const {activeTab, showNewExpense, standing = 100, spent = 50} = this.state;
     return (
       <div className="">
         <div>
@@ -101,9 +107,9 @@ export default class Home extends Component {
                 <div className="heading">Expense Home</div>
                 {standing ? <div className="subHeading">{'Standing : ₹' + standing}</div> : null}
                 <div className="expenseDaysBtn">
-                  <span className={'dayTypeBtn ' + (showWeek ? 'dayTypeBtn-active' : '')} onClick={() => {this.changeExpenseDayFormat('week')}}>Week</span>
-                  <span className={'dayTypeBtn ' + (showMonth ? 'dayTypeBtn-active' : '')} onClick={() => {this.changeExpenseDayFormat('month')}}>Month</span>
-                  <span className={'dayTypeBtn ' + (showYear ? 'dayTypeBtn-active' : '')} onClick={() => {this.changeExpenseDayFormat('year')}}>Year</span>
+                  <span className={'dayTypeBtn ' + (activeTab === WEEK ? 'dayTypeBtn-active' : '')} onClick={() => {this.changeExpenseDayFormat(WEEK)}}>Week</span>
+                  <span className={'dayTypeBtn ' + (activeTab === MONTH ? 'dayTypeBtn-active' : '')} onClick={() => {this.changeExpenseDayFormat(MONTH)}}>Month</span>
+                  <span className={'dayTypeBtn ' + (activeTab === YEAR ? 'dayTypeBtn-active' : '')} onClick={() => {this.changeExpenseDayFormat(YEAR)}}>Year</span>
                 </div>
                 <div>
                   {spent ? <div className="subHeading">{'Spent : ₹' + spent}</div> : null}

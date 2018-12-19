@@ -13,6 +13,7 @@ import mongoose1 from './db/mongoose';
 import mongoose from 'mongoose';
 import Users from './models/userModel';
 import Expenses from './models/expenseModel';
+import { MONTH, YEAR, WEEK } from '../src/pages/constants/constants';
 
 const app = express();
 const port = process.env.PORT;
@@ -21,7 +22,7 @@ app.use(session({
     secret: 'dhilipLocal',
     resave: false,
     saveUninitialized: true
-  }))
+}))
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 app.use(express.static('build/public'));
@@ -30,20 +31,20 @@ app.use(express.static('src/pages/static'));
 
 app.post('/signup', (request, response) => {
     // Users.deleteMany({});
-   const {username = '', password = '', emailId = ''} = request.body;
+    const { username = '', password = '', emailId = '' } = request.body;
     var user = new Users({
         _id: mongoose.Types.ObjectId(),
         username: username,
         password: password,
         emailId: emailId
     });
-    Users.find({username: username}).then((res)=> {
+    Users.find({ username: username }).then((res) => {
         if (res.length > 0) {
-            response.send({error: true, msg: 'Username already Exists'});
+            response.send({ error: true, msg: 'Username already Exists' });
         } else {
             user.save().then((doc) => {
                 request.session._userId = doc._id;
-                response.send({error: false, msg: 'Saved Successfully'});
+                response.send({ error: false, msg: 'Saved Successfully' });
             }, (e) => {
                 response.status(500).send(e);
             });
@@ -55,26 +56,32 @@ app.post('/signup', (request, response) => {
 });
 
 app.post('/signin', (request, response) => {
-    const {username = '', password = '', emailId = ''} = request.body;
+    const { username = '', password = '', emailId = '' } = request.body;
     console.log(request.session.user);
-     Users.find({username: username, password: password}).then((res)=> {
-         if (res.length > 0) {
+    Users.find({ username: username, password: password }).then((res) => {
+        if (res.length > 0) {
             request.session._userId = res[0]._id;
-            response.send({error: false, msg: 'success'});
-         } else {
-            response.send({error:true, msg: 'No user account found'});
-         }
-     }, (e) => {
-         response.send(e);
-         console.log(e);
-     });
- });
+            response.send({ error: false, msg: 'success' });
+        } else {
+            response.send({ error: true, msg: 'No user account found' });
+        }
+    }, (e) => {
+        response.send(e);
+        console.log(e);
+    });
+});
 
 app.post('/new_expense', (request, response) => {
-    const { amount, category, date, type} = request.body;
-    const newExpense = {amount, category, date, type}
+    let { amount, category, date, type } = request.body;
+    amount = parseInt(amount);
+    date = new Date(date);
+    const ww = Math.ceil(date.getDate() / 7);
+    const dow = date.getDay() + 1;
+    const mm = date.getMonth() + 1;
+    const yy = date.getFullYear();
+    const newExpense = { amount, category, date, type, ww, dow, mm, yy };
     var newExpenseInstance = new Expenses({
-        user_id: request.session._userId,
+        user_id: mongoose.Types.ObjectId("5c1630ad7669ea2c9bb04616"),
         ...newExpense
     });
     newExpenseInstance.save().then((doc) => {
@@ -99,17 +106,55 @@ app.post('/new_expense', (request, response) => {
     //     });
 });
 
-app.get('/get_expense_data', (request, response) => {
-    Expenses.aggregate([
-        {$match: { user_id: mongoose.Types.ObjectId(request.session._userId) }},
-        {$project: { _id: 0, amount: 1}}
-    ]).allowDiskUse(true).exec((err, data) => {
+app.post('/get_expense_data', (request, response) => {
+    function expenseDateResponder(err, data) {
         if (err) {
             respond.send(500).send(err);
         } else {
-            response.send({...data});
+            response.send({ ...data });
         }
-    });
+    }
+
+    const { tab, ww, mm, yy, dow } = request.body;
+    if (tab === YEAR) {
+        Expenses.aggregate([
+            { $match: { user_id: mongoose.Types.ObjectId("5c1630ad7669ea2c9bb04616") } },
+            { $match: { yy: parseInt(yy) } },
+            {
+                $group: {
+                    _id: { type: '$type', category: '$category' },
+                    amount: { $sum: '$amount' }
+                }
+            }
+        ]).allowDiskUse(true).exec(expenseDateResponder);
+    } else if (tab === MONTH) {
+        Expenses.aggregate([
+            { $match: { user_id: mongoose.Types.ObjectId("5c1630ad7669ea2c9bb04616") } },
+            { $match: { yy: parseInt(yy) } },
+            { $match: { mm: parseInt(mm) } },
+            {
+                $group: {
+                    _id: { type: '$type', category: '$category' },
+                    amount: { $sum: '$amount' },
+                    type: '$type',
+                    category: '$category'
+                }
+            }
+        ]).allowDiskUse(true).exec(expenseDateResponder);
+    } else if (tab === WEEK) {
+        Expenses.aggregate([
+            { $match: { user_id: mongoose.Types.ObjectId("5c1630ad7669ea2c9bb04616") } },
+            { $match: { yy: parseInt(yy) } },
+            { $match: { mm: parseInt(mm) } },
+            { $match: { ww: parseInt(mm) } },
+            {
+                $group: {
+                    _id: { type: '$type', category: '$category' },
+                    amount: { $sum: '$amount' }
+                }
+            }
+        ]).allowDiskUse(true).exec(expenseDateResponder);
+    }
 });
 
 const loadHtml = (content) => {
@@ -138,7 +183,7 @@ app.get('*', (req, res) => {
     const context = {};
     const content = ReactDOMServer.renderToString(
         <StaticRouter>
-            <App location={req.url} context={context}/>
+            <App location={req.url} context={context} />
         </StaticRouter>
     );
     const template = loadHtml(content);
@@ -146,6 +191,6 @@ app.get('*', (req, res) => {
 });
 
 app.listen(port, () => {
-    console.log('process.env',port);
+    console.log('process.env', port);
     console.log('Server Started on Port: ', port);
 });
