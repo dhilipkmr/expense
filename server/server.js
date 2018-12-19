@@ -10,10 +10,7 @@ var session = require('express-session');
 
 import App from '../src/app'
 import mongoose1 from './db/mongoose';
-import mongoose from 'mongoose';
-import Users from './models/userModel';
-import Expenses from './models/expenseModel';
-import { MONTH, YEAR, WEEK } from '../src/pages/constants/constants';
+import {signUp, signIn, newExpense, getExpenseData} from './api/apiCalls';
 
 const app = express();
 const port = process.env.PORT;
@@ -29,142 +26,11 @@ app.use(express.static('build/public'));
 app.use('/styles', express.static('src/pages/styles'));
 app.use(express.static('src/pages/static'));
 
-app.post('/signup', (request, response) => {
-    // Users.deleteMany({});
-    const { username = '', password = '', emailId = '' } = request.body;
-    var user = new Users({
-        _id: mongoose.Types.ObjectId(),
-        username: username,
-        password: password,
-        emailId: emailId
-    });
-    Users.find({ username: username }).then((res) => {
-        if (res.length > 0) {
-            response.send({ error: true, msg: 'Username already Exists' });
-        } else {
-            user.save().then((doc) => {
-                request.session._userId = doc._id;
-                response.send({ error: false, msg: 'Saved Successfully' });
-            }, (e) => {
-                response.status(500).send(e);
-            });
-        }
-    }, (e) => {
-        response.send(e);
-        console.log(e);
-    });
-});
-
-app.post('/signin', (request, response) => {
-    const { username = '', password = '', emailId = '' } = request.body;
-    console.log(request.session.user);
-    Users.find({ username: username, password: password }).then((res) => {
-        if (res.length > 0) {
-            request.session._userId = res[0]._id;
-            response.send({ error: false, msg: 'success' });
-        } else {
-            response.send({ error: true, msg: 'No user account found' });
-        }
-    }, (e) => {
-        response.send(e);
-        console.log(e);
-    });
-});
-
-app.post('/new_expense', (request, response) => {
-    let { amount, category, date, type } = request.body;
-    amount = parseInt(amount);
-    date = new Date(date);
-    const ww = Math.ceil(date.getDate() / 7);
-    const dow = date.getDay() + 1;
-    const mm = date.getMonth() + 1;
-    const yy = date.getFullYear();
-    const newExpense = { amount, category, date, type, ww, dow, mm, yy };
-    var newExpenseInstance = new Expenses({
-        user_id: mongoose.Types.ObjectId("5c1630ad7669ea2c9bb04616"),
-        ...newExpense
-    });
-    newExpenseInstance.save().then((doc) => {
-        // request.session.user = doc.username;
-        console.log(' doc.username', doc);
-        response.send(doc);
-    }, (err) => {
-        console.log('Failed to save new Expense', err);
-        response.status(500).send(err);
-    });
-
-    // Users.findOneAndUpdate(
-    //     { username: 'dhilipk13'},
-    //     { $push: {expense: newExpense}},
-    //     function (err, document) {
-    //         if (err) {
-    //             console.log('Failed to save new Expense', err);
-    //         } else {
-    //             const lastIndex = document._doc.expense.length - 1;
-    //             response.send({error: false,...document._doc.expense[lastIndex]._doc});
-    //         }
-    //     });
-});
-
-app.post('/get_expense_data', (request, response) => {
-    function expenseDateResponder(err, data) {
-        if (err) {
-            respond.send(500).send(err);
-        } else {
-            response.send({ ...data });
-        }
-    }
-
-    const { tab, ww, mm, yy, dow } = request.body;
-    if (tab === YEAR) {
-        Expenses.aggregate([
-            { $match: { user_id: mongoose.Types.ObjectId("5c1630ad7669ea2c9bb04616") } },
-            { $match: { yy: parseInt(yy) } },
-            {
-                $group: {
-                    _id: { type: '$type', category: '$category' },
-                    amount: { $sum: '$amount' }
-                }
-            }
-        ]).allowDiskUse(true).exec(expenseDateResponder);
-    } else if (tab === MONTH) {
-        Expenses.aggregate([
-            { $match: { user_id: mongoose.Types.ObjectId("5c1630ad7669ea2c9bb04616") } },
-            { $match: { yy: parseInt(yy) } },
-            { $match: { mm: parseInt(mm) } },
-            {$group: { 
-                _id: {category:'$category', type: '$type'},
-                 type: {'$first': '$type'},
-                 category: {'$first': '$category'},
-                 amount: { $sum: '$amount'}
-                }
-         },
-         {$group: {
-             _id: {type: '$type'},
-              amount: { $sum: '$amount'},
-               type: {'$first': '$type'},
-               transactionList: {$push: {category: '$category', amount: '$amount'}},
-               category: {$push: '$category'},
-               amountAr: {$push: '$amount'}
-             }
-          },
-          {$project: {_id:0, amount: 1, type: 1, transactionList: 1}}
-        ]).allowDiskUse(true).exec(expenseDateResponder);
-    } else if (tab === WEEK) {
-        Expenses.aggregate([
-            { $match: { user_id: mongoose.Types.ObjectId("5c1630ad7669ea2c9bb04616") } },
-            { $match: { yy: parseInt(yy) } },
-            { $match: { mm: parseInt(mm) } },
-            { $match: { ww: parseInt(mm) } },
-            {
-                $group: {
-                    _id: { type: '$type', category: '$category' },
-                    amount: { $sum: '$amount' }
-                }
-            }
-        ]).allowDiskUse(true).exec(expenseDateResponder);
-    }
-});
+// API Calls
+app.post('/signup', signUp);
+app.post('/signin', signIn);
+app.post('/new_expense', newExpense);
+app.post('/get_expense_data', getExpenseData);
 
 const loadHtml = (content) => {
     const helmet = Helmet.renderStatic();
@@ -203,3 +69,5 @@ app.listen(port, () => {
     console.log('process.env', port);
     console.log('Server Started on Port: ', port);
 });
+
+export default app;
