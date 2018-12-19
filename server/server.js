@@ -132,14 +132,23 @@ app.post('/get_expense_data', (request, response) => {
             { $match: { user_id: mongoose.Types.ObjectId("5c1630ad7669ea2c9bb04616") } },
             { $match: { yy: parseInt(yy) } },
             { $match: { mm: parseInt(mm) } },
-            {
-                $group: {
-                    _id: { type: '$type', category: '$category' },
-                    amount: { $sum: '$amount' },
-                    type: '$type',
-                    category: '$category'
+            {$group: { 
+                _id: {category:'$category', type: '$type'},
+                 type: {'$first': '$type'},
+                 category: {'$first': '$category'},
+                 amount: { $sum: '$amount'}
                 }
-            }
+         },
+         {$group: {
+             _id: {type: '$type'},
+              amount: { $sum: '$amount'},
+               type: {'$first': '$type'},
+               transactionList: {$push: {category: '$category', amount: '$amount'}},
+               category: {$push: '$category'},
+               amountAr: {$push: '$amount'}
+             }
+          },
+          {$project: {_id:0, amount: 1, type: 1, transactionList: 1}}
         ]).allowDiskUse(true).exec(expenseDateResponder);
     } else if (tab === WEEK) {
         Expenses.aggregate([
