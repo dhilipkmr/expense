@@ -1,8 +1,9 @@
 import React, {Component} from 'react';
 import Helmet from 'react-helmet';
 import NewExpense from './NewExpense';
-import {get_expense_data} from '../apiCalls/ApiCalls';
+import {get_expense_data, get_expense_summary} from '../apiCalls/ApiCalls';
 import {MONTH, YEAR, WEEK} from '../constants/constants';
+import Graph from './Graph';
 
 export default class Home extends Component {
   constructor(props) {
@@ -23,6 +24,21 @@ export default class Home extends Component {
   }
   componentDidMount() {
     this.getExpense();
+    this.getExpenseSummary();
+  }
+
+  getExpenseSummary() {
+    const tab = this.state.activeTab;
+    const mm = new Date().getMonth() + 1;
+    const dow = new Date().getDay();
+    const ww = Math.ceil(new Date().getDate() / 7);
+    const yy = new Date().getFullYear();
+    const params = {tab, mm, dow, ww, yy};
+    get_expense_summary(params).then((resp) => {
+      this.setState({plotData: {...resp.data}});
+    }, (err) => {
+      console.log('Unable to Get Expense Summary Details', err);
+    });
   }
 
   getExpense() {
@@ -44,6 +60,7 @@ export default class Home extends Component {
   changeExpenseDayFormat(activeTab) {
     this.setState({activeTab: activeTab, viewMore: false}, () => {
       this.getExpense();
+      this.getExpenseSummary();
     });
   }
 
@@ -155,9 +172,7 @@ export default class Home extends Component {
                 <div className="textCenter trSumaryHeading fb" >
                   <span>Transaction Summary</span>
                 </div>
-                <svg height="200" width="300" class="chart">
-                  <polyline points="0,180 500,180" style={{ fill: 'white', stroke: 'red', strokeWidth: "4"}} />
-                </svg>
+                <Graph data={this.state.plotData}/>
                 <div className="newContainer">
                   <div className="new">
                     <span className="newBtn" onClick={() => this.newExpense(true)}>Add New</span>

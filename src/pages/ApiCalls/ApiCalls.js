@@ -19,3 +19,8 @@ export const get_expense_data = (params) => {
   const url = '/get_expense_data/' ;
   return axios.post(url, params);
 }
+
+export const get_expense_summary = (params) => {
+  const url = '/get_expense_summary/' ;
+  return axios.post(url, params);
+}

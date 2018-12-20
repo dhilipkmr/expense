@@ -158,4 +158,59 @@ export const getExpenseData = (request, response) => {
     }
 };
 
-
+export const getExpenseSummary = (request, response) => {
+    function execSummaryQuery(err, data) {
+        if (err) {
+            respond.send(500).send(err);
+        } else {
+            if (data[0].perDay) {
+                const total = data[0].amount;
+                data[0].perDay.forEach(element => {
+                    let percent  = element.amount / total;
+                    element.percent = Math.round( percent* 1000) / 10;
+                });
+            }
+            response.send({...data[0]});
+        }
+    };
+    const userId = request.session.user_id ? mongoose.Types.ObjectId(request.session.user_id) : mongoose.Types.ObjectId("5c1630ad7669ea2c9bb04616");
+    const {tab, yy, mm, ww} = request.body;
+    if (tab === YEAR) {
+        Expenses.aggregate([
+            {$match: { user_id: userId}},
+            {$match: { yy: yy}},
+            {$match: { type: 'expense'}},
+            {$group: { _id: { mm: '$mm'}, amount: {$sum: '$amount'}, month: {'$first': '$mm'}}},
+            {$sort: { month: 1 }},
+            {$group: {_id: null, amount: {'$sum': '$amount'}, perMonth: {$push : { amount: '$amount', month: '$month'}}}},
+            {$project: {_id: 0}}
+            ]).allowDiskUse(true).exec(execSummaryQuery);
+    } else if (tab === MONTH) {
+        Expenses.aggregate([
+            {$match: { user_id: userId }},
+            {$match: { yy: yy}},
+            {$match: { mm: mm}},
+            {$match: { type: 'expense'}},
+            {$group: { _id: { ww: '$ww'}, amount: {$sum: '$amount'}, ww: {'$first': '$ww'}, perDay: { $push: {amount: '$amount', dow: '$dow'}}}},
+            {$sort: {ww: 1}},
+            {$unwind: '$perDay'},
+            {$sort: {ww: 1, 'perDay.dow': 1}},
+            {$group: {_id: { ww: '$ww'}, amount: {$sum: '$amount'}, ww: {'$first': '$ww'}, perDay: { $push: '$perDay'}}},
+            {$sort: {ww: 1}},
+            {$group: {_id: null, amount: {$sum: '$amount'}, perWeek: {$push: {amount: '$amount', ww:'$ww', perDay: '$perDay'}}}},
+            {$project: {_id: 0}}
+            ]).allowDiskUse(true).exec(execSummaryQuery);
+    } else if (tab === WEEK) {
+        Expenses.aggregate([
+            {$match: { user_id: userId }},
+            {$match: { yy: yy}},
+            {$match: { mm: mm}},
+            {$match: { ww: ww}},
+            {$match: { type: 'expense'}},
+            {$group: { _id: {dow: '$dow'}, amount: {$sum: '$amount'}, dow: {'$first': '$dow'}}},
+            {$sort: { dow: 1}},
+            {$group: { _id: null, amount: {$sum: '$amount'},  perDay: {$push: {amount: '$amount', dow: '$dow'}}}},
+            {$project: {_id: 0}}
+            ]).allowDiskUse(true).exec(execSummaryQuery);
+    }
+}

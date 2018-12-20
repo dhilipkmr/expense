@@ -10,7 +10,7 @@ var session = require('express-session');
 
 import App from '../src/app'
 import mongoose1 from './db/mongoose';
-import {signUp, signIn, newExpense, getExpenseData} from './api/apiCalls';
+import {signUp, signIn, newExpense, getExpenseData, getExpenseSummary} from './api/apiCalls';
 
 const app = express();
 const port = process.env.PORT;
@@ -31,6 +31,7 @@ app.post('/signup', signUp);
 app.post('/signin', signIn);
 app.post('/new_expense', newExpense);
 app.post('/get_expense_data', getExpenseData);
+app.post('/get_expense_summary', getExpenseSummary);
 
 const loadHtml = (content) => {
     const helmet = Helmet.renderStatic();
