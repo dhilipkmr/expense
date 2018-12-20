@@ -69,81 +69,93 @@ export const newExpense = (request, response) => {
 };
 
 export const getExpenseData = (request, response) => {
-  function expenseDateResponder(err, data) {
-      if (err) {
-          respond.send(500).send(err);
-      } else {
-          let expenseList, incomeList;
-        Object.keys(data).map((key) => {
-        if (data[key].type === 'expense') {
-            expenseList = data[key];
-        } else if (data[key].type === 'income') {
-            incomeList = data[key];
-        }
-        });
-        let spent, standing;
-        if (expenseList) {
-            expenseList.transactionList.map(( transaction )=> {
-                let percent = transaction.amount/ (expenseList.amount/ 100);
-                transaction.percent = Math.round(percent * 100) / 100; 
+    const userId = request.session.user_id ? mongoose.Types.ObjectId(request.session.user_id) : mongoose.Types.ObjectId("5c1630ad7669ea2c9bb04616");
+    function expenseDateResponder(err, data) {
+        if (err) {
+            respond.send(500).send(err);
+        } else {
+            let expenseList, incomeList;
+            Object.keys(data).map((key) => {
+                if (data[key].type === 'expense') {
+                    expenseList = data[key];
+                } else if (data[key].type === 'income') {
+                    incomeList = data[key];
+                }
             });
-            spent = expenseList.amount;
+            let spent, standing;
+            if (expenseList) {
+                expenseList.transactionList.map((transaction) => {
+                    let percent = transaction.amount / (expenseList.amount / 100);
+                    transaction.percent = Math.round(percent * 100) / 100;
+                });
+                spent = expenseList.amount;
+            }
+            if (incomeList) {
+                incomeList.transactionList.map((transaction) => {
+                    let percent = transaction.amount / (incomeList.amount / 100);
+                    transaction.percent = Math.round(percent * 100) / 100;
+                });
+                standing = incomeList.amount - spent;
+            }
+            response.send({ expenseList, incomeList, spent, standing });
         }
-        if (incomeList) {
-            incomeList.transactionList.map(( transaction )=> {
-                let percent = transaction.amount/ (incomeList.amount/ 100);
-                transaction.percent = Math.round(percent * 100) / 100;
-            });
-            standing = incomeList.amount - spent;
+    }
+
+    // Queries start
+    const group1 = {
+        $group: {
+            _id: { category: '$category', type: '$type' },
+            type: { '$first': '$type' },
+            category: { '$first': '$category' },
+            amount: { $sum: '$amount' }
         }
-        response.send({expenseList, incomeList, spent, standing});
-      }
-  }
-  const group1 = {
-      $group: {
-          _id: { category: '$category', type: '$type' },
-          type: { '$first': '$type' },
-          category: { '$first': '$category' },
-          amount: { $sum: '$amount' }
-      }
-  };
-  const group2 = {
-      $group: {
-          _id: { type: '$type' },
-          amount: { $sum: '$amount' },
-          type: { '$first': '$type' },
-          transactionList: { $push: { category: '$category', amount: '$amount' } }
-      }
-  };
-  const { tab, ww, mm, yy, dow } = request.body;
-  if (tab === YEAR) {
-      Expenses.aggregate([
-          { $match: { user_id: mongoose.Types.ObjectId("5c1630ad7669ea2c9bb04616") } },
-          { $match: { yy: parseInt(yy) } },
-          {...group1},
-          {...group2},
-          { $project: { _id: 0, amount: 1, type: 1, transactionList: 1 } }
-      ]).allowDiskUse(true).exec(expenseDateResponder);
-  } else if (tab === MONTH) {
-      Expenses.aggregate([
-          { $match: { user_id: mongoose.Types.ObjectId("5c1630ad7669ea2c9bb04616") } },
-          { $match: { yy: parseInt(yy) } },
-          { $match: { mm: parseInt(mm) } },
-          {...group1},
-          {...group2},
-          { $project: { _id: 0, amount: 1, type: 1, transactionList: 1 } }
-      ]).allowDiskUse(true).exec(expenseDateResponder);
-  } else if (tab === WEEK) {
-      Expenses.aggregate([
-          { $match: { user_id: mongoose.Types.ObjectId("5c1630ad7669ea2c9bb04616") } },
-          { $match: { yy: parseInt(yy) } },
-          { $match: { mm: parseInt(mm) } },
-          { $match: { ww: parseInt(ww) } },
-          {...group1},
-          {...group2},
-          { $project: { _id: 0, amount: 1, type: 1, transactionList: 1 } }
-      ]).allowDiskUse(true).exec(expenseDateResponder);
-  }
+    };
+    const group2 = {
+        $group: {
+            _id: { type: '$type' },
+            amount: { $sum: '$amount' },
+            type: { '$first': '$type' },
+            transactionList: { $push: { category: '$category', amount: '$amount' } }
+        }
+    };
+    const unwind = { $unwind: '$transactionList' };
+    const sort = { $sort: { 'transactionList.amount': -1 } }
+    const reGroup = {
+        $group: {
+            _id: { type: '$type' },
+            amount: { '$first': '$amount' },
+            type: { '$first': '$type' },
+            transactionList: { $push: '$transactionList' }
+        }
+    };
+    // Queries end
+
+    const { tab, ww, mm, yy, dow } = request.body;
+    if (tab === YEAR) {
+        Expenses.aggregate([
+            { $match: { user_id: userId} },
+            { $match: { yy: parseInt(yy) } },
+            { ...group1 },{ ...group2 },
+            { ...unwind },{ ...sort },{ ...reGroup },
+            { $project: { _id: 0, amount: 1, type: 1, transactionList: 1 } }
+        ]).allowDiskUse(true).exec(expenseDateResponder);
+    } else if (tab === MONTH) {
+        Expenses.aggregate([
+            { $match: { user_id: userId } },
+            { $match: { yy: parseInt(yy) } },{ $match: { mm: parseInt(mm) } },
+            { ...group1 },{ ...group2 },
+            { ...unwind },{ ...sort },{ ...reGroup },
+            { $project: { _id: 0, amount: 1, type: 1, transactionList: 1 } }
+        ]).allowDiskUse(true).exec(expenseDateResponder);
+    } else if (tab === WEEK) {
+        Expenses.aggregate([
+            { $match: { user_id: userId } },
+            { $match: { yy: parseInt(yy) } },{ $match: { mm: parseInt(mm) } },{ $match: { ww: parseInt(ww) } },
+            { ...group1 },{ ...group2 },
+            { ...unwind },{ ...sort },{ ...reGroup },
+            { $project: { _id: 0, amount: 1, type: 1, transactionList: 1 } }
+        ]).allowDiskUse(true).exec(expenseDateResponder);
+    }
 };
 
 

@@ -29,19 +29,13 @@ export default class Home extends Component {
     let expenseList = {}, incomeList = {}, standing ='';
     const tab = this.state.activeTab;
     const mm = new Date().getMonth() + 1;
-    const dow = Math.ceil(new Date().getDate() / 7);
-    const ww = new Date().getDay();
+    const dow = new Date().getDay();
+    const ww = Math.ceil(new Date().getDate() / 7);
     const yy = new Date().getFullYear();
     const params = {tab, mm, dow, ww, yy};
     get_expense_data(params).then((resp) => {
-      // Object.keys(resp.data).map((key) => {
-      //   if (resp.data[key].type === 'expense') {
-      //     expenseList = resp.data[key];
-      //   } else if (resp.data[key].type === 'income') {
-      //     incomeList = resp.data[key];
-      //   }
-      // });
-      this.setState({...resp.data});
+     const {expenseList, incomeList, standing, spent} = resp.data;
+      this.setState({expenseList, incomeList, standing, spent});
     }, (err) => {
       console.log('Unable to Get Expense Details', err);
     });
@@ -158,6 +152,12 @@ export default class Home extends Component {
             </div>
             <div className="other-half-landing">
               <div ref="otherHalfLandingTxt">
+                <div className="textCenter trSumaryHeading fb" >
+                  <span>Transaction Summary</span>
+                </div>
+                <svg height="200" width="300" class="chart">
+                  <polyline points="0,180 500,180" style={{ fill: 'white', stroke: 'red', strokeWidth: "4"}} />
+                </svg>
                 <div className="newContainer">
                   <div className="new">
                     <span className="newBtn" onClick={() => this.newExpense(true)}>Add New</span>
