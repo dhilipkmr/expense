@@ -96,59 +96,59 @@ export default class Home extends Component {
 
   clickViewMore() {
     this.setState({viewMore: !this.state.viewMore});
+    this.refs.transactedCard.scrollTop = 0;
   }
 
   renderInnerTransactioncard() {
-    if (this.state.expenseList && Object.keys(this.state.expenseList).length > 0) {
-      return (
-        this.state.expenseList.transactionList.map((transaction, index) => {
-          if (this.state.viewMore || this.viewedMore[this.state.activeTab] || !this.state.viewMore && index < 2) {
-            if (this.state.viewMore) {
-              this.viewedMore[this.state.activeTab] = true; // To not remove element from DOM on clicking view More again
-            }
-            return (
-              <div key={'transaction_type_' + index} className="transactedCardInner">
-                <div className="cardInnerheading">
-                  <span className="cat_name">{transaction.category}</span>
-                  <span className="cat_percent ">{transaction.percent + ' %'}</span>
-                  {/* <span className="cat_name loader"></span>
-                  <span className="cat_percent loader"></span> */}
-                </div>
-                <div className="progressBar bl textCenter marginT25" >
-                  <div className="filled" style= {{maxWidth: transaction.percent + '%'}}>
-                    {/* <div className="filled" ></div> */}
-                  </div>
+    return (
+      this.state.expenseList.transactionList.map((transaction, index) => {
+        if (this.state.viewMore || this.viewedMore[this.state.activeTab] || !this.state.viewMore && index < 2) {
+          if (this.state.viewMore) {
+            this.viewedMore[this.state.activeTab] = true; // To not remove element from DOM on clicking view More again
+          }
+          return (
+            <div key={'transaction_type_' + index} className="transactedCardInner">
+              <div className="cardInnerheading">
+                <span className="cat_name">{transaction.category}</span>
+                <span className="cat_percent ">{transaction.percent + ' %'}</span>
+                {/* <span className="cat_name loader"></span>
+                <span className="cat_percent loader"></span> */}
+              </div>
+              <div className="progressBar bl textCenter marginT25" >
+                <div className="filled" style= {{maxWidth: transaction.percent + '%'}}>
+                  {/* <div className="filled" ></div> */}
                 </div>
               </div>
-            );
-          } else {
-            return null;
-          }
-        })
-    );
-    } else {
-      return null;
-    }
+            </div>
+          );
+        } else {
+          return null;
+        }
+      })
+  );
   }
 
   getTransactionCard() {
     const {activeTab, viewMore = false} = this.state;
-    return (
-      <div>
-        <div ref="transactedCard" className={'transactedCard transition1a ' + (viewMore ? 'showAllTransaction' : '')}>
-          <div className="transactScroller">
-            {activeTab === WEEK ? this.renderInnerTransactioncard() : null}
-            {activeTab === MONTH ? this.renderInnerTransactioncard() : null}
-            {activeTab === YEAR ? this.renderInnerTransactioncard() : null}
+    if (this.state.expenseList && Object.keys(this.state.expenseList).length > 0) {
+      return (
+        <div>
+          <div ref="transactedCard" className={'transactedCard transition1a ' + (viewMore ? 'showAllTransaction' : '')}>
+            <div className="transactScroller">
+              {activeTab === WEEK ? this.renderInnerTransactioncard() : null}
+              {activeTab === MONTH ? this.renderInnerTransactioncard() : null}
+              {activeTab === YEAR ? this.renderInnerTransactioncard() : null}
+            </div>
+          </div>
+          <div className="viewMoreArrow" onClick={() => this.clickViewMore()}>
+            <svg className={viewMore ? 'rotateViewMore' : ''} ref="svgViewMore" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+              <path d="M7.41 7.84L12 12.42l4.59-4.58L18 9.25l-6 6-6-6z"/>
+            </svg>
           </div>
         </div>
-        <div className="viewMoreArrow" onClick={() => this.clickViewMore()}>
-          <svg className={viewMore ? 'rotateViewMore' : ''} ref="svgViewMore" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
-            <path d="M7.41 7.84L12 12.42l4.59-4.58L18 9.25l-6 6-6-6z"/>
-          </svg>
-        </div>
-      </div>
-    );
+      );
+    }
+    return null;
   }
 
   render() {
