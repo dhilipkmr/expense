@@ -5,6 +5,7 @@
   border-bottom-left-radius: 15px;
   border-bottom-right-radius: 15px;
   box-shadow: 0 3px 6px 0 rgba(0,0,0,0.3);
+  min-height: 50%;
 }
 
 .other-half-landing {
@@ -62,12 +63,7 @@
 .in-bl{
   display: inline-block
 }
-.fl {
-  float: left;
-}
-.fr {
-  float: right;
-}
+
 .right0 {
   right: 0%;
 }
@@ -89,7 +85,10 @@
 }
 .heading {
   font-size: 16px;
-  padding: 20px;
+  padding-top: 15px;
+  padding-right: 20px;
+  padding-left: 20px;
+  padding-bottom: 10px;
   text-align: center;
   color: white;
   font-weight: bold;
@@ -140,11 +139,9 @@
   cursor: pointer;
 } */
 .newContainer {
-  position: fixed;
   right: 0;
   left: 0;
-  margin: 10px auto;
-  bottom: 10px;
+  margin-top: 20px;
 }
 .new {
   position: relative;
@@ -285,7 +282,7 @@
 }
 
 .graphPlotLine {
-  fill: #dfeeff;
+  fill: #a0cdff;
   stroke: #4688F1;
   stroke-width: 0.7;
   animation: dash 1500ms linear 0s 1 normal none running;
@@ -295,4 +292,7 @@
 @keyframes dash {
   0% {stroke-dashoffset: 1000;}
   100% {stroke-dashoffset: 0;}
+}
+.standingAmt {
+  font-size: 25px;
 }

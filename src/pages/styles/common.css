@@ -49,3 +49,33 @@ button:focus {
 .transition0_5{
   transition : all .5s;
 }
+.fl {
+  float: left;
+}
+.fr {
+  float: right;
+}
+.w50 {
+  width: 50%;
+}
+.f18 {
+  font-size: 18px;
+}
+.f11 {
+  font-size: 11px;
+}
+.padT20 {
+  padding-top: 20px;
+}
+.mh10p {
+min-height: 10%
+}
+.padT10 {
+  padding-top: 10px;
+}
+.padB10 {
+  padding-bottom: 10px;
+}
+.padB20 {
+  padding-bottom: 20px;
+}

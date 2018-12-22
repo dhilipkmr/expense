@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 import Helmet from 'react-helmet';
 import NewExpense from './NewExpense';
 import {get_expense_data, get_expense_summary} from '../apiCalls/ApiCalls';
-import {MONTH, YEAR, WEEK} from '../constants/constants';
+import {MONTH, YEAR, WEEK, MONTHSNAME} from '../constants/constants';
 import Graph from './Graph';
 
 export default class Home extends Component {
@@ -130,14 +130,25 @@ export default class Home extends Component {
 
   getTransactionCard() {
     const {activeTab, viewMore = false} = this.state;
-    if (this.state.expenseList && Object.keys(this.state.expenseList).length > 0) {
+    const hasData = this.state.expenseList && Object.keys(this.state.expenseList).length > 0;
       return (
         <div>
           <div ref="transactedCard" className={'transactedCard transition1a ' + (viewMore ? 'showAllTransaction' : '')}>
-            <div className="transactScroller">
-              {activeTab === WEEK ? this.renderInnerTransactioncard() : null}
-              {activeTab === MONTH ? this.renderInnerTransactioncard() : null}
-              {activeTab === YEAR ? this.renderInnerTransactioncard() : null}
+            {hasData ?
+              <div className="transactScroller">
+                {activeTab === WEEK ? this.renderInnerTransactioncard() : null}
+                {activeTab === MONTH ? this.renderInnerTransactioncard() : null}
+                {activeTab === YEAR ? this.renderInnerTransactioncard() : null}
+              </div> : 
+              <div className="textCenter padT20 mh10p">
+                <div>No Transactions added </div>
+                {typeof(window) !== 'undefined' && !window.signedIn && <div className="padT10 padB20"><a href="/login"><span>Sign In</span></a> for Past Transactions</div>}
+              </div>
+            }
+          </div>
+          <div className={'newContainer ' + (!hasData ? 'padT10' : '')}>
+            <div className="new">
+              <span className="newBtn" onClick={() => this.newExpense(true)}>Add New</span>
             </div>
           </div>
           <div className="viewMoreArrow" onClick={() => this.clickViewMore()}>
@@ -147,12 +158,16 @@ export default class Home extends Component {
           </div>
         </div>
       );
-    }
-    return null;
+  }
+  getCurrentDate() {
+    const date = new Date();
+    const currMonth = MONTHSNAME[date.getMonth()];
+    const currDate = date.getDate();
+    return currDate + ' ' + currMonth + ' ' + date.getFullYear();
   }
 
   render() {
-    const {activeTab, showNewExpense, standing = undefined, spent = undefined, viewMore = false, plotData} = this.state;
+    const {activeTab, showNewExpense, standing = undefined, spent = undefined, viewMore = false, plotData, incomeList} = this.state;
     return (
       <div className="">
         <div>
@@ -164,18 +179,29 @@ export default class Home extends Component {
               <div ref="firstHalfLandingTxt" className="transition0_5 ">
                 <div className="standing">
                   <span className="left-menu-container" onClick={this.leftMenuClick}><img className="left-menu" src="/img/menu.svg"/></span>
-                  <span></span>
                   {/* <span className="right-menu-container" onClick={() => {this.setState({visibleRightMenu: true})}}><img className="right-menu" src="/img/menu.svg"/></span> */}
                 </div>
-                <div className="heading">Expense Home</div>
-                <div className="subHeading">{'Standing : ₹' + (typeof(standing) !== 'undefined' ? standing : '0')}</div>
+                <div className="heading">
+                  <div className="fb f11">CURRENT BALANCE</div>
+                  <div>
+                    <span className="f18">₹ </span>
+                    <span className="standingAmt">{(typeof(standing) !== 'undefined' ? standing : '0')}</span>
+                  </div>
+                  <div className="textCenter">
+                    <div><span className="f11">{this.getCurrentDate()}</span></div>
+                  </div>
+                </div>
+                
                 <div className="expenseDaysBtn">
                   <span className={'dayTypeBtn ' + (activeTab === WEEK ? 'dayTypeBtn-active' : '')} onClick={() => {this.changeExpenseDayFormat(WEEK)}}>Week</span>
                   <span className={'dayTypeBtn ' + (activeTab === MONTH ? 'dayTypeBtn-active' : '')} onClick={() => {this.changeExpenseDayFormat(MONTH)}}>Month</span>
                   <span className={'dayTypeBtn ' + (activeTab === YEAR ? 'dayTypeBtn-active' : '')} onClick={() => {this.changeExpenseDayFormat(YEAR)}}>Year</span>
                 </div>
                 <div>
-                  <div className="subHeading">{'Spent : ₹' + (typeof(spent) !== 'undefined'? spent: '0')}</div>
+                  
+                  <div className="subHeading in-bl fl w50 ">{'Spent : ₹' + (typeof(spent) !== 'undefined'? spent: '0')}</div>
+                  {/* <div className="subHeading in-bl fl w50 ">{'Standing : ₹' + (typeof(standing) !== 'undefined' ? standing : '0')}</div> */}
+                  <div className="subHeading in-bl fl w50 ">{'Income : ₹' + (incomeList && typeof(incomeList.amount) !== 'undefined' ? incomeList.amount : '0')}</div>
                 </div>
                 {this.getTransactionCard()}
               </div>
@@ -189,11 +215,7 @@ export default class Home extends Component {
                   {activeTab === WEEK ?  <Graph plotData={plotData} tab={activeTab}/> : null}
                   {activeTab === MONTH ?  <Graph plotData={plotData} tab={activeTab}/> : null}
                   {activeTab === YEAR ?  <Graph plotData={plotData} tab={activeTab}/> : null}
-                  <div className="newContainer">
-                    <div className="new">
-                      <span className="newBtn" onClick={() => this.newExpense(true)}>Add New</span>
-                    </div>
-                  </div>
+                 
                 </div>
               </div> : null}
           </div>

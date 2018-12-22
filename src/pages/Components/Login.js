@@ -31,6 +31,9 @@ class Login extends Component {
       if (resp.data && !resp.data.error) {
         console.log(this);
         this.props.history.push('/home', {});
+        if (typeof(window) !== 'undefined') {
+          window.signedIn = true;
+        }
       } else {
         console.log('Failed to SignIn', resp);
       }
@@ -43,10 +46,8 @@ class Login extends Component {
     return (
       <div>
         {this.head()}
-        <div>
+        <div className="loginContainer">
           <h1>Login</h1>
-        </div>
-        <div>
           <div>
             <input placeholder='username' value={this.state.username} onChange = {(e) => this.setState({username: e.target.value})} type="text"/>
             <input placeholder='password' value={this.state.password} onChange = {(e) => this.setState({password: e.target.value})} type="password"/>
