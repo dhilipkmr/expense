@@ -43,3 +43,9 @@ button:focus {
 .fb {
   font-weight: bold;
 }
+.marginT25 {
+  margin-top: 25px;
+}
+.transition0_5{
+  transition : all .5s;
+}

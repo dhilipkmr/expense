@@ -19,8 +19,8 @@ export default class Home extends Component {
       expenseList: {},
       incomeList: {},
       viewMore: false
-
     }
+    this.viewedMore = {};
   }
   componentDidMount() {
     this.getExpense();
@@ -98,18 +98,23 @@ export default class Home extends Component {
     this.setState({viewMore: !this.state.viewMore});
   }
 
-  renderTransactioncard() {
+  renderInnerTransactioncard() {
     if (this.state.expenseList && Object.keys(this.state.expenseList).length > 0) {
       return (
         this.state.expenseList.transactionList.map((transaction, index) => {
-          if (this.state.viewMore || !this.state.viewMore && index < 2) {
+          if (this.state.viewMore || this.viewedMore[this.state.activeTab] || !this.state.viewMore && index < 2) {
+            if (this.state.viewMore) {
+              this.viewedMore[this.state.activeTab] = true; // To not remove element from DOM on clicking view More again
+            }
             return (
               <div key={'transaction_type_' + index} className="transactedCardInner">
                 <div className="cardInnerheading">
                   <span className="cat_name">{transaction.category}</span>
-                  <span className="cat_percent">{transaction.percent + ' %'}</span>
+                  <span className="cat_percent ">{transaction.percent + ' %'}</span>
+                  {/* <span className="cat_name loader"></span>
+                  <span className="cat_percent loader"></span> */}
                 </div>
-                <div className="progressBar bl textCenter">
+                <div className="progressBar bl textCenter marginT25" >
                   <div className="filled" style= {{maxWidth: transaction.percent + '%'}}>
                     {/* <div className="filled" ></div> */}
                   </div>
@@ -122,13 +127,32 @@ export default class Home extends Component {
         })
     );
     } else {
-      
       return null;
     }
   }
 
+  getTransactionCard() {
+    const {activeTab, viewMore = false} = this.state;
+    return (
+      <div>
+        <div ref="transactedCard" className={'transactedCard transition1a ' + (viewMore ? 'showAllTransaction' : '')}>
+          <div className="transactScroller">
+            {activeTab === WEEK ? this.renderInnerTransactioncard() : null}
+            {activeTab === MONTH ? this.renderInnerTransactioncard() : null}
+            {activeTab === YEAR ? this.renderInnerTransactioncard() : null}
+          </div>
+        </div>
+        <div className="viewMoreArrow" onClick={() => this.clickViewMore()}>
+          <svg className={viewMore ? 'rotateViewMore' : ''} ref="svgViewMore" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+            <path d="M7.41 7.84L12 12.42l4.59-4.58L18 9.25l-6 6-6-6z"/>
+          </svg>
+        </div>
+      </div>
+    );
+  }
+
   render() {
-    const {activeTab, showNewExpense, standing = undefined, spent = undefined, viewMore = false} = this.state;
+    const {activeTab, showNewExpense, standing = undefined, spent = undefined, viewMore = false, plotData} = this.state;
     return (
       <div className="">
         <div>
@@ -137,49 +161,41 @@ export default class Home extends Component {
           {this.renderLeftMenuBar()}
           <div ref="mainContent" className="mainContent">
             <div className="first-half-landing">
-              <div ref="firstHalfLandingTxt" className="firstHalfTxt">
+              <div ref="firstHalfLandingTxt" className="transition0_5 ">
                 <div className="standing">
                   <span className="left-menu-container" onClick={this.leftMenuClick}><img className="left-menu" src="/img/menu.svg"/></span>
                   <span></span>
                   {/* <span className="right-menu-container" onClick={() => {this.setState({visibleRightMenu: true})}}><img className="right-menu" src="/img/menu.svg"/></span> */}
                 </div>
                 <div className="heading">Expense Home</div>
-                {standing ? <div className="subHeading">{'Standing : ₹' + standing}</div> : null}
+                <div className="subHeading">{'Standing : ₹' + (typeof(standing) !== 'undefined' ? standing : '0')}</div>
                 <div className="expenseDaysBtn">
                   <span className={'dayTypeBtn ' + (activeTab === WEEK ? 'dayTypeBtn-active' : '')} onClick={() => {this.changeExpenseDayFormat(WEEK)}}>Week</span>
                   <span className={'dayTypeBtn ' + (activeTab === MONTH ? 'dayTypeBtn-active' : '')} onClick={() => {this.changeExpenseDayFormat(MONTH)}}>Month</span>
                   <span className={'dayTypeBtn ' + (activeTab === YEAR ? 'dayTypeBtn-active' : '')} onClick={() => {this.changeExpenseDayFormat(YEAR)}}>Year</span>
                 </div>
                 <div>
-                  {spent ? <div className="subHeading">{'Spent : ₹' + spent}</div> : null}
+                  <div className="subHeading">{'Spent : ₹' + (typeof(spent) !== 'undefined'? spent: '0')}</div>
                 </div>
-                <div>
-                  <div ref="transactedCard" className={'transactedCard transition2a ' + (viewMore ? 'showAllTransaction' : '')}>
-                    <div className="transactScroller">
-                      {this.renderTransactioncard()}
+                {this.getTransactionCard()}
+              </div>
+            </div>
+            {plotData && plotData.perDivisionData &&  plotData.perDivisionData.length > 0 ?
+              <div className="other-half-landing">
+                <div ref="otherHalfLandingTxt" className="transition0_5 ">
+                  <div className="textCenter trSumaryHeading fb" >
+                    <span>{'Expense Trends'}</span>
+                  </div>
+                  {activeTab === WEEK ?  <Graph plotData={plotData} tab={activeTab}/> : null}
+                  {activeTab === MONTH ?  <Graph plotData={plotData} tab={activeTab}/> : null}
+                  {activeTab === YEAR ?  <Graph plotData={plotData} tab={activeTab}/> : null}
+                  <div className="newContainer">
+                    <div className="new">
+                      <span className="newBtn" onClick={() => this.newExpense(true)}>Add New</span>
                     </div>
                   </div>
-                  <div className="viewMoreArrow" onClick={() => this.clickViewMore()}>
-                    <svg className={viewMore ? 'rotateViewMore' : ''} ref="svgViewMore" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
-                      <path d="M7.41 7.84L12 12.42l4.59-4.58L18 9.25l-6 6-6-6z"/>
-                    </svg>
-                  </div>
                 </div>
-              </div>
-            </div>
-            <div className="other-half-landing">
-              <div ref="otherHalfLandingTxt">
-                <div className="textCenter trSumaryHeading fb" >
-                  <span>Transaction Summary</span>
-                </div>
-                <Graph data={this.state.plotData}/>
-                <div className="newContainer">
-                  <div className="new">
-                    <span className="newBtn" onClick={() => this.newExpense(true)}>Add New</span>
-                  </div>
-                </div>
-              </div>
-            </div>
+              </div> : null}
           </div>
         </div>
         {showNewExpense ? 

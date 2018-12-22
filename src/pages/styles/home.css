@@ -84,7 +84,9 @@
 .transition2a{
   transition: all 2s;
 }
-
+.transition1a {
+  transition: all 1s;
+}
 .heading {
   font-size: 16px;
   padding: 20px;
@@ -105,7 +107,7 @@
 }
 
 .scale90 {
-  transform: scale(0.90);
+  transform: scale(0.96);
 }
 .expenseDaysBtn {
   padding: 10px;
@@ -161,12 +163,13 @@
 }
 
 .transactedCard {
+  height: auto;
   max-height: 25%;
   overflow: hidden;
   background-color: white;
   border-radius: 10px;
-  padding: 2%;
-  margin: 2% 4%;
+  padding: 2px;
+  margin: 10px 10px;
   box-shadow: 0 4px 8px 0 rgba(0,0,0,0.4)
 
 }
@@ -174,7 +177,7 @@
   min-height: 10%;
   background-color: white;
   border-radius: 10px;
-  margin: 2% 1%;
+  margin: 10px 10px;
   box-shadow: 0 3px 6px 0 rgba(0,0,0,0.3);
 }
 
@@ -193,7 +196,7 @@
 }
 
 .showAllTransaction {
-  max-height: 60vh;
+  max-height: 50%;
   overflow: scroll;
 }
 
@@ -244,9 +247,11 @@
 }
 
 .cardInnerheading {
-  margin: 2% 4%;
+  /* margin: 2% 4%; */
+  margin: 4px 10px;
   padding-top: 10px;
   padding-bottom: 5px;
+  position: relative;
 }
 
 .cat_name {
@@ -265,4 +270,29 @@
 
 .trSumaryHeading {
   padding: 10px;
+}
+
+.loader {
+  content: '';
+  position: absolute;
+  width: 20%;
+  height: 20px;
+  /* left: 14px; */
+  top: 34%;
+  z-index: 0;
+  background: #e8e9ea;
+  border-radius: 5px;
+}
+
+.graphPlotLine {
+  fill: #dfeeff;
+  stroke: #4688F1;
+  stroke-width: 0.7;
+  animation: dash 1500ms linear 0s 1 normal none running;
+  stroke-dasharray: 1000;
+}
+
+@keyframes dash {
+  0% {stroke-dashoffset: 1000;}
+  100% {stroke-dashoffset: 0;}
 }

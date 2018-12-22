@@ -29,6 +29,11 @@ const Expenses = mongoose.model('Expenses', {
     trim: true,
     default: Date.now()
   },
+  dd: {
+    type: Number,
+    required: false,
+    trim: true
+  },
   ww: {
     type: Number,
     required: false,

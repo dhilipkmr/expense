@@ -54,7 +54,8 @@ export const newExpense = (request, response) => {
     const dow = date.getDay() + 1;
     const mm = date.getMonth() + 1;
     const yy = date.getFullYear();
-    const newExpense = { amount, category, date, type, ww, dow, mm, yy };
+    const dd = date.getDate();
+    const newExpense = { amount, category, date, type, ww, dow, mm, yy, dd};
     var newExpenseInstance = new Expenses({
         user_id: mongoose.Types.ObjectId("5c1630ad7669ea2c9bb04616"),
         ...newExpense
@@ -89,6 +90,8 @@ export const getExpenseData = (request, response) => {
                     transaction.percent = Math.round(percent * 100) / 100;
                 });
                 spent = expenseList.amount;
+            } else  {
+                spent = 0;
             }
             if (incomeList) {
                 incomeList.transactionList.map((transaction) => {
@@ -96,6 +99,8 @@ export const getExpenseData = (request, response) => {
                     transaction.percent = Math.round(percent * 100) / 100;
                 });
                 standing = incomeList.amount - spent;
+            } else {
+                standing = 0 - spent;
             }
             response.send({ expenseList, incomeList, spent, standing });
         }
@@ -163,26 +168,30 @@ export const getExpenseSummary = (request, response) => {
         if (err) {
             respond.send(500).send(err);
         } else {
-            if (data[0].perDay) {
-                const total = data[0].amount;
-                data[0].perDay.forEach(element => {
-                    let percent  = element.amount / total;
-                    element.percent = Math.round( percent* 1000) / 10;
+            if (data && data[0] && data[0].perDivisionData) {
+                let maxAmount = Number.MIN_SAFE_INTEGER;
+                data[0].perDivisionData.forEach(entry => {
+                    if (maxAmount < entry.amount) {
+                        maxAmount = entry.amount
+                    }
                 });
+                data[0].maxAmount = maxAmount;
+                response.send({...data[0]});
+            } else {
+                response.send({});
             }
-            response.send({...data[0]});
         }
     };
     const userId = request.session.user_id ? mongoose.Types.ObjectId(request.session.user_id) : mongoose.Types.ObjectId("5c1630ad7669ea2c9bb04616");
     const {tab, yy, mm, ww} = request.body;
     if (tab === YEAR) {
         Expenses.aggregate([
-            {$match: { user_id: userId}},
+            {$match: { user_id: userId }},
             {$match: { yy: yy}},
             {$match: { type: 'expense'}},
             {$group: { _id: { mm: '$mm'}, amount: {$sum: '$amount'}, month: {'$first': '$mm'}}},
             {$sort: { month: 1 }},
-            {$group: {_id: null, amount: {'$sum': '$amount'}, perMonth: {$push : { amount: '$amount', month: '$month'}}}},
+            {$group: {_id: null, totalAmount: {'$sum': '$amount'}, perDivisionData: {$push : { amount: '$amount', division: '$month'}}}},
             {$project: {_id: 0}}
             ]).allowDiskUse(true).exec(execSummaryQuery);
     } else if (tab === MONTH) {
@@ -191,14 +200,10 @@ export const getExpenseSummary = (request, response) => {
             {$match: { yy: yy}},
             {$match: { mm: mm}},
             {$match: { type: 'expense'}},
-            {$group: { _id: { ww: '$ww'}, amount: {$sum: '$amount'}, ww: {'$first': '$ww'}, perDay: { $push: {amount: '$amount', dow: '$dow'}}}},
-            {$sort: {ww: 1}},
-            {$unwind: '$perDay'},
-            {$sort: {ww: 1, 'perDay.dow': 1}},
-            {$group: {_id: { ww: '$ww'}, amount: {$sum: '$amount'}, ww: {'$first': '$ww'}, perDay: { $push: '$perDay'}}},
-            {$sort: {ww: 1}},
-            {$group: {_id: null, amount: {$sum: '$amount'}, perWeek: {$push: {amount: '$amount', ww:'$ww', perDay: '$perDay'}}}},
-            {$project: {_id: 0}}
+            {$group: { _id: {dd: '$dd'}, amount: {'$sum': '$amount'}, dd: {'$first': '$dd'} }},
+            {$sort: {dd: 1}},
+            {$group: {_id: null, totalAmount: {'$sum': '$amount'}, perDivisionData: {$push: {amount: '$amount', division: '$dd'}}}},
+            {$project: {_id:0}}
             ]).allowDiskUse(true).exec(execSummaryQuery);
     } else if (tab === WEEK) {
         Expenses.aggregate([
@@ -209,7 +214,7 @@ export const getExpenseSummary = (request, response) => {
             {$match: { type: 'expense'}},
             {$group: { _id: {dow: '$dow'}, amount: {$sum: '$amount'}, dow: {'$first': '$dow'}}},
             {$sort: { dow: 1}},
-            {$group: { _id: null, amount: {$sum: '$amount'},  perDay: {$push: {amount: '$amount', dow: '$dow'}}}},
+            {$group: { _id: null, totalAmount: {$sum: '$amount'},  perDivisionData: {$push: {amount: '$amount', division: '$dow'}}}},
             {$project: {_id: 0}}
             ]).allowDiskUse(true).exec(execSummaryQuery);
     }
