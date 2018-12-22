@@ -197,11 +197,20 @@ export default class Home extends Component {
                   <span className={'dayTypeBtn ' + (activeTab === MONTH ? 'dayTypeBtn-active' : '')} onClick={() => {this.changeExpenseDayFormat(MONTH)}}>Month</span>
                   <span className={'dayTypeBtn ' + (activeTab === YEAR ? 'dayTypeBtn-active' : '')} onClick={() => {this.changeExpenseDayFormat(YEAR)}}>Year</span>
                 </div>
-                <div>
+                <div className="spentIncomeSection">
+                  <div className="in-bl ">
+                    <div className="fl in-bl spentIcon" >
+                      <svg  width="21" height="17" viewBox="0 0 24 24"><path d="M24 12c0-6.627-5.373-12-12-12s-12 5.373-12 12 5.373 12 12 12 12-5.373 12-12zm-17 1h4v-8h2v8h4l-5 6-5-6z"/></svg>
+                    </div>
+                    <div className="subHeading in-bl">{'Spent : ₹' + (typeof(spent) !== 'undefined'? spent: '0')}</div>
+                  </div>
                   
-                  <div className="subHeading in-bl fl w50 ">{'Spent : ₹' + (typeof(spent) !== 'undefined'? spent: '0')}</div>
-                  {/* <div className="subHeading in-bl fl w50 ">{'Standing : ₹' + (typeof(standing) !== 'undefined' ? standing : '0')}</div> */}
-                  <div className="subHeading in-bl fl w50 ">{'Income : ₹' + (incomeList && typeof(incomeList.amount) !== 'undefined' ? incomeList.amount : '0')}</div>
+                  <div className="in-bl  ">
+                    <div className="fl in-bl incomeIcon " >
+                      <svg className="fl in-bl" width="21" height="17" viewBox="0 0 24 24"><path d="M0 12c0 6.627 5.373 12 12 12s12-5.373 12-12-5.373-12-12-12-12 5.373-12 12zm17-1h-4v8h-2v-8h-4l5-6 5 6z"/></svg>
+                    </div>
+                    <div className="subHeading in-bl">{'Income : ₹' + (incomeList && typeof(incomeList.amount) !== 'undefined' ? incomeList.amount : '0')}</div>
+                  </div>
                 </div>
                 {this.getTransactionCard()}
               </div>

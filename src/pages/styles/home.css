@@ -296,3 +296,21 @@
 .standingAmt {
   font-size: 25px;
 }
+.spentIcon {
+  padding-top: 14px;
+  padding-left: 11px;
+}
+.incomeIcon {
+  padding-top: 14px;
+  padding-left: 11px;
+}
+.spentIcon path {
+  fill : #ffffff;
+}
+.incomeIcon path{
+  fill : #ffffff;
+}
+.spentIncomeSection {
+  display: flex;
+  justify-content: space-between;
+}
