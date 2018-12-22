@@ -155,7 +155,7 @@ export default class Home extends Component {
           </div>
           <div className={'newContainer ' + (!hasData ? 'padT10' : '')}>
             <div className="new">
-              <span className="newBtn" onClick={() => this.newExpense(true)}>Add New</span>
+              <span className="newBtn" onClick={() => this.newExpense(true)}> + add New</span>
             </div>
           </div>
         </div>
