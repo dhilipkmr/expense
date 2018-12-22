@@ -9,10 +9,10 @@ import Home from '../components/Home';
 export default () => {
     return (
         <Switch>
-            <Route path='/' exact render={(props) => <Home {...props}/>}/>
             <Route path='/login' exact render={(props) => <Login {...props}/>}/>
             <Route path='/home' exact render={(props) => <Home {...props}/>}/>
-            <Route render={(props) => <NotFound {...props}/>}/>
+            {/* <Route path='/' exact render={(props) => <Home {...props}/>}/> */}
+            {/* <Route path='*' render={(props) => <NotFound {...props}/>}/> */}
         </Switch>
     );
 }

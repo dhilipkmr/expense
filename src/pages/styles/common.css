@@ -79,3 +79,6 @@ min-height: 10%
 .padB20 {
   padding-bottom: 20px;
 }
+.di {
+  display: inline;
+}

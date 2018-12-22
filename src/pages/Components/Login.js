@@ -46,14 +46,25 @@ class Login extends Component {
     return (
       <div>
         {this.head()}
-        <div className="loginContainer">
-          <h1>Login</h1>
-          <div>
-            <input placeholder='username' value={this.state.username} onChange = {(e) => this.setState({username: e.target.value})} type="text"/>
-            <input placeholder='password' value={this.state.password} onChange = {(e) => this.setState({password: e.target.value})} type="password"/>
+        <div>
+          <div className="loginContainer white">
+            <div className="fieldsDiv">
+              <div className="username">
+                <input placeholder='username' value={this.state.username} onChange = {(e) => this.setState({username: e.target.value})} type="text"/>
+              </div>
+              <div className="password padT10">
+                <input placeholder='password' value={this.state.password} onChange = {(e) => this.setState({password: e.target.value})} type="password"/>
+              </div>
+            </div>
+            <div className="textCenter padT20">
+              <div className="new di">
+                <span className="newBtn"onClick={this.signIn}>Sign In</span>
+              </div>
+              <div className="new di">
+                <span className="newBtn" onClick={this.signUp}>Sign Up</span>
+              </div>
+            </div>
           </div>
-          <button onClick={this.signIn}>Sign In</button>
-          <button onClick={this.signUp}>Sign Up</button>
         </div>
       </div>
     );
