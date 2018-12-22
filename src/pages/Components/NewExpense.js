@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
 import {new_expense} from '../apiCalls/ApiCalls';
+import {MONTHSNAMESHORT} from '../constants/constants';
 // import {commaFormatted} from '../utils/utils';
 
 export default class NewExpense extends Component {
@@ -74,28 +75,49 @@ export default class NewExpense extends Component {
     }
   }
 
+  renderOptions(type) {
+    const options = [];
+    if (type === 'day') {
+      for(let i = 1; i < 32 ; i++) {
+        options.push(<option value={i}>{i}</option>);
+      }
+    } else if (type === 'month') {
+      for(let i = 0; i < 12 ; i++) {
+        options.push(<option value={i}>{MONTHSNAMESHORT[i]}</option>);
+      }
+    } else if (type === 'year') {
+      for(let i = 2020; i > 2000 ; i--) {
+        options.push(<option value={i}>{i}</option>);
+      }
+    }
+    return options;
+  }
+
   render() {
     const {type, amount, day, month, year, category, error} = this.state;
 
     return (
       <div className="newExpenseContainer zi2">
-        <div className="expIncBtns textCenter">
+        <div className="expIncBtns textCenter mT25">
           <span className={'newBtn ' + (type === 'expense' ? 'selectedType' : '')}  onClick={() => this.selectType('expense')}>Expense</span>
           <span className={'newBtn ' + (type === 'income' ? 'selectedType' : '')} onClick={() => this.selectType('income')}>Income</span>
         </div>
-        <div className="amountInput">
+        <div className="amountInput mT25 ">
         <span>₹</span>
           <input type="text" placeholder="Amount" onChange={(e) => this.changeAmount(e.target.value)} value={amount}/>
           {error.amount ? <div className="errorDiv">{error.amount}</div> : null}
         </div>
-        <div  className="categoryInput">
+        <div  className="categoryInput mT25 ">
           <input type="text" placeholder="Category" onChange={(e) => this.setState({category: e.target.value})} value={category}/>
           {error.category ? <div className="errorDiv">{error.category}</div> : null}
         </div>
-        <div className="spentDay">
-          <input ref="day" className="dayIp" type="number" maxLength="2" placeholder="DD" onChange={(e) => this.changeDate({day: e.target.value}, 'day', 'month')} value={day}/>
+        <div className="spentDay mT25 ">
+          {/* <input ref="day" className="dayIp" type="number" maxLength="2" placeholder="DD" onChange={(e) => this.changeDate({day: e.target.value}, 'day', 'month')} value={day}/>
           <input ref="month" className="dayIp" type="number" maxLength="2" placeholder="MM" onChange={(e) => this.changeDate({month: e.target.value}, 'month', 'year')} value={month}/>
-          <input ref="year" className="dayIp" type="number" maxLength="2" placeholder="YY" onChange={(e) => this.changeDate({year: e.target.value}, 'year')} value={year}/>
+          <input ref="year" className="dayIp" type="number" maxLength="2" placeholder="YY" onChange={(e) => this.changeDate({year: e.target.value}, 'year')} value={year}/> */}
+          <select ref="day" onChange={(e) => this.changeDate({day: e.target.value}, 'day', 'month')}>{this.renderOptions('day')}</select>
+          <select ref="day" onChange={(e) => this.changeDate({day: e.target.value}, 'month', 'year')}>{this.renderOptions('month')}</select>
+          <select ref="day" onChange={(e) => this.changeDate({day: e.target.value}, 'year')}>{this.renderOptions('year')}</select>
           {error.date ? <div className="errorDiv">{error.date}</div> : null}
         </div>
         <div className="textCenter">

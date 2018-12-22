@@ -10,6 +10,7 @@ export default () => {
     return (
         <Switch>
             <Route path='/login' exact render={(props) => <Login {...props}/>}/>
+            {/* <Route path='/login' exact render={(props) => <Login {...props}/>}/> */}
             <Route path='/home' exact render={(props) => <Home {...props}/>}/>
             {/* <Route path='/' exact render={(props) => <Home {...props}/>}/> */}
             {/* <Route path='*' render={(props) => <NotFound {...props}/>}/> */}

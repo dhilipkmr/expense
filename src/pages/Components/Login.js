@@ -9,8 +9,8 @@ class Login extends Component {
     this.signUp = this.signUp.bind(this);
     this.signIn = this.signIn.bind(this);
     this.state = {
-      username: 'dhilip',
-      password: 'dhilipdhilip'
+      username: '',
+      password: ''
     }
   }
 
@@ -26,8 +26,13 @@ class Login extends Component {
     signup({username: this.state.username, password: this.state.password});
   }
 
-  signIn() {
-    signin({username: this.state.username, password: this.state.password}).then((resp) => {
+  signIn(withTestCreds) {
+    let {username, password} = this.state;
+    if (withTestCreds) {
+      username = 'dhilip';
+      password = 'dhilipdhilip';
+    }
+    signin({username: username, password: password}).then((resp) => {
       if (resp.data && !resp.data.error) {
         console.log(this);
         this.props.history.push('/home', {});
@@ -50,10 +55,10 @@ class Login extends Component {
           <div className="loginContainer white">
             <div className="fieldsDiv">
               <div className="username">
-                <input placeholder='username' value={this.state.username} onChange = {(e) => this.setState({username: e.target.value})} type="text"/>
+                <input className="whiteBrdrBtm" placeholder='username' value={this.state.username} onChange = {(e) => this.setState({username: e.target.value})} type="text"/>
               </div>
               <div className="password padT10">
-                <input placeholder='password' value={this.state.password} onChange = {(e) => this.setState({password: e.target.value})} type="password"/>
+                <input className="whiteBrdrBtm" placeholder='password' value={this.state.password} onChange = {(e) => this.setState({password: e.target.value})} type="password"/>
               </div>
             </div>
             <div className="textCenter padT20">
@@ -62,6 +67,11 @@ class Login extends Component {
               </div>
               <div className="new di">
                 <span className="newBtn" onClick={this.signUp}>Sign Up</span>
+              </div>
+            </div>
+            <div className="textCenter padT20">
+              <div className="new">
+                <span className="newBtn" onClick={() => this.signIn(true)}>Continue with Test Login</span>
               </div>
             </div>
           </div>

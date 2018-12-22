@@ -1,11 +1,14 @@
 .first-half-landing {
   /* background-image: linear-gradient(141deg, #9fb8ad 0%, #1fc8db 51%, #2cb5e8 75%); */
-  /* background-image: linear-gradient(to bottom, #2d6bfd, #22c1c3); */
+  /* background-image: linear-gradient(to bottom, #2d6bfd, #2550b1); */
   background-color: #4688F1;
   border-bottom-left-radius: 15px;
   border-bottom-right-radius: 15px;
   box-shadow: 0 3px 6px 0 rgba(0,0,0,0.3);
-  min-height: 50%;
+  position: fixed;
+  width: 100%;
+  height: 300px;
+  z-index: -1;
 }
 
 .other-half-landing {
@@ -161,7 +164,7 @@
 
 .transactedCard {
   height: auto;
-  max-height: 25%;
+  max-height: 185px;
   overflow: hidden;
   background-color: white;
   border-radius: 10px;
@@ -171,7 +174,7 @@
 
 }
 .transactedCardInner {
-  min-height: 10%;
+  min-height: 75px;
   background-color: white;
   border-radius: 10px;
   margin: 10px 10px;
@@ -180,10 +183,9 @@
 
 .viewMoreArrow {
   text-align: center;
-  padding-top: 10px;
 }
 .viewMoreArrow path {
-  fill: white;
+  fill: #4688F1;
 }
 .viewMoreArrow:hover {
   cursor: pointer;
@@ -193,7 +195,7 @@
 }
 
 .showAllTransaction {
-  max-height: 50%;
+  max-height: 60vh;
   overflow: scroll;
 }
 
@@ -313,4 +315,6 @@
 .spentIncomeSection {
   display: flex;
   justify-content: space-between;
+  padding-right: 10px;
+  padding-left: 10px;
 }

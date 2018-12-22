@@ -135,26 +135,28 @@ export default class Home extends Component {
         <div>
           <div ref="transactedCard" className={'transactedCard transition1a ' + (viewMore ? 'showAllTransaction' : '')}>
             {hasData ?
+            <div>
               <div className="transactScroller">
                 {activeTab === WEEK ? this.renderInnerTransactioncard() : null}
                 {activeTab === MONTH ? this.renderInnerTransactioncard() : null}
                 {activeTab === YEAR ? this.renderInnerTransactioncard() : null}
-              </div> : 
-              <div className="textCenter padT20 mh10p">
-                <div>No Transactions added </div>
-                {typeof(window) !== 'undefined' && !window.signedIn && <div className="padT10 padB20"><a href="/login"><span>Sign In</span></a> for Past Transactions</div>}
               </div>
-            }
-          </div>
-          <div className={'newContainer ' + (!hasData ? 'padT10' : '')}>
-            <div className="new">
-              <span className="newBtn" onClick={() => this.newExpense(true)}>Add New</span>
+            </div> : 
+            <div className="textCenter padT20 mh10p">
+              <div>No Transactions added </div>
+              {typeof(window) !== 'undefined' && !window.signedIn && <div className="padT10 padB20"><a href="/login"><span>Sign In</span></a> for Past Transactions</div>}
             </div>
+            }
           </div>
           <div className="viewMoreArrow" onClick={() => this.clickViewMore()}>
             <svg className={viewMore ? 'rotateViewMore' : ''} ref="svgViewMore" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
               <path d="M7.41 7.84L12 12.42l4.59-4.58L18 9.25l-6 6-6-6z"/>
             </svg>
+          </div>
+          <div className={'newContainer ' + (!hasData ? 'padT10' : '')}>
+            <div className="new">
+              <span className="newBtn" onClick={() => this.newExpense(true)}>Add New</span>
+            </div>
           </div>
         </div>
       );
@@ -175,7 +177,8 @@ export default class Home extends Component {
           </div>
           {this.renderLeftMenuBar()}
           <div ref="mainContent" className="mainContent">
-            <div className="first-half-landing">
+            <div className="">
+              <div class="first-half-landing"></div>
               <div ref="firstHalfLandingTxt" className="transition0_5 ">
                 <div className="standing">
                   <span className="left-menu-container" onClick={this.leftMenuClick}><img className="left-menu" src="/img/menu.svg"/></span>
