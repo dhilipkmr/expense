@@ -9,9 +9,8 @@
   padding-top: 30%;
   text-align: center;
 }
-.username {
 
-}
-.password {
-
+.fieldsDiv ::placeholder { /* Chrome, Firefox, Opera, Safari 10.1+ */
+  color: #d4d4d4;
+  opacity: 1; /* Firefox */
 }

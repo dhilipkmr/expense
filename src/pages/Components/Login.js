@@ -55,10 +55,10 @@ class Login extends Component {
           <div className="loginContainer white">
             <div className="fieldsDiv">
               <div className="username">
-                <input className="whiteBrdrBtm" placeholder='username' value={this.state.username} onChange = {(e) => this.setState({username: e.target.value})} type="text"/>
+                <input className="whiteBrdrBtm" placeholder='Username' value={this.state.username} onChange = {(e) => this.setState({username: e.target.value})} type="text"/>
               </div>
               <div className="password padT10">
-                <input className="whiteBrdrBtm" placeholder='password' value={this.state.password} onChange = {(e) => this.setState({password: e.target.value})} type="password"/>
+                <input className="whiteBrdrBtm" placeholder='Password' value={this.state.password} onChange = {(e) => this.setState({password: e.target.value})} type="password"/>
               </div>
             </div>
             <div className="textCenter padT20">
