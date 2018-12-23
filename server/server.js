@@ -1,3 +1,4 @@
+require('./config/config');
 import 'babel-polyfill';
 import env from './config/config';
 import express from 'express';
@@ -68,7 +69,7 @@ app.get('*', (req, res) => {
 });
 
 app.listen(port, () => {
-    console.log('process.env', port);
+    console.log('proces.env', port, process.env.MONGOLAB_URI);
     console.log('Server Started on Port: ', port);
 });
 
