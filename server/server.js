@@ -19,7 +19,8 @@ const port = process.env.PORT;
 app.use(session({
     secret: 'dhilipLocal',
     resave: false,
-    saveUninitialized: true
+    saveUninitialized: true,
+    url: process.env.MONGOLAB_URI
 }))
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
