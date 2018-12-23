@@ -70,7 +70,7 @@ export const newExpense = (request, response) => {
 };
 
 export const getExpenseData = (request, response) => {
-    const userId = request.session.user_id ? mongoose.Types.ObjectId(request.session.user_id) : mongoose.Types.ObjectId("5c1630ad7669ea2c9bb04616");
+    const userId = request.session._userId ? mongoose.Types.ObjectId(request.session._userId) : mongoose.Types.ObjectId("5c10ba234f8b6296c08e5818");
     function expenseDateResponder(err, data) {
         if (err) {
             respond.send(500).send(err);
@@ -182,7 +182,7 @@ export const getExpenseSummary = (request, response) => {
             }
         }
     };
-    const userId = request.session.user_id ? mongoose.Types.ObjectId(request.session.user_id) : mongoose.Types.ObjectId("5c1630ad7669ea2c9bb04616");
+    const userId = request.session._userId ? mongoose.Types.ObjectId(request.session._userId) : mongoose.Types.ObjectId("5c10ba234f8b6296c08e5818");
     const {tab, yy, mm, ww} = request.body;
     if (tab === YEAR) {
         Expenses.aggregate([
