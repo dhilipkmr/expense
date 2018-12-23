@@ -1,6 +1,6 @@
 var mongoose1 = require('mongoose');
 mongoose1.Promise = global.Promise;
-mongoose1.connect(process.env.MONGOLAB_URI, { useNewUrlParser: true }).then(() => {
+mongoose1.connect(process.env.MONGOLAB_URI, { useNewUrlParser: true, useMongoClient: true }).then(() => {
     console.log('Connected to Db');
 },(e)=> {
     console.log(e);
