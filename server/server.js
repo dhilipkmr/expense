@@ -12,16 +12,23 @@ var session = require('express-session');
 import App from '../src/app'
 import mongoose1 from './db/mongoose';
 import {signUp, signIn, newExpense, getExpenseData, getExpenseSummary} from './api/apiCalls';
+const MongoStore = require('connect-mongo')(session);
 
 const app = express();
 const port = process.env.PORT;
 
+// app.use(session({
+//     secret: 'dhilipLocal',
+//     resave: false,
+//     saveUninitialized: true,
+//     url: process.env.MONGOLAB_URI
+// }))
 app.use(session({
-    secret: 'dhilipLocal',
-    resave: false,
-    saveUninitialized: true,
-    url: process.env.MONGOLAB_URI
-}))
+    secret: 'foo',
+    store: new MongoStore({
+        url: process.env.MONGOLAB_URI
+    })
+}));
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 app.use(express.static('build/public'));
