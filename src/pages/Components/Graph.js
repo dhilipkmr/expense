@@ -45,6 +45,13 @@ export default class Graph extends Component {
         lastDivision = lastDivision + 1;
       }
     });
+    // to push values for remaining days
+    while(length > lastDivision) {
+      const lastX = xCoordinates[xCoordinates.length - 1];
+      xCoordinates.push((lastX + xCoordinateDivLength));
+      yCoordinates.push(HEIGHT);
+      lastDivision = lastDivision + 1;
+    }
     const lastX = xCoordinates[xCoordinates.length - 1];
     xCoordinates.push((lastX + xCoordinateDivLength));
     yCoordinates.push(HEIGHT);

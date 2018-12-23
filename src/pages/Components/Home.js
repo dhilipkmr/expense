@@ -90,8 +90,13 @@ export default class Home extends Component {
     );
   }
 
-  newExpense(val) {
-    this.setState({showNewExpense: val});
+  newExpense(val, saveSuccess) {
+    this.setState({showNewExpense: val}, () => {
+      if (saveSuccess) {
+        this.getExpense();
+        this.getExpenseSummary();
+      }
+    });
   }
 
   clickViewMore() {

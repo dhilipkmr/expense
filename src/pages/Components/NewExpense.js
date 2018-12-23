@@ -37,11 +37,12 @@ export default class NewExpense extends Component {
 
   isValidDate() {
     const {day, month, year} = this.state;
-    var dateReg = /^[0-9][0-9]$/;
-    if (!dateReg.test(day) || !dateReg.test(month) || !dateReg.test(year)) {
+    const dateReg = /^\d{1,2}$/;
+    const dateRegYear = /^\d{4}$/;
+    if (!dateReg.test(day) || !dateReg.test(month) || !dateRegYear.test(year)) {
       return false;
     } else {
-      this.date = new Date(2000 + parseInt(year), parseInt(month)-1, parseInt(day));
+      this.date = new Date(parseInt(year), parseInt(month), parseInt(day));
       return true;
     }
   }
@@ -68,9 +69,10 @@ export default class NewExpense extends Component {
     if (isValidationSuccess) {
       const params = { amount, type, date: this.date, category};
       new_expense(params).then((response) => {
-        this.props.newExpense(false);
+        this.props.newExpense(false, true);
       }, (err) => {
         console.log('Unable to create new Expense',err);
+        this.props.newExpense(false, false);
       });
     }
   }
@@ -78,14 +80,17 @@ export default class NewExpense extends Component {
   renderOptions(type) {
     const options = [];
     if (type === 'day') {
+      options.push(<option>Day</option>);
       for(let i = 1; i < 32 ; i++) {
         options.push(<option value={i}>{i}</option>);
       }
     } else if (type === 'month') {
+      options.push(<option>Month</option>);
       for(let i = 0; i < 12 ; i++) {
         options.push(<option value={i}>{MONTHSNAMESHORT[i]}</option>);
       }
     } else if (type === 'year') {
+      options.push(<option>Year</option>);
       for(let i = 2020; i > 2000 ; i--) {
         options.push(<option value={i}>{i}</option>);
       }
@@ -116,8 +121,8 @@ export default class NewExpense extends Component {
           <input ref="month" className="dayIp" type="number" maxLength="2" placeholder="MM" onChange={(e) => this.changeDate({month: e.target.value}, 'month', 'year')} value={month}/>
           <input ref="year" className="dayIp" type="number" maxLength="2" placeholder="YY" onChange={(e) => this.changeDate({year: e.target.value}, 'year')} value={year}/> */}
           <select ref="day" onChange={(e) => this.changeDate({day: e.target.value}, 'day', 'month')}>{this.renderOptions('day')}</select>
-          <select ref="day" onChange={(e) => this.changeDate({day: e.target.value}, 'month', 'year')}>{this.renderOptions('month')}</select>
-          <select ref="day" onChange={(e) => this.changeDate({day: e.target.value}, 'year')}>{this.renderOptions('year')}</select>
+          <select ref="month" onChange={(e) => this.changeDate({month: e.target.value}, 'month', 'year')}>{this.renderOptions('month')}</select>
+          <select ref="year" onChange={(e) => this.changeDate({year: e.target.value}, 'year')}>{this.renderOptions('year')}</select>
           {error.date ? <div className="errorDiv">{error.date}</div> : null}
         </div>
         <div className="textCenter">
