@@ -51,13 +51,13 @@ export const newExpense = (request, response) => {
     amount = parseInt(amount);
     date = new Date(date);
     const ww = Math.ceil(date.getDate() / 7);
-    const dow = date.getDay() + 1;
-    const mm = date.getMonth() + 1;
+    const dow = date.getDay();
+    const mm = date.getMonth();
     const yy = date.getFullYear();
     const dd = date.getDate();
     const newExpense = { amount, category, date, type, ww, dow, mm, yy, dd};
     var newExpenseInstance = new Expenses({
-        user_id: mongoose.Types.ObjectId("5c1630ad7669ea2c9bb04616"),
+        user_id: mongoose.Types.ObjectId(request.session._userId),
         ...newExpense
     });
     newExpenseInstance.save().then((doc) => {

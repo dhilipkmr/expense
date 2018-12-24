@@ -25,6 +25,7 @@ const port = process.env.PORT;
 // }))
 app.use(session({
     secret: 'foo',
+    resave: true,
     store: new MongoStore({
         url: process.env.MONGOLAB_URI
     })

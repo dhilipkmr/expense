@@ -29,7 +29,7 @@ export default class Home extends Component {
 
   getExpenseSummary() {
     const tab = this.state.activeTab;
-    const mm = new Date().getMonth() + 1;
+    const mm = new Date().getMonth();
     const dow = new Date().getDay();
     const ww = Math.ceil(new Date().getDate() / 7);
     const yy = new Date().getFullYear();
@@ -44,7 +44,7 @@ export default class Home extends Component {
   getExpense() {
     let expenseList = {}, incomeList = {}, standing ='';
     const tab = this.state.activeTab;
-    const mm = new Date().getMonth() + 1;
+    const mm = new Date().getMonth();
     const dow = new Date().getDay();
     const ww = Math.ceil(new Date().getDate() / 7);
     const yy = new Date().getFullYear();
