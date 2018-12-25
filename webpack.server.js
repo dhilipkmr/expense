@@ -1,4 +1,5 @@
 const path = require('path');
+var webpack = require('webpack');
 const webpackNodeExternals = require('webpack-node-externals')
 module.exports = {
     target: 'node',
@@ -27,6 +28,5 @@ module.exports = {
         ]
     },
     externals: [webpackNodeExternals()],
-    mode: 'development',
     devtool: 'inline-source-map'
 }

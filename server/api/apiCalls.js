@@ -5,7 +5,6 @@ import Users from '../models/userModel';
 import { MONTH, YEAR, WEEK } from '../../src/pages/constants/constants';
 
 export const signUp = (request, response) => {
-    // Users.deleteMany({});
     const { username = '', password = '', emailId = '' } = request.body;
     var user = new Users({
         _id: mongoose.Types.ObjectId(),
@@ -61,7 +60,6 @@ export const newExpense = (request, response) => {
         ...newExpense
     });
     newExpenseInstance.save().then((doc) => {
-        // request.session.user = doc.username;
         response.send(doc);
     }, (err) => {
         console.log('Failed to save new Expense', err);
