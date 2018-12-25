@@ -53,6 +53,8 @@ const loadHtml = (content) => {
             </head>
             <body>
                 <div id="root"></div>
+                <script src = "/swRegisterer.js">
+                </script>
                 <script src="client_bundle.js"></script>
             </body>
         </html>`);

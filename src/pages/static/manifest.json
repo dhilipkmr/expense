@@ -4,10 +4,15 @@
   "start_url": "/login",
   "scope": ".",
   "display": "standalone",
-  "background-color": "#4688F1",
-  "theme-color": "#4688F1",
+  "background_color": "#4688F1",
+  "theme_color": "#4688F1",
   "description" : "Manage all your Expenses at one place",
   "dir": "ltr",
   "lang": "en-US",
-  "orientation": "portrait-primary"
+  "orientation": "portrait-primary",
+  "icons":[{
+    "src": "/img/money192.png",
+    "type": "img/png",
+    "sizes": "192x192"
+  }]
 }
