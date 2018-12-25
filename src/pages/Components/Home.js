@@ -14,11 +14,10 @@ export default class Home extends Component {
     this.state = {
       activeTab: MONTH,
       showNewExpense: false,
-      standing: undefined,
-      spent: undefined,
-      expenseList: {},
-      incomeList: {},
-      viewMore: false
+      viewMore: false,
+      weekData: {},
+      monthData: {},
+      yearData: {}
     }
     this.viewedMore = {};
   }
@@ -26,35 +25,68 @@ export default class Home extends Component {
     this.getExpense();
     this.getExpenseSummary();
   }
-
-  getExpenseSummary() {
-    const tab = this.state.activeTab;
-    const mm = new Date().getMonth();
-    const dow = new Date().getDay();
-    const ww = Math.ceil(new Date().getDate() / 7);
-    const yy = new Date().getFullYear();
-    const params = {tab, mm, dow, ww, yy};
-    get_expense_summary(params).then((resp) => {
-      this.setState({plotData: {...resp.data}});
-    }, (err) => {
-      console.log('Unable to Get Expense Summary Details', err);
-    });
+  // To give the prop in the state to check availability of data
+  currentTabData() {
+    const {activeTab} = this.state;
+    if (activeTab === WEEK) {
+      return this.state.weekData;
+    } else if (activeTab === MONTH) {
+      return this.state.monthData;
+    } else if (activeTab === YEAR) {
+      return this.state.yearData;
+    }
   }
 
-  getExpense() {
-    let expenseList = {}, incomeList = {}, standing ='';
+  findCurrentDataProp() {
+    const {activeTab} = this.state;
+    if (activeTab === WEEK) {
+      return 'weekData';
+    } else if (activeTab === MONTH) {
+      return 'monthData';
+    } else if (activeTab === YEAR) {
+      return 'yearData';
+    }
+  }
+
+  getParams() {
     const tab = this.state.activeTab;
-    const mm = new Date().getMonth();
-    const dow = new Date().getDay();
-    const ww = Math.ceil(new Date().getDate() / 7);
-    const yy = new Date().getFullYear();
+    const currDate = new Date();
+    const mm = currDate.getMonth();
+    const dow = currDate.getDay();
+    const yy = currDate.getFullYear();
+
+    const firstDayofMonth = new Date(yy, mm, 1).getDay();
+    const ww = Math.ceil((firstDayofMonth + currDate.getDate()) / 7);
+    
     const params = {tab, mm, dow, ww, yy};
-    get_expense_data(params).then((resp) => {
-     const {expenseList, incomeList, standing, spent} = resp.data;
-      this.setState({expenseList, incomeList, standing, spent});
-    }, (err) => {
-      console.log('Unable to Get Expense Details', err);
-    });
+    return params;
+  }
+
+  getExpenseSummary(loadNewSummaryData) {
+    const params = this.getParams();
+    const activeTabData = this.findCurrentDataProp();
+
+    if (Object.keys(this.state[activeTabData]).length === 0 || loadNewSummaryData) {
+      get_expense_summary(params).then((resp) => {
+        this.setState({[activeTabData] : {...this.state[activeTabData], plotData: {...resp.data}}});
+      }, (err) => {
+        console.log('Unable to Get Expense Summary Details', err);
+      });
+    }
+  }
+
+  getExpense(loadNewExpenseData) {
+    const params = this.getParams();
+    const activeTabData = this.findCurrentDataProp();
+    
+    if (Object.keys(this.state[activeTabData]).length === 0 || loadNewExpenseData) {
+      get_expense_data(params).then((resp) => {
+        const {expenseList, incomeList, standing, spent} = resp.data;
+        this.setState({[activeTabData] : {...this.state[activeTabData], expenseList, incomeList, standing, spent}});
+       }, (err) => {
+         console.log('Unable to Get Expense Details', err);
+       });
+    }
   }
 
   changeExpenseDayFormat(activeTab) {
@@ -91,12 +123,14 @@ export default class Home extends Component {
   }
 
   newExpense(val, saveSuccess) {
-    this.setState({showNewExpense: val}, () => {
-      if (saveSuccess) {
-        this.getExpense();
-        this.getExpenseSummary();
-      }
-    });
+    if (saveSuccess) {
+      this.setState({showNewExpense: val, weekData: {}, monthData: {}, yearData: {}}, () => {
+        this.getExpense(saveSuccess);
+        this.getExpenseSummary(saveSuccess);
+      });
+    } else {
+      this.setState({showNewExpense: val});
+    }
   }
 
   clickViewMore() {
@@ -105,8 +139,9 @@ export default class Home extends Component {
   }
 
   renderInnerTransactioncard() {
+    const {expenseList} = this.currentTabData();
     return (
-      this.state.expenseList.transactionList.map((transaction, index) => {
+      expenseList.transactionList.map((transaction, index) => {
         if (this.state.viewMore || this.viewedMore[this.state.activeTab] || !this.state.viewMore && index < 2) {
           if (this.state.viewMore) {
             this.viewedMore[this.state.activeTab] = true; // To not remove element from DOM on clicking view More again
@@ -134,8 +169,9 @@ export default class Home extends Component {
   }
 
   getTransactionCard() {
+    const currentTabData = this.currentTabData();
     const {activeTab, viewMore = false} = this.state;
-    const hasData = this.state.expenseList && Object.keys(this.state.expenseList).length > 0;
+    const hasData = currentTabData.expenseList && Object.keys(currentTabData.expenseList).length > 0;
       return (
         <div>
           <div ref="transactedCard" className={'transactedCard transition1a ' + (viewMore ? 'showAllTransaction' : '')}>
@@ -174,16 +210,16 @@ export default class Home extends Component {
   }
 
   render() {
-    const {activeTab, showNewExpense, standing = undefined, spent = undefined, viewMore = false, plotData, incomeList} = this.state;
+    const {activeTab, showNewExpense, viewMore = false} = this.state;
+    const {standing = undefined, spent = undefined, plotData = undefined, incomeList = undefined} = this.currentTabData();
     return (
       <div className="">
         <div>
-          <div ref="backDrop" className={'transition2a zi1 ' + (showNewExpense ? 'backDrop' : '')} onClick={() => this.newExpense(false)}>
-          </div>
+          <div ref="backDrop" className={'transition2a zi1 ' + (showNewExpense ? 'backDrop' : '')} onClick={() => this.newExpense(false)}></div>
           {this.renderLeftMenuBar()}
           <div ref="mainContent" className="mainContent">
             <div className="">
-              <div class="first-half-landing"></div>
+              <div className="first-half-landing"></div>
               <div ref="firstHalfLandingTxt" className="transition0_5 ">
                 <div className="standing">
                   <span className="left-menu-container" onClick={this.leftMenuClick}><img className="left-menu" src="/img/menu.svg"/></span>
@@ -232,7 +268,6 @@ export default class Home extends Component {
                   {activeTab === WEEK ?  <Graph plotData={plotData} tab={activeTab}/> : null}
                   {activeTab === MONTH ?  <Graph plotData={plotData} tab={activeTab}/> : null}
                   {activeTab === YEAR ?  <Graph plotData={plotData} tab={activeTab}/> : null}
-                 
                 </div>
               </div> : null}
           </div>

@@ -50,10 +50,11 @@ export const newExpense = (request, response) => {
     let { amount, category, date, type } = request.body;
     amount = parseInt(amount);
     date = new Date(date);
-    const ww = Math.ceil(date.getDate() / 7);
-    const dow = date.getDay();
     const mm = date.getMonth();
     const yy = date.getFullYear();
+    const firstDayofMonth = new Date(yy, mm, 1).getDay();
+    const ww = Math.ceil((firstDayofMonth + date.getDate()) / 7);
+    const dow = date.getDay();
     const dd = date.getDate();
     const newExpense = { amount, category, date, type, ww, dow, mm, yy, dd};
     var newExpenseInstance = new Expenses({

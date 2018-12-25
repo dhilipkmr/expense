@@ -26,7 +26,7 @@ export default class Graph extends Component {
     const length = DIVISIONLENGTH[tab];
     const maxAmt = plotData.maxAmount;
     const xCoordinateDivLength = (WIDTH / (length + 2));
-    let lastDivision = 0;
+    let lastDivision = -1;
     let str = '';
 
     /* To start the graph at the Least Point */
@@ -42,7 +42,7 @@ export default class Graph extends Component {
         } else {
           yCoordinates.push(HEIGHT);
         }
-        lastDivision = lastDivision + 1;
+        lastDivision++;
       }
     });
     // to push values for remaining days
@@ -50,7 +50,7 @@ export default class Graph extends Component {
       const lastX = xCoordinates[xCoordinates.length - 1];
       xCoordinates.push((lastX + xCoordinateDivLength));
       yCoordinates.push(HEIGHT);
-      lastDivision = lastDivision + 1;
+      lastDivision++;
     }
     const lastX = xCoordinates[xCoordinates.length - 1];
     xCoordinates.push((lastX + xCoordinateDivLength));

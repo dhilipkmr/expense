@@ -6,7 +6,7 @@
   min-height: 50%;
 }
 .fieldsDiv {
-  padding-top: 30%;
+  padding-top: 200px;
   text-align: center;
 }
 
@@ -14,3 +14,4 @@
   color: #d4d4d4;
   opacity: 1; /* Firefox */
 }
+

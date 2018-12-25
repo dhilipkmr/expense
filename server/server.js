@@ -6,7 +6,7 @@ import bodyParser from 'body-parser';
 var session = require('express-session');
 
 import App from '../src/app'
-import mongoose1 from './db/mongoose';
+import './db/mongoose';
 import {signUp, signIn, newExpense, getExpenseData, getExpenseSummary} from './api/apiCalls';
 
 const MongoStore = require('connect-mongo')(session);
