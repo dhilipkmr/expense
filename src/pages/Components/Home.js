@@ -117,13 +117,8 @@ export default class Home extends Component {
       this.refs.firstHalfLandingTxt.classList.toggle('scale90');
       this.refs.otherHalfLandingTxt.classList.toggle('scale90');
     }
-    if (this.refs.backDrop.classList.contains('backDrop')) {
-      this.refs.addBtnContainer.classList.toggle('dn');
-    } else {
-      setTimeout(() => {
-        this.refs.addBtnContainer.classList.toggle('dn');
-      }, 500);
-    }
+    this.refs.addBtnContainer.classList.toggle('dn');
+    
   }
 
   navigateToSignIn() {

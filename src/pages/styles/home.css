@@ -109,7 +109,7 @@
 }
 
 .scale90 {
-  transform: scale(0.96);
+  /* transform: scale(0.96); */
 }
 .expenseDaysBtn {
   padding: 10px;
