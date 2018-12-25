@@ -10,6 +10,16 @@ export const signin = (params) => {
   return axios.post(url, {...params});
 }
 
+export const getUserInfo = () => {
+  const url = '/userinfo/';
+  return axios.post(url, {});
+}
+
+export const logoutUser = () => {
+  const url = '/logout/';
+  return axios.post(url, {});
+}
+
 export const new_expense = (params) => {
   const url = '/new_expense/';
   return axios.post(url, {...params});

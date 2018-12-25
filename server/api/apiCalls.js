@@ -18,7 +18,7 @@ export const signUp = (request, response) => {
             response.send({ error: true, msg: 'Username already Exists' });
         } else {
             user.save().then((doc) => {
-                request.session._userId = doc._id;
+                request.session._userId = doc.id;
                 response.send({ error: false, msg: 'Saved Successfully' });
             }, (e) => {
                 response.status(500).send(e);
@@ -33,9 +33,9 @@ export const signUp = (request, response) => {
 export const signIn = (request, response) => {
     const { username = '', password = '', emailId = '' } = request.body;
     console.log(request.session.user);
-    Users.find({ username: username, password: password }).then((res) => {
-        if (res.length > 0) {
-            request.session._userId = res[0]._id;
+    Users.findOne({ username: username, password: password }).then((res) => {
+        if (res) {
+            request.session._userId = res.id;
             response.send({ error: false, msg: 'success' });
         } else {
             response.send({ error: true, msg: 'No user account found' });
@@ -45,6 +45,32 @@ export const signIn = (request, response) => {
         console.log(e);
     });
 };
+
+export const logout = (request, response) => {
+    request.session._userId = null;
+    response.send({ error: false, msg: 'success' });
+};
+
+export const getUserInfo = (request, response) => {
+    if (request.session._userId) {
+        const id = mongoose.Types.ObjectId(request.session._userId);
+        Users.findOne({ _id :id}).then((res) => {
+            if (res) {
+                const username = res.username;
+                response.send({ userInfo: {username: username} });
+            } else {
+                response.send({ error: true, msg: 'No user account found' });
+            }
+        }, (e) => {
+            response.send(e);
+            console.log(e);
+        });
+    } else  {
+        response.send(200).send({error: true});
+    }
+   
+};
+
 
 export const newExpense = (request, response) => {
     let { amount, category, date, type } = request.body;

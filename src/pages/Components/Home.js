@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import Helmet from 'react-helmet';
 import NewExpense from './NewExpense';
-import {get_expense_data, get_expense_summary} from '../apiCalls/ApiCalls';
+import {get_expense_data, get_expense_summary, getUserInfo, logoutUser} from '../apiCalls/ApiCalls';
 import {MONTH, YEAR, WEEK, MONTHSNAME} from '../constants/constants';
 import Graph from './Graph';
 
@@ -24,6 +24,7 @@ export default class Home extends Component {
   componentDidMount() {
     this.getExpense();
     this.getExpenseSummary();
+    this.userInfo();
   }
   // To give the prop in the state to check availability of data
   currentTabData() {
@@ -60,6 +61,14 @@ export default class Home extends Component {
     
     const params = {tab, mm, dow, ww, yy};
     return params;
+  }
+
+  userInfo() {
+    getUserInfo().then((res) => {
+      if (res.data && res.data.userInfo) {
+        this.setState({ userInfo: res.data.userInfo});
+      }
+    });
   }
 
   getExpenseSummary(loadNewSummaryData) {
@@ -99,22 +108,28 @@ export default class Home extends Component {
   leftMenuClick() {
     this.refs.backDrop.classList.toggle('backDrop');
     this.refs.popup.classList.toggle('right0');
-    this.refs.firstHalfLandingTxt.classList.toggle('scale90');
-    this.refs.otherHalfLandingTxt.classList.toggle('scale90');
+    if (this.refs.otherHalfLandingTxt) {
+      this.refs.firstHalfLandingTxt.classList.toggle('scale90');
+      this.refs.otherHalfLandingTxt.classList.toggle('scale90');
+    }
   }
 
   navigateToSignIn() {
-    console.log(this.props);
-    this.props.history.push('/login');
+    if (this.state.userInfo) {
+      logoutUser().then(() => {
+       window.location.href = '/login';
+      });
+    }
   }
 
   renderLeftMenuBar() {
+    const {userInfo} = this.state;
     return(
       <div className="menuBar">
         <div ref="popup"className="popup zi2 " onClick={this.leftMenuClick}>
           <div className="sideBar in-bl fl">
             <div className="menu-option">Settings</div>
-            <div className="menu-option" onClick={this.navigateToSignIn}>Sign In</div>
+            <div className="menu-option" onClick={this.navigateToSignIn}>{(!userInfo ? 'Sign In' : 'Logout')}</div>
             <div className="menu-option">About Me</div>
           </div>
         </div>
@@ -170,7 +185,7 @@ export default class Home extends Component {
 
   getTransactionCard() {
     const currentTabData = this.currentTabData();
-    const {activeTab, viewMore = false} = this.state;
+    const {activeTab, viewMore = false, userInfo} = this.state;
     const hasData = currentTabData.expenseList && Object.keys(currentTabData.expenseList).length > 0;
       return (
         <div>
@@ -185,7 +200,7 @@ export default class Home extends Component {
             </div> : 
             <div className="textCenter padT20 mh10p">
               <div>No Transactions added </div>
-              {typeof(window) !== 'undefined' && !window.signedIn && <div className="padT10 padB20"><a href="/login"><span>Sign In</span></a> for Past Transactions</div>}
+              {!userInfo && <div className="padT10 padB20"><a href="/login"><span>Sign In</span></a> for Past Transactions</div>}
             </div>
             }
           </div>

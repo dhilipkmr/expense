@@ -22,8 +22,24 @@ class Login extends Component {
     );
   }
 
+  successful(resp) {
+    if (resp.data && !resp.data.error) {
+      console.log(this);
+      this.props.history.push('/home', {});
+      if (typeof(window) !== 'undefined') {
+        window.signedIn = true;
+      }
+    } else {
+      console.log('Failed to SignIn', resp);
+    }
+  }
+
   signUp() {
-    signup({username: this.state.username, password: this.state.password});
+    signup({username: this.state.username, password: this.state.password})
+      .then((resp) => {
+        this.successful(resp);
+      })
+      .catch((err) => console.log('Failed to Signup'));
   }
 
   signIn(withTestCreds) {
@@ -33,15 +49,7 @@ class Login extends Component {
       password = 'dhilipdhilip';
     }
     signin({username: username, password: password}).then((resp) => {
-      if (resp.data && !resp.data.error) {
-        console.log(this);
-        this.props.history.push('/home', {});
-        if (typeof(window) !== 'undefined') {
-          window.signedIn = true;
-        }
-      } else {
-        console.log('Failed to SignIn', resp);
-      }
+      this.successful(resp);
     }).catch((err) => {
       console.log('Failed to SignIn', err);
     });
@@ -63,7 +71,7 @@ class Login extends Component {
             </div>
             <div className="textCenter padT20">
               <div className="new di">
-                <span className="newBtn"onClick={this.signIn}>Sign In</span>
+                <span className="newBtn"onClick={() => this.signIn(false)}>Sign In</span>
               </div>
               <div className="new di">
                 <span className="newBtn" onClick={this.signUp}>Sign Up</span>
