@@ -109,11 +109,11 @@ export default class NewExpense extends Component {
         </div>
         <div className="amountInput mT25 ">
         <span>₹</span>
-          <input type="text" placeholder="Amount" onChange={(e) => this.changeAmount(e.target.value)} value={amount}/>
+          <input className="padL10" type="text" placeholder="Amount" onChange={(e) => this.changeAmount(e.target.value)} value={amount}/>
           {error.amount ? <div className="errorDiv">{error.amount}</div> : null}
         </div>
         <div  className="categoryInput mT25 ">
-          <input type="text" placeholder="Category" onChange={(e) => this.setState({category: e.target.value})} value={category}/>
+          <input className="padL10" type="text" placeholder="Category" onChange={(e) => this.setState({category: e.target.value})} value={category}/>
           {error.category ? <div className="errorDiv">{error.category}</div> : null}
         </div>
         <div className="spentDay mT25 ">

@@ -88,3 +88,12 @@ min-height: 10%
 .mT25 {
   margin-top: 25px;
 }
+.padL10 {
+  padding-left: 10px;
+}
+.posRel {
+  position: relative;
+}
+.dn {
+  display: none;
+}

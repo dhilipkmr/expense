@@ -117,6 +117,13 @@ export default class Home extends Component {
       this.refs.firstHalfLandingTxt.classList.toggle('scale90');
       this.refs.otherHalfLandingTxt.classList.toggle('scale90');
     }
+    if (this.refs.backDrop.classList.contains('backDrop')) {
+      this.refs.addBtnContainer.classList.toggle('dn');
+    } else {
+      setTimeout(() => {
+        this.refs.addBtnContainer.classList.toggle('dn');
+      }, 500);
+    }
   }
 
   navigateToSignIn() {
@@ -216,9 +223,11 @@ export default class Home extends Component {
               <path d="M7.41 7.84L12 12.42l4.59-4.58L18 9.25l-6 6-6-6z"/>
             </svg>
           </div>
-          <div className={'newContainer ' + (!hasData ? 'padT10' : '')}>
-            <div className="new">
-              <span className="newBtn" onClick={() => this.newExpense(true)}> + add New</span>
+          <div className="posRel">
+            <div ref="addBtnContainer" className={'addBtnContainer ' + (!hasData ? 'padT10' : '')}>
+              <div className="">
+                <span className="addBtn" onClick={() => this.newExpense(true)}> + </span>
+              </div>
             </div>
           </div>
         </div>
