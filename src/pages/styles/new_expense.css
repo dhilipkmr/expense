@@ -56,3 +56,18 @@ background: #4688F1;
   border: none;
   margin-right: 10px;
 }
+.tapOption {
+  border: 1px solid #4688F1;
+  border-radius: 15px;
+  padding: 2px 10px;
+  font-size: 12px;
+  background-color: aliceblue;
+}
+.activeTapOption {
+  border: 1px solid #ffffff;
+  border-radius: 15px;
+  padding: 2px 10px;
+  font-size: 12px;
+  color: white;
+  background-color: #4688F1;
+}

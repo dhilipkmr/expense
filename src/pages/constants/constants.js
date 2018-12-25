@@ -6,3 +6,5 @@ export const MAXLENGTHPERTAB = { month: 31, year:11, week: 6};
 export const MONTHSNAME = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
 export const  MONTHSNAMESHORT = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
 export const WEEKNAMESHORT = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+export const TODAY = 'today';
+export const YESTERDAY = 'yesterday';

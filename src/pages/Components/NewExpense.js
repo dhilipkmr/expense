@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import {new_expense} from '../apiCalls/ApiCalls';
-import {MONTHSNAMESHORT} from '../constants/constants';
+import {MONTHSNAMESHORT, TODAY, YESTERDAY} from '../constants/constants';
 // import {commaFormatted} from '../utils/utils';
 
 export default class NewExpense extends Component {
@@ -28,10 +28,16 @@ export default class NewExpense extends Component {
     this.setState({amount: val})
   }
 
-  changeDate(val, current, next) {
-    this.setState({...val});
-    if (current && val[current].length === 2 && next) {
-      this.refs[next].focus();
+  changeDate(val) {
+    if (val === TODAY) {
+      const date = new Date();
+      this.setState({ todayTap:true, yesterdayTap: false, day: date.getDate(), month: date.getMonth(), year: date.getFullYear()});
+    } else if (val == YESTERDAY) {
+      let currDate = new Date();
+      let date = new Date(currDate.setDate(currDate.getDate() - 1));
+      this.setState({ todayTap: false, yesterdayTap: true, day: date.getDate(), month: date.getMonth(), year: date.getFullYear()});
+    } else {
+      this.setState({...val});
     }
   }
 
@@ -120,9 +126,13 @@ export default class NewExpense extends Component {
           {/* <input ref="day" className="dayIp" type="number" maxLength="2" placeholder="DD" onChange={(e) => this.changeDate({day: e.target.value}, 'day', 'month')} value={day}/>
           <input ref="month" className="dayIp" type="number" maxLength="2" placeholder="MM" onChange={(e) => this.changeDate({month: e.target.value}, 'month', 'year')} value={month}/>
           <input ref="year" className="dayIp" type="number" maxLength="2" placeholder="YY" onChange={(e) => this.changeDate({year: e.target.value}, 'year')} value={year}/> */}
-          <select ref="day" onChange={(e) => this.changeDate({day: e.target.value}, 'day', 'month')}>{this.renderOptions('day')}</select>
-          <select ref="month" onChange={(e) => this.changeDate({month: e.target.value}, 'month', 'year')}>{this.renderOptions('month')}</select>
-          <select ref="year" onChange={(e) => this.changeDate({year: e.target.value}, 'year')}>{this.renderOptions('year')}</select>
+          <select ref="day" onChange={(e) => this.changeDate({day: e.target.value})} value={this.state.day}>{this.renderOptions('day')}</select>
+          <select ref="month" onChange={(e) => this.changeDate({month: e.target.value})} value={this.state.month}>{this.renderOptions('month')}</select>
+          <select ref="year" onChange={(e) => this.changeDate({year: e.target.value})} value={this.state.year}>{this.renderOptions('year')}</select>
+          <div className="mt20">
+            <span className={'m10 ' + (this.state.todayTap ? 'activeTapOption': 'tapOption')} onClick={() => this.changeDate(TODAY)}>Today</span>
+            <span className={'m10 ' + (this.state.yesterdayTap ? 'activeTapOption': 'tapOption')}  onClick={() => this.changeDate(YESTERDAY)}>Yesterday</span>
+          </div>
           {error.date ? <div className="errorDiv">{error.date}</div> : null}
         </div>
         <div className="textCenter">
