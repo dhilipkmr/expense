@@ -1,9 +1,9 @@
 .newExpenseContainer {
   background-color: white;
-  min-height: 70%;
-  position: fixed;
+  min-height: 500px;
+  position: absolute;
   top: 0;
-  width: 70%;
+  min-width: 285px;
   margin: 15%;
   border-radius: 20px;
   display: flex;
