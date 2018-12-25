@@ -1,0 +1,23 @@
+.notfoundContainer{
+  margin-top: 50%;
+}
+
+.notfoundText {
+  margin: 20px;
+}
+
+.notfoundUL{
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+}
+
+.blueBtn {
+  background-color: #0757d0;
+  position: relative;
+  display: inline-block;
+  padding: 5px 15px;
+  border-radius: 5px;
+  color: white;
+  margin: 5px;
+}

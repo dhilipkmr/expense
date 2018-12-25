@@ -20,19 +20,20 @@ class NotFound extends Component {
     return (
       <div>
         {this.head()}
-        <div>
-          <h1>Sorry, the page you are expecting does not exist!</h1>
+        <div className="notfoundContainer">
+          <h5 className="notFoundText fb textCenter">Sorry, this page does not exist!</h5>
         </div>
         <div>
-          <ul>
-            <li onClick= {() => this.props.history.goBack()}> 
-              Back
-            </li>
+          <ul className="notfoundUL textCenter">
+            {/* <li>
+              <div className="blueBtn">
+                <NavLink to='/home' className="white"> Home </NavLink>
+              </div>
+            </li> */}
             <li>
-              <NavLink to='/'> Home </NavLink>
-            </li>
-            <li>
-              <NavLink to='/login'> Login </NavLink>
+              <div className="blueBtn">
+              <NavLink to='/login' className="white"> Login </NavLink>
+              </div>
             </li>
           </ul>
         </div>

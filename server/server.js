@@ -46,6 +46,7 @@ const loadHtml = (content) => {
                 <link rel="stylesheet" type="text/css" href="/styles/home.css">
                 <link rel="stylesheet" type="text/css" href="/styles/login.css">
                 <link rel="stylesheet" type="text/css" href="/styles/new_expense.css">
+                <link rel="stylesheet" type="text/css" href="/styles/notfound.css">
                 <link href="https://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet">
             </head>
             <body>

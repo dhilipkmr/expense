@@ -67,7 +67,12 @@ export default class Home extends Component {
     getUserInfo().then((res) => {
       if (res.data && res.data.userInfo) {
         this.setState({ userInfo: res.data.userInfo});
+      } else {
+        this.navigateToSignIn();
       }
+    })
+    .catch(() => {
+      this.navigateToSignIn();
     });
   }
 
@@ -119,6 +124,8 @@ export default class Home extends Component {
       logoutUser().then(() => {
        window.location.href = '/login';
       });
+    } else  {
+      window.location.href = '/login';
     }
   }
 
