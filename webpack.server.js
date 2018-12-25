@@ -27,6 +27,5 @@ module.exports = {
         ]
     },
     externals: [webpackNodeExternals()],
-    mode: 'development',
     devtool: 'inline-source-map'
 }

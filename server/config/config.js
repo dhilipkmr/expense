@@ -7,4 +7,3 @@ if (env === 'development') {
 } else {
   process.env.MONGOLAB_URI = 'mongodb://dhilipk13:dhilipk13@ds247310.mlab.com:47310/expense';
 }
-// export default env;
