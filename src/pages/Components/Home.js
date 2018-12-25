@@ -162,7 +162,23 @@ export default class Home extends Component {
     this.refs.transactedCard.scrollTop = 0;
   }
 
-  renderInnerTransactioncard() {
+  renderInnerTransactioncard(hasListDefined) {
+    if (!hasListDefined) {
+      const loader = [];
+      for(let i = 0; i < 2; i++){
+        loader.push(
+          <div key={'transaction_type_' + i} className="transactedCardInner">
+            <div className="cardInnerheading">
+              <span className="cat_percent progressBar fl m0 mt10"></span>
+            </div>
+            <div className="progressBar bl textCenter mt30" >
+            </div>
+          </div>
+        );
+      }
+      return loader;
+    }
+
     const {expenseList} = this.currentTabData();
     return (
       expenseList.transactionList.map((transaction, index) => {
@@ -195,23 +211,26 @@ export default class Home extends Component {
   getTransactionCard() {
     const currentTabData = this.currentTabData();
     const {activeTab, viewMore = false, userInfo} = this.state;
-    const hasData = currentTabData.expenseList && Object.keys(currentTabData.expenseList).length > 0;
+    // const hasNoData = currentTabData.expenseList && Object.keys(currentTabData.expenseList).length === 0;
+    const hasListDefined = currentTabData.expenseList; // To determine if the call is completed
       return (
         <div>
           <div ref="transactedCard" className={'transactedCard transition1a ' + (viewMore ? 'showAllTransaction' : '')}>
-            {hasData ?
             <div>
               <div className="transactScroller">
-                {activeTab === WEEK ? this.renderInnerTransactioncard() : null}
-                {activeTab === MONTH ? this.renderInnerTransactioncard() : null}
-                {activeTab === YEAR ? this.renderInnerTransactioncard() : null}
+              {typeof(hasListDefined) !== 'undefined' && Object.keys(hasListDefined).length === 0?
+                <div className="textCenter padT20 mh10p">
+                  <div>No Transactions added </div>
+                  {!userInfo && <div className="padT10 padB20"><a href="/login"><span>Sign In</span></a> for Past Transactions</div>}
+                </div>:
+                <div>
+                   {activeTab === WEEK ? this.renderInnerTransactioncard(hasListDefined) : null}
+                  {activeTab === MONTH ? this.renderInnerTransactioncard(hasListDefined) : null}
+                  {activeTab === YEAR ? this.renderInnerTransactioncard(hasListDefined) : null}
+                </div> 
+              }
               </div>
-            </div> : 
-            <div className="textCenter padT20 mh10p">
-              <div>No Transactions added </div>
-              {!userInfo && <div className="padT10 padB20"><a href="/login"><span>Sign In</span></a> for Past Transactions</div>}
             </div>
-            }
           </div>
           <div className="viewMoreArrow" onClick={() => this.clickViewMore()}>
             <svg className={viewMore ? 'rotateViewMore' : ''} ref="svgViewMore" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
@@ -219,7 +238,7 @@ export default class Home extends Component {
             </svg>
           </div>
           <div className="posRel">
-            <div ref="addBtnContainer" className={'addBtnContainer ' + (!hasData ? 'padT10' : '')}>
+            <div ref="addBtnContainer" className={'addBtnContainer '}>
               <div className="">
                 <span className="addBtn" onClick={() => this.newExpense(true)}> + </span>
               </div>

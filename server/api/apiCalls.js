@@ -102,7 +102,7 @@ export const getExpenseData = (request, response) => {
         if (err) {
             respond.send(500).send(err);
         } else {
-            let expenseList, incomeList;
+            let expenseList = {}, incomeList={};
             Object.keys(data).map((key) => {
                 if (data[key].type === 'expense') {
                     expenseList = data[key];
@@ -111,7 +111,7 @@ export const getExpenseData = (request, response) => {
                 }
             });
             let spent, standing;
-            if (expenseList) {
+            if (expenseList && expenseList.transactionList) {
                 expenseList.transactionList.map((transaction) => {
                     let percent = transaction.amount / (expenseList.amount / 100);
                     transaction.percent = Math.round(percent * 100) / 100;
@@ -120,7 +120,7 @@ export const getExpenseData = (request, response) => {
             } else  {
                 spent = 0;
             }
-            if (incomeList) {
+            if (incomeList && incomeList.transactionList) {
                 incomeList.transactionList.map((transaction) => {
                     let percent = transaction.amount / (incomeList.amount / 100);
                     transaction.percent = Math.round(percent * 100) / 100;
@@ -129,7 +129,7 @@ export const getExpenseData = (request, response) => {
             } else {
                 standing = 0 - spent;
             }
-            response.send({ expenseList, incomeList, spent, standing });
+            response.send({ expenseList: expenseList, incomeList: incomeList, spent: spent, standing: standing });
         }
     }
 
