@@ -215,6 +215,10 @@ export default class Home extends Component {
     const hasListDefined = currentTabData.expenseList; // To determine if the call is completed
       return (
         <div>
+          {/* <div>
+            <span>Date</span>
+            <span>Percentage</span>
+          </div> */}
           <div ref="transactedCard" className={'transactedCard transition1a ' + (viewMore ? 'showAllTransaction' : '')}>
             <div>
               <div className="transactScroller">

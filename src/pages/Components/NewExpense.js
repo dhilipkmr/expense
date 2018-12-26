@@ -25,19 +25,44 @@ export default class NewExpense extends Component {
   }
 
   changeAmount(val){
-    this.setState({amount: val})
+    if (val && this.state.error.amount) {
+      this.setState({amount: val, error:{}});
+    } else {
+      this.setState({amount: val});
+    }
+  }
+
+  changeCategory(val) {
+    if (val && this.state.error.category) {
+      this.setState({category: val, error:{}});
+    } else {
+      this.setState({category: val});
+    }
+  }
+
+  removeDateError() {
+    const {day, month, year} = this.state;
+    if (!(new Date(parseInt(year), parseInt(month), parseInt(day)) > new Date())) {
+      this.setState({error:{}});
+    }
   }
 
   changeDate(val) {
     if (val === TODAY) {
       const date = new Date();
-      this.setState({ todayTap:true, yesterdayTap: false, day: date.getDate(), month: date.getMonth(), year: date.getFullYear()});
+      this.setState({ todayTap:true, yesterdayTap: false, day: date.getDate(), month: date.getMonth(), year: date.getFullYear()}, () => {
+        this.removeDateError();
+      });
     } else if (val == YESTERDAY) {
       let currDate = new Date();
       let date = new Date(currDate.setDate(currDate.getDate() - 1));
-      this.setState({ todayTap: false, yesterdayTap: true, day: date.getDate(), month: date.getMonth(), year: date.getFullYear()});
+      this.setState({ todayTap: false, yesterdayTap: true, day: date.getDate(), month: date.getMonth(), year: date.getFullYear()}, () => {
+        this.removeDateError();
+      });
     } else {
-      this.setState({...val});
+      this.setState({...val}, () => {
+        this.removeDateError();
+      });
     }
   }
 
@@ -46,9 +71,13 @@ export default class NewExpense extends Component {
     const dateReg = /^\d{1,2}$/;
     const dateRegYear = /^\d{4}$/;
     if (!dateReg.test(day) || !dateReg.test(month) || !dateRegYear.test(year)) {
+      this.setState({error: {date: 'Please provide a Valid Date!'}});
+      return false;
+    } else if (new Date(parseInt(year), parseInt(month), parseInt(day)) > new Date()) {
+      this.setState({error: {date: 'Please do not Provide Future Date!'}});
       return false;
     } else {
-      this.date = new Date(parseInt(year), parseInt(month), parseInt(day));
+      this.date = new Date(parseInt(year), parseInt(month));
       return true;
     }
   }
@@ -64,7 +93,6 @@ export default class NewExpense extends Component {
       return false;
     }
     if (!this.isValidDate()) {
-      this.setState({error: {date: 'Please provide a Valid Date'}});
       return false;
     }
     return true;
@@ -115,11 +143,11 @@ export default class NewExpense extends Component {
         </div>
         <div className="amountInput mT25 ">
         <span>₹</span>
-          <input className="padL10" type="text" placeholder="Amount" onChange={(e) => this.changeAmount(e.target.value)} value={amount}/>
+          <input className={'padL10 ' + (error.amount ? 'redBrdrBtm' : '')} type="text" placeholder="Amount" onChange={(e) => this.changeAmount(e.target.value)} value={amount}/>
           {error.amount ? <div className="errorDiv">{error.amount}</div> : null}
         </div>
         <div  className="categoryInput mT25 ">
-          <input className="padL10" type="text" placeholder="Category" onChange={(e) => this.setState({category: e.target.value})} value={category}/>
+          <input className={'padL10 ' + (error.category ? 'redBrdrBtm' : '')} type="text" placeholder="Category" onChange={(e) => this.changeCategory(e.target.value)} value={category}/>
           {error.category ? <div className="errorDiv">{error.category}</div> : null}
         </div>
         <div className="spentDay mT25 ">
@@ -133,7 +161,7 @@ export default class NewExpense extends Component {
             <span className={'m10 ' + (this.state.todayTap ? 'activeTapOption': 'tapOption')} onClick={() => this.changeDate(TODAY)}>Today</span>
             <span className={'m10 ' + (this.state.yesterdayTap ? 'activeTapOption': 'tapOption')}  onClick={() => this.changeDate(YESTERDAY)}>Yesterday</span>
           </div>
-          {error.date ? <div className="errorDiv">{error.date}</div> : null}
+          {error.date ? <div className="mt10 errorDiv">{error.date}</div> : null}
         </div>
         <div className="textCenter">
           <div className="submitBtn" onClick={this.submitNewExpense}>Done</div>

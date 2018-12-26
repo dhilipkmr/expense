@@ -71,3 +71,6 @@ background: #4688F1;
   color: white;
   background-color: #4688F1;
 }
+.redBrdrBtm {
+  border-bottom: 1px solid #b71c1c !important;
+}

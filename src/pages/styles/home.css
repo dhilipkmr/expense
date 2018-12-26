@@ -182,17 +182,17 @@
 
 .transactedCard {
   height: auto;
-  max-height: 185px;
+  max-height: 165px;
   overflow: hidden;
   background-color: white;
   border-radius: 10px;
   padding: 2px;
   margin: 10px 10px;
-  box-shadow: 0 4px 8px 0 rgba(0,0,0,0.4)
+  box-shadow: 0 4px 8px 0 rgba(0,0,0,0.4);
 
 }
 .transactedCardInner {
-  min-height: 75px;
+  min-height: 65px;
   background-color: white;
   border-radius: 10px;
   margin: 10px 10px;
@@ -264,9 +264,8 @@
 }
 
 .cardInnerheading {
-  /* margin: 2% 4%; */
-  margin: 4px 10px;
-  padding-top: 10px;
+  margin: 5px 14px;
+  padding-top: 5px;
   padding-bottom: 5px;
   position: relative;
 }
