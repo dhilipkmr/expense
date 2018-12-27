@@ -316,6 +316,13 @@ export default class Home extends Component {
     const {activeTab, showNewExpense, viewMore = false} = this.state;
     const {standing = undefined, spent = undefined, plotData = undefined, incomeList = undefined} = this.currentTabData();
     const {togglerHeader, isPrevDisabled, isNextDisabled} = this.getTogglerHeader();
+    if (!this.state.userInfo) {
+      return (
+        <div className='loginRedirect'>
+          <div>Please wait... </div>
+          <div>Redirecting to login...</div>
+        </div>);
+    }
     return (
       <div className="">
         <div>
