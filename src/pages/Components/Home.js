@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 import Helmet from 'react-helmet';
 import NewExpense from './NewExpense';
 import {get_expense_data, get_expense_summary, getUserInfo, logoutUser} from '../apiCalls/ApiCalls';
-import {MONTH, YEAR, WEEK, MONTHSNAME} from '../constants/constants';
+import {MONTH, YEAR, WEEK, MONTHSNAME, MONTHSNAMESHORT} from '../constants/constants';
 import Graph from './Graph';
 
 export default class Home extends Component {
@@ -25,7 +25,20 @@ export default class Home extends Component {
     this.getExpense();
     this.getExpenseSummary();
     this.userInfo();
+    this.updateTogglerContent();
   }
+
+  updateTogglerContent() {
+    const {activeTab} = this.state;
+    if (activeTab === WEEK) {
+      return this.state.weekData;
+    } else if (activeTab === MONTH) {
+      return this.state.monthData;
+    } else if (activeTab === YEAR) {
+      return this.state.yearData;
+    }
+  }
+
   // To give the prop in the state to check availability of data
   currentTabData() {
     const {activeTab} = this.state;
@@ -49,17 +62,31 @@ export default class Home extends Component {
     }
   }
 
-  getParams() {
+  getParams(toggleVal) {
     const tab = this.state.activeTab;
-    const currDate = new Date();
-    const mm = currDate.getMonth();
-    const dow = currDate.getDay();
-    const yy = currDate.getFullYear();
+    let {dd, mm, yy, ww} = this.currentTabData();
 
-    const firstDayofMonth = new Date(yy, mm, 1).getDay();
-    const ww = Math.ceil((firstDayofMonth + currDate.getDate()) / 7);
+    const currDate = (yy && typeof(mm) !== 'undefined' && dd) ? new Date(yy, mm, dd) : new Date();
+    let month = currDate.getMonth();
+    let dow = currDate.getDay();
+    let date = currDate.getDate();
+    let year = currDate.getFullYear();
+
+    if (!ww) {
+      const firstDayofMonth = new Date(year, month, 1).getDay();
+      ww = Math.ceil((firstDayofMonth + currDate.getDate()) / 7);
+    }
     
-    const params = {tab, mm, dow, ww, yy};
+    if (toggleVal) {
+      if (tab === YEAR) {
+        year = toggleVal === 'previous' ? year - 1 : year + 1;
+      } else if (tab === MONTH) {
+        month = toggleVal === 'previous' ? month - 1 : month + 1;
+      } else if (tab === WEEK) {
+        ww = toggleVal === 'previous' ? ww - 1: ww + 1;
+      }
+    }
+    const params = {tab, mm: month, dow, ww, yy:year, dd:date};
     return params;
   }
 
@@ -89,14 +116,14 @@ export default class Home extends Component {
     }
   }
 
-  getExpense(loadNewExpenseData) {
-    const params = this.getParams();
+  getExpense(loadNewExpenseData, toggleVal) {
+    const params = this.getParams(toggleVal);
     const activeTabData = this.findCurrentDataProp();
     
     if (Object.keys(this.state[activeTabData]).length === 0 || loadNewExpenseData) {
       get_expense_data(params).then((resp) => {
-        const {expenseList, incomeList, standing, spent} = resp.data;
-        this.setState({[activeTabData] : {...this.state[activeTabData], expenseList, incomeList, standing, spent}});
+        const {expenseList, incomeList, standing, spent, ww, yy, mm, dd} = resp.data;
+        this.setState({[activeTabData] : {...this.state[activeTabData], expenseList, incomeList, standing, spent, ww, yy, mm,dd}});
        }, (err) => {
          console.log('Unable to Get Expense Details', err);
        });
@@ -257,10 +284,41 @@ export default class Home extends Component {
     const currDate = date.getDate();
     return currDate + ' ' + currMonth + ' ' + date.getFullYear();
   }
+  getTogglerHeader() {
+    const {activeTab} = this.state;
+    const {mm, yy , ww} = this.currentTabData();
+    let togglerHeader = '';
+    let isPrevDisabled = false;
+    let isNextDisabled = false;
+
+    if (activeTab === MONTH) {
+      togglerHeader =  typeof(mm) !== 'undefined' ? MONTHSNAME[mm] : '----';
+      isPrevDisabled = mm === 0 ? true : false;
+      isNextDisabled = mm === 11 ? true : false;
+    } else if (activeTab === WEEK) {
+      togglerHeader =  ww ? ('Week ' +  ww) : '----';
+      isPrevDisabled = ww === 1 ? true : false;
+      isNextDisabled = ww === 5 ? true : false;
+    } else {
+      togglerHeader = yy ? yy : '----';
+      isNextDisabled = yy === 2018 ? true : false;
+    }
+
+    return {togglerHeader, isPrevDisabled, isNextDisabled}
+  }
+
+  toggleType(val) {
+    if (val === 'previous') {
+      this.getExpense(true, val);
+    } else if (val === 'next') {
+      this.getExpense(true, val);
+    }
+  }
 
   render() {
     const {activeTab, showNewExpense, viewMore = false} = this.state;
     const {standing = undefined, spent = undefined, plotData = undefined, incomeList = undefined} = this.currentTabData();
+    const {togglerHeader, isPrevDisabled, isNextDisabled} = this.getTogglerHeader();
     return (
       <div className="">
         <div>
@@ -289,6 +347,11 @@ export default class Home extends Component {
                   <span className={'dayTypeBtn ' + (activeTab === WEEK ? 'dayTypeBtn-active' : '')} onClick={() => {this.changeExpenseDayFormat(WEEK)}}>Week</span>
                   <span className={'dayTypeBtn ' + (activeTab === MONTH ? 'dayTypeBtn-active' : '')} onClick={() => {this.changeExpenseDayFormat(MONTH)}}>Month</span>
                   <span className={'dayTypeBtn ' + (activeTab === YEAR ? 'dayTypeBtn-active' : '')} onClick={() => {this.changeExpenseDayFormat(YEAR)}}>Year</span>
+                </div>
+                <div className="expenseDaysBtn">
+                  <span className={'prevNextBtn ' + (isPrevDisabled ? 'disabled' : '')} onClick={() => {this.toggleType('previous')}}>{'<'}</span>
+                  <span className={'white mp5'}>{togglerHeader}</span>
+                  <span className={'prevNextBtn ' + (isNextDisabled ? 'disabled' : '')} onClick={() => {this.toggleType('next')}}>{'>'}</span>
                 </div>
                 <div className="spentIncomeSection">
                   <div className="in-bl ">

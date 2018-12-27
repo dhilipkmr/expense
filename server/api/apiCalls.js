@@ -129,7 +129,8 @@ export const getExpenseData = (request, response) => {
             } else {
                 standing = 0 - spent;
             }
-            response.send({ expenseList: expenseList, incomeList: incomeList, spent: spent, standing: standing });
+            const { yy, mm, ww, dd} = request.body
+            response.send({ dd:dd, mm: mm, yy: yy, ww: ww, expenseList: expenseList, incomeList: incomeList, spent: spent, standing: standing });
         }
     }
 
