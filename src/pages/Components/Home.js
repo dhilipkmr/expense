@@ -103,8 +103,8 @@ export default class Home extends Component {
     });
   }
 
-  getExpenseSummary(loadNewSummaryData) {
-    const params = this.getParams();
+  getExpenseSummary(loadNewSummaryData, toggleVal) {
+    const params = this.getParams(toggleVal);
     const activeTabData = this.findCurrentDataProp();
 
     if (Object.keys(this.state[activeTabData]).length === 0 || loadNewSummaryData) {
@@ -308,11 +308,8 @@ export default class Home extends Component {
   }
 
   toggleType(val) {
-    if (val === 'previous') {
-      this.getExpense(true, val);
-    } else if (val === 'next') {
-      this.getExpense(true, val);
-    }
+    this.getExpense(true, val);
+    this.getExpenseSummary(true, val);
   }
 
   render() {
