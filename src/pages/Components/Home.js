@@ -20,11 +20,11 @@ export default class Home extends Component {
       yearData: {}
     }
     this.viewedMore = {};
+    this.userInfo();
   }
   componentDidMount() {
     this.getExpense();
     this.getExpenseSummary();
-    this.userInfo();
     this.updateTogglerContent();
   }
 
@@ -316,13 +316,13 @@ export default class Home extends Component {
     const {activeTab, showNewExpense, viewMore = false} = this.state;
     const {standing = undefined, spent = undefined, plotData = undefined, incomeList = undefined} = this.currentTabData();
     const {togglerHeader, isPrevDisabled, isNextDisabled} = this.getTogglerHeader();
-    if (!this.state.userInfo) {
-      return (
-        <div className='loginRedirect'>
-          <div>Please wait... </div>
-          <div>Redirecting to login...</div>
-        </div>);
-    }
+    // if (!this.state.userInfo) {
+    //   return (
+    //     <div className='loginRedirect'>
+    //       <div>Please wait... </div>
+    //       <div>Redirecting to login...</div>
+    //     </div>);
+    // }
     return (
       <div className="">
         <div>
@@ -377,7 +377,7 @@ export default class Home extends Component {
             </div>
             {plotData && plotData.perDivisionData &&  plotData.perDivisionData.length > 0 ?
               <div className="other-half-landing">
-                <div ref="otherHalfLandingTxt" className="transition0_5 ">
+                <div ref="otherHalfLandingTxt" className="expenseCard transition0_5 ">
                   <div className="textCenter trSumaryHeading fb" >
                     <span>{'Expense Trends'}</span>
                   </div>

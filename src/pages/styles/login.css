@@ -1,12 +1,12 @@
-.loginContainer {
-  background-color: #4688F1;
+/* .loginContainer {
+  background-color: #0757d0;
   border-bottom-left-radius: 15px;
   border-bottom-right-radius: 15px;
   box-shadow: 0 3px 6px 0 rgba(0,0,0,0.3);
   min-height: 50%;
-}
+} */
 .fieldsDiv {
-  padding-top: 100px;
+  margin-top: 200px;
   text-align: center;
 }
 
@@ -15,3 +15,25 @@
   opacity: 1; /* Firefox */
 }
 
+.loginBtns {
+  color: white;
+}
+
+input[id=loginUsername],input[id=loginPwd] {
+  background: transparent;
+  border: none;
+  border-bottom: 1px solid #585858;
+}
+input[id=loginUsername]:focus, 
+input[id=loginPwd]:focus{
+  border-bottom: 1px solid #0757d0;
+}
+
+.loginInput {
+  color: #484242;
+  font-weight: bold;
+}
+
+.testLogin {
+  padding: 6px 9px;
+}

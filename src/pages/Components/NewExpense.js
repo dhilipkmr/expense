@@ -143,11 +143,11 @@ export default class NewExpense extends Component {
         </div>
         <div className="amountInput mT25 ">
         <span>₹</span>
-          <input className={'padL10 ' + (error.amount ? 'redBrdrBtm' : '')} type="text" placeholder="Amount" onChange={(e) => this.changeAmount(e.target.value)} value={amount}/>
+          <input className={'padL10 ' + (error.amount ? 'redBrdrBtm' : '')} type="text" id="newExpAmt" placeholder="Amount" onChange={(e) => this.changeAmount(e.target.value)} value={amount}/>
           {error.amount ? <div className="errorDiv">{error.amount}</div> : null}
         </div>
         <div  className="categoryInput mT25 ">
-          <input className={'padL10 ' + (error.category ? 'redBrdrBtm' : '')} type="text" placeholder="Category" onChange={(e) => this.changeCategory(e.target.value)} value={category}/>
+          <input className={'padL10 ' + (error.category ? 'redBrdrBtm' : '')} type="text" id="newCategAmt" placeholder="Category" onChange={(e) => this.changeCategory(e.target.value)} value={category}/>
           {error.category ? <div className="errorDiv">{error.category}</div> : null}
         </div>
         <div className="spentDay mT25 ">
@@ -158,13 +158,13 @@ export default class NewExpense extends Component {
           <select ref="month" onChange={(e) => this.changeDate({month: e.target.value})} value={this.state.month}>{this.renderOptions('month')}</select>
           <select ref="year" onChange={(e) => this.changeDate({year: e.target.value})} value={this.state.year}>{this.renderOptions('year')}</select>
           <div className="mt20">
-            <span className={'m10 ' + (this.state.todayTap ? 'activeTapOption': 'tapOption')} onClick={() => this.changeDate(TODAY)}>Today</span>
-            <span className={'m10 ' + (this.state.yesterdayTap ? 'activeTapOption': 'tapOption')}  onClick={() => this.changeDate(YESTERDAY)}>Yesterday</span>
+            <span className={'m10 ' + (this.state.todayTap ? 'activeTapOption themeBg': 'tapOption themeBrdr')} onClick={() => this.changeDate(TODAY)}>Today</span>
+            <span className={'m10 ' + (this.state.yesterdayTap ? 'activeTapOption themeBg': 'tapOption themeBrdr')}  onClick={() => this.changeDate(YESTERDAY)}>Yesterday</span>
           </div>
           {error.date ? <div className="mt10 errorDiv">{error.date}</div> : null}
         </div>
         <div className="textCenter">
-          <div className="submitBtn" onClick={this.submitNewExpense}>Done</div>
+          <div className="submitBtn themeBg" onClick={this.submitNewExpense}>Done</div>
         </div>
       </div>
     );

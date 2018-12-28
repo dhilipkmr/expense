@@ -19,11 +19,6 @@
   z-index: 2;
 }
 
-input[type=password], input[type=text], input[type=number] {
-  background: transparent;
-  border: none;
-  border-bottom: 1px solid #cccccc;
-}
 input:focus,
 select:focus,
 textarea:focus,
@@ -113,3 +108,16 @@ min-height: 10%
   margin: 50% auto;
   text-align: center;
 }
+.themeBg {
+background-color: #0757d0;
+}
+.themeColor {
+  color: #0757d0;
+}
+.themeBrdrBtm {
+  border-bottom: 1px solid #0757d0;
+}
+.themeBrdr{
+  border: 1px solid #0757d0;
+}
+

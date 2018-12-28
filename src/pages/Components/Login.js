@@ -60,26 +60,26 @@ class Login extends Component {
       <div>
         {this.head()}
         <div>
-          <div className="loginContainer white">
+          <div className="">
             <div className="fieldsDiv">
               <div className="username">
-                <input className="whiteBrdrBtm white" placeholder='Username' value={this.state.username} onChange = {(e) => this.setState({username: e.target.value})} type="text"/>
+                <input className="loginInput " id="loginUsername" placeholder='Username' value={this.state.username} onChange = {(e) => this.setState({username: e.target.value})} type="text"/>
               </div>
               <div className="password padT10">
-                <input className="whiteBrdrBtm white" placeholder='Password' value={this.state.password} onChange = {(e) => this.setState({password: e.target.value})} type="password"/>
+                <input className="loginInput " id="loginPwd" placeholder='Password' value={this.state.password} onChange = {(e) => this.setState({password: e.target.value})} type="password"/>
               </div>
             </div>
             <div className="textCenter padT20">
               <div className="new di">
-                <span className="newBtn"onClick={() => this.signIn(false)}>Sign In</span>
+                <span className="newBtn loginBtns themeBg"onClick={() => this.signIn(false)}>Sign In</span>
               </div>
               <div className="new di">
-                <span className="newBtn" onClick={this.signUp}>Sign Up</span>
+                <span className="newBtn loginBtns themeBg" onClick={this.signUp}>Sign Up</span>
               </div>
             </div>
             <div className="textCenter padT20">
               <div className="new">
-                <span className="newBtn" onClick={() => this.signIn(true)}>Continue with Test Login</span>
+                <span className="newBtn loginBtns testLogin themeBg" onClick={() => this.signIn(true)}>Continue with Test Login</span>
               </div>
             </div>
           </div>

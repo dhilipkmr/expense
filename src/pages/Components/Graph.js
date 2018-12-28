@@ -39,7 +39,7 @@ export default class Graph extends Component {
         <g key={'group_' + index}>
           <a>
           <text className="fb" x={xCoordinates[index]} fill="#757575" y={yCoordinates[index] - 5} fontSize="5" textAnchor="middle">{pointText}</text>
-          <circle cx={xCoordinates[index]} cy={yCoordinates[index]} stroke="#4688F1" fill="#4688F1" r="1" strokeWidth="1"></circle>
+          <circle cx={xCoordinates[index]} cy={yCoordinates[index]} stroke="#0757d0" fill="#0757d0" r="0.5" strokeWidth="1"></circle>
           </a>
         </g>
       );

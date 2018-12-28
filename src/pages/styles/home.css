@@ -1,7 +1,7 @@
 .first-half-landing {
   /* background-image: linear-gradient(141deg, #9fb8ad 0%, #1fc8db 51%, #2cb5e8 75%); */
   /* background-image: linear-gradient(to bottom, #2d6bfd, #2550b1); */
-  background-color: #4688F1;
+  background-color: #0757d0;
   border-bottom-left-radius: 15px;
   border-bottom-right-radius: 15px;
   box-shadow: 0 3px 6px 0 rgba(0,0,0,0.3);
@@ -203,7 +203,7 @@
   text-align: center;
 }
 .viewMoreArrow path {
-  fill: #4688F1;
+  fill: #0757d0;
 }
 .viewMoreArrow:hover {
   cursor: pointer;
@@ -247,7 +247,7 @@
   left: 0;
   top: -5px;
 
-  background-image: linear-gradient(141deg, #81adf5, #116bdc);
+  background-image: linear-gradient(141deg,#60a6ff, #0757d0);
   transition: 0.8s;
   display: block;
   animation: animate 1 1s;
@@ -301,8 +301,9 @@
 }
 
 .graphPlotLine {
-  fill: #a0cdff;
-  stroke: #4688F1;
+  /* fill: #a0cdff; */
+  fill: #0757d0;
+  stroke: #0757d0;
   stroke-width: 0.7;
   animation: dash 1500ms linear 0s 1 normal none running;
   stroke-dasharray: 1000;
@@ -341,7 +342,7 @@
 
 .prevNextBtn {
   background: white;
-  color: #4688F1;
+  color: #0757d0;
   border-radius: 35px;
   padding: 2px 8px;
   margin: 10%;
@@ -354,4 +355,10 @@
 .disabled {
   opacity: 0.5;
   pointer-events: none;
+}
+
+.expenseCard {
+  box-shadow: 0 4px 8px 0 rgba(0,0,0,0.4);
+  margin: 10px;
+  border-radius: 15px;
 }
