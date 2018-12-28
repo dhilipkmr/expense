@@ -302,7 +302,8 @@
 
 .graphPlotLine {
   /* fill: #a0cdff; */
-  fill: #0757d0;
+  /* fill: #0757d0; */
+  fill: #618cce;
   stroke: #0757d0;
   stroke-width: 0.7;
   animation: dash 1500ms linear 0s 1 normal none running;

@@ -251,7 +251,7 @@ export default class Home extends Component {
               <div className="transactScroller">
               {typeof(hasListDefined) !== 'undefined' && Object.keys(hasListDefined).length === 0?
                 <div className="textCenter padT20 mh10p">
-                  <div>No Transactions added </div>
+                  <div>Add Transaction </div>
                   {!userInfo && <div className="padT10 padB20"><a href="/login"><span>Sign In</span></a> for Past Transactions</div>}
                 </div>:
                 <div>

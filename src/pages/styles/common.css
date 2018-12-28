@@ -109,15 +109,15 @@ min-height: 10%
   text-align: center;
 }
 .themeBg {
-background-color: #0757d0;
+background-color: #0757d0 !important;
 }
 .themeColor {
-  color: #0757d0;
+  color: #0757d0 !important;
 }
 .themeBrdrBtm {
-  border-bottom: 1px solid #0757d0;
+  border-bottom: 1px solid #0757d0 !important;
 }
 .themeBrdr{
-  border: 1px solid #0757d0;
+  border: 1px solid #0757d0 !important;
 }
 

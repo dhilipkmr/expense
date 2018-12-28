@@ -77,7 +77,7 @@ export default class NewExpense extends Component {
       this.setState({error: {date: 'Please do not Provide Future Date!'}});
       return false;
     } else {
-      this.date = new Date(parseInt(year), parseInt(month));
+      this.date = new Date(parseInt(year), parseInt(month), parseInt(day));
       return true;
     }
   }
