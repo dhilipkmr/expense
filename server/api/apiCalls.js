@@ -82,7 +82,7 @@ export const newExpense = (request, response) => {
     const ww = Math.ceil((firstDayofMonth + date.getDate()) / 7);
     const dow = date.getDay();
     const dd = date.getDate();
-    const newExpense = { amount, category, date, type, ww, dow, mm, yy, dd};
+    const newExpense = { amount, category, date, type, ww, dow, mm, yy, dd };
     var newExpenseInstance = new Expenses({
         user_id: mongoose.Types.ObjectId(request.session._userId),
         ...newExpense

@@ -75,10 +75,12 @@ export default class NewExpense extends Component {
     if (!dateReg.test(day) || !dateReg.test(month) || !dateRegYear.test(year)) {
       this.setState({error: {date: 'Please provide a Valid Date!'}});
       return false;
-    } else if (new Date(parseInt(year), parseInt(month), parseInt(day)) > new Date()) {
-      this.setState({error: {date: 'Please do not Provide Future Date!'}});
-      return false;
-    } else {
+    }
+    // else if (new Date(parseInt(year), parseInt(month), parseInt(day)) > new Date()) {
+    //   this.setState({error: {date: 'Please do not Provide Future Date!'}});
+    //   return false;
+    // }
+    else {
       this.date = new Date(parseInt(year), parseInt(month), parseInt(day));
       return true;
     }
