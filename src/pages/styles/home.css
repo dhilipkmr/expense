@@ -405,3 +405,10 @@
 .m10a{
   margin: 10px auto;
 }
+
+.expenseDaysBtn select {
+  background: #fff;
+  border: none;
+  padding: 2px;
+  text-align: center;
+}
