@@ -88,7 +88,6 @@ export const newExpense = (request, response) => {
         ...newExpense
     });
     newExpenseInstance.save().then((doc) => {
-        // request.session.user = doc.username;
         response.send(doc);
     }, (err) => {
         console.log('Failed to save new Expense', err);

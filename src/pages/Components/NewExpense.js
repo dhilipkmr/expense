@@ -103,7 +103,7 @@ export default class NewExpense extends Component {
     const {amount, day, month, year, type, category} = this.state;
     const isValidationSuccess = this.validateParams();
     if (isValidationSuccess) {
-      const params = { amount, type, date: this.date, category};
+      const params = { amount, type, date: this.date.getTime(), category};
       new_expense(params).then((response) => {
         this.props.newExpense(false, true);
       }, (err) => {
