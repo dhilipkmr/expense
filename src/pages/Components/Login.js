@@ -24,22 +24,35 @@ class Login extends Component {
 
   successful(resp) {
     if (resp.data && !resp.data.error) {
-      console.log(this);
       this.props.history.push('/home', {});
       if (typeof(window) !== 'undefined') {
         window.signedIn = true;
       }
     } else {
-      console.log('Failed to SignIn', resp);
+      this.setState({...resp.data});
     }
   }
 
+  isValid() {
+    if (this.state.username.length < 5) {
+      this.setState({error: true, msg: 'Username must be greater than 4 Characters'});
+      return false;
+    }
+    if (this.state.password.length < 8) {
+      this.setState({error: true, msg: 'Password must be greater than 7 Characters'});
+      return false;
+    }
+    return true;
+  }
+
   signUp() {
-    signup({username: this.state.username, password: this.state.password})
+    if (this.isValid()) {
+      signup({username: this.state.username, password: this.state.password})
       .then((resp) => {
         this.successful(resp);
       })
       .catch((err) => console.log('Failed to Signup'));
+    }
   }
 
   signIn(withTestCreds) {
@@ -48,11 +61,13 @@ class Login extends Component {
       username = 'dhilip';
       password = 'dhilipdhilip';
     }
-    signin({username: username, password: password}).then((resp) => {
-      this.successful(resp);
-    }).catch((err) => {
-      console.log('Failed to SignIn', err);
-    });
+    if (withTestCreds || this.isValid()) {
+      signin({username: username, password: password}).then((resp) => {
+        this.successful(resp);
+      }).catch((err) => {
+        console.log('Failed to SignIn', err);
+      }); 
+    }
   }
 
   render() {
@@ -69,6 +84,7 @@ class Login extends Component {
                 <input className="loginInput " id="loginPwd" placeholder='Password' value={this.state.password} onChange = {(e) => this.setState({password: e.target.value})} type="password"/>
               </div>
             </div>
+            {this.state.error && <div id="errorDiv" className="textCenter red ">{this.state.msg}</div>}
             <div className="textCenter padT20">
               <div className="new di">
                 <span className="newBtn loginBtns themeBg"onClick={() => this.signIn(false)}>Sign In</span>
@@ -82,6 +98,7 @@ class Login extends Component {
                 <span className="newBtn loginBtns testLogin themeBg" onClick={() => this.signIn(true)}>Continue with Test Login</span>
               </div>
             </div>
+
           </div>
         </div>
       </div>
