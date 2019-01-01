@@ -4,6 +4,7 @@ import NewExpense from './NewExpense';
 import {get_expense_data, get_expense_summary, getUserInfo, logoutUser} from '../apiCalls/ApiCalls';
 import {MONTH, YEAR, WEEK, MONTHSNAME, MONTHSNAMESHORT} from '../constants/constants';
 import Graph from './Graph';
+import {renderOptions} from '../utils/utils';
 
 export default class Home extends Component {
   constructor(props) {
@@ -17,7 +18,10 @@ export default class Home extends Component {
       viewMore: false,
       weekData: {},
       monthData: {},
-      yearData: {}
+      yearData: {},
+      selectorWW: '',
+      selectorMM: '',
+      selectorYY: '',
     }
     this.viewedMore = {};
     this.userInfo();
@@ -77,14 +81,10 @@ export default class Home extends Component {
       ww = Math.ceil((firstDayofMonth + currDate.getDate()) / 7);
     }
     
-    if (toggleVal) {
-      if (tab === YEAR) {
-        year = toggleVal === 'previous' ? year - 1 : year + 1;
-      } else if (tab === MONTH) {
-        month = toggleVal === 'previous' ? month - 1 : month + 1;
-      } else if (tab === WEEK) {
-        ww = toggleVal === 'previous' ? ww - 1: ww + 1;
-      }
+    if (this.state.selectorWW && typeof(this.state.selectorMM) !== 'undefined' && this.state.selectorYY) {
+      year = parseInt(this.state.selectorYY);
+      month = parseInt(this.state.selectorMM);
+      ww = parseInt(this.state.selectorWW);
     }
     const params = {tab, mm: month, dow, ww, yy:year, dd:date};
     return params;
@@ -107,27 +107,27 @@ export default class Home extends Component {
     const params = this.getParams(toggleVal);
     const activeTabData = this.findCurrentDataProp();
 
-    if (Object.keys(this.state[activeTabData]).length === 0 || loadNewSummaryData) {
+    // if (Object.keys(this.state[activeTabData]).length === 0 || loadNewSummaryData) {
       get_expense_summary(params).then((resp) => {
         this.setState({[activeTabData] : {...this.state[activeTabData], plotData: {...resp.data}}});
       }, (err) => {
         console.log('Unable to Get Expense Summary Details', err);
       });
-    }
+    // }
   }
 
   getExpense(loadNewExpenseData, toggleVal) {
     const params = this.getParams(toggleVal);
     const activeTabData = this.findCurrentDataProp();
     
-    if (Object.keys(this.state[activeTabData]).length === 0 || loadNewExpenseData) {
+    // if (Object.keys(this.state[activeTabData]).length === 0 || loadNewExpenseData) {
       get_expense_data(params).then((resp) => {
         const {expenseList, incomeList, standing, spent, ww, yy, mm, dd} = resp.data;
-        this.setState({[activeTabData] : {...this.state[activeTabData], expenseList, incomeList, standing, spent, ww, yy, mm,dd}});
+        this.setState({[activeTabData] : {...this.state[activeTabData], expenseList, incomeList, standing, spent, ww, yy, mm,dd}, selectorMM:mm, selectorWW: ww, selectorYY: yy});
        }, (err) => {
          console.log('Unable to Get Expense Details', err);
        });
-    }
+    // }
   }
 
   changeExpenseDayFormat(activeTab) {
@@ -247,6 +247,10 @@ export default class Home extends Component {
             <span>Percentage</span>
           </div> */}
           <div ref="transactedCard" className={'transactedCard transition1a ' + (viewMore ? 'showAllTransaction' : '')}>
+            <div className="textCenter mt5">
+              <span className="sortType sortTypeRight rightActiveRight">Spent Rate</span>
+              <span className="sortType sortTypeLeft rightActiveLeft">Date</span>
+            </div>
             <div>
               <div className="transactScroller">
               {typeof(hasListDefined) !== 'undefined' && Object.keys(hasListDefined).length === 0?
@@ -307,9 +311,19 @@ export default class Home extends Component {
     return {togglerHeader, isPrevDisabled, isNextDisabled}
   }
 
-  toggleType(val) {
-    this.getExpense(true, val);
-    this.getExpenseSummary(true, val);
+  toggleType(type, val) {
+    let objToChange = {};
+    if (type === WEEK) {
+      objToChange = {selectorWW: val};
+    } else if (type === MONTH) {
+      objToChange = {selectorMM: val};
+    } else if (type === YEAR) {
+      objToChange = {selectorYY: val};
+    }
+    this.setState({...objToChange}, () => {
+      this.getExpense(true, true);
+      this.getExpenseSummary(true, true);
+    });
   }
 
   render() {
@@ -347,16 +361,37 @@ export default class Home extends Component {
                   </div>
                 </div>
                 
-                <div className="expenseDaysBtn">
-                  <span className={'dayTypeBtn ' + (activeTab === WEEK ? 'dayTypeBtn-active' : '')} onClick={() => {this.changeExpenseDayFormat(WEEK)}}>Week</span>
+                <div className="expenseDaysBtn w85 m10a">
+                  <div className="in-bl w33">
+                    <div>
+                      <select onChange={(e) => this.toggleType(WEEK, e.target.value)} id="weekSelector db white" value={this.state.selectorWW}>
+                        {renderOptions('week')}
+                      </select>
+                      <label onClick={() => this.changeExpenseDayFormat(WEEK)}  className={'db white padT10 padB10 ' + (activeTab === WEEK ? 'dayTypeBtn-active' : '')} htmlFor="weekSelector">Week</label>
+                    </div>
+                  </div>
+                  <div className="in-bl w33">
+                    <select onChange={(e) => this.toggleType(MONTH, e.target.value)} id="monthSelector db white" value={this.state.selectorMM}>
+                      {renderOptions('month')}
+                    </select>
+                    <label onClick={() => this.changeExpenseDayFormat(MONTH)}  className={'db white padT10 padB10 ' + (activeTab === MONTH ? 'dayTypeBtn-active' : '')} htmlFor="monthSelector">Month</label>
+                  </div>
+                  <div className="in-bl w33">
+                    <select onChange={(e) => this.toggleType(YEAR, e.target.value)} id="yearSelector db white" value={this.state.selectorYY}>
+                    {renderOptions('year')}
+                    </select>
+                    <label onClick={() => this.changeExpenseDayFormat(YEAR)} className={'db white padT10 padB10 ' + (activeTab === YEAR ? 'dayTypeBtn-active' : '')} htmlFor="yearSelector">Year</label>
+                  </div>
+
+{/*                   
                   <span className={'dayTypeBtn ' + (activeTab === MONTH ? 'dayTypeBtn-active' : '')} onClick={() => {this.changeExpenseDayFormat(MONTH)}}>Month</span>
-                  <span className={'dayTypeBtn ' + (activeTab === YEAR ? 'dayTypeBtn-active' : '')} onClick={() => {this.changeExpenseDayFormat(YEAR)}}>Year</span>
+                  <span className={'dayTypeBtn ' + (activeTab === YEAR ? 'dayTypeBtn-active' : '')} onClick={() => {this.changeExpenseDayFormat(YEAR)}}>Year</span> */}
                 </div>
-                <div className="expenseDaysBtn">
+                {/* <div className="expenseDaysBtn">
                   <span className={'prevNextBtn ' + (isPrevDisabled ? 'disabled' : '')} onClick={() => {this.toggleType('previous')}}>{'<'}</span>
                   <span className={'white mp5'}>{togglerHeader}</span>
                   <span className={'prevNextBtn ' + (isNextDisabled ? 'disabled' : '')} onClick={() => {this.toggleType('next')}}>{'>'}</span>
-                </div>
+                </div> */}
                 <div className="spentIncomeSection">
                   <div className="in-bl ">
                     <div className="fl in-bl spentIcon" >

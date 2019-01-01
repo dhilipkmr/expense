@@ -121,3 +121,21 @@ background-color: #0757d0 !important;
   border: 1px solid #0757d0 !important;
 }
 
+.white {
+  color: white;
+}
+.db {
+  display: block;
+}
+.w33 {
+  width: 33%;
+}
+.w100 {
+  width: 100%;
+}
+.w50 {
+  width: 50%;
+}
+.w85 {
+  width: 85%;
+}

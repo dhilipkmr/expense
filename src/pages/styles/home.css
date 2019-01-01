@@ -182,7 +182,7 @@
 
 .transactedCard {
   height: auto;
-  max-height: 165px;
+  max-height: 193px;
   overflow: hidden;
   background-color: white;
   border-radius: 10px;
@@ -362,4 +362,46 @@
   box-shadow: 0 4px 8px 0 rgba(0,0,0,0.4);
   margin: 10px;
   border-radius: 15px;
+}
+
+.sortType {
+  background: #dad4d4;
+  padding: 2px 12px;
+  border-radius: 20px;
+  z-index: 0;
+  position: relative;
+  color: white;
+}
+
+.sortTypeRight {
+  padding-right: 28px;
+}
+.sortTypeLeft {
+  left: -25px;
+}
+.rightActiveRight {
+  background: #3276f3;
+  z-index: 1;
+  padding-right: 12px
+}
+.rightActiveLeft {
+  padding-left: 28px;
+}
+
+.sortType12 {
+  background: #3276f3;
+  padding: 2px 10px;
+  padding-right: 20px;
+  border-radius: 20px;
+  z-index: 1;
+  position: relative;
+  right: -20px;
+  color: white;
+}
+.mt5 {
+  margin-top: 5px;
+}
+
+.m10a{
+  margin: 10px auto;
 }
