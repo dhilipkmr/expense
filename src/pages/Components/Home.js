@@ -344,8 +344,7 @@ export default class Home extends Component {
           {this.renderLeftMenuBar()}
           <div ref="mainContent" className="mainContent">
             <div className="">
-              <div className="first-half-landing"></div>
-              <div ref="firstHalfLandingTxt" className="transition0_5 ">
+              <div ref="firstHalfLandingTxt" className="transition0_5 first-half-landing">
                 <div className="standing">
                   <span className="left-menu-container" onClick={this.leftMenuClick}><img className="left-menu" src="/img/menu.svg"/></span>
                   {/* <span className="right-menu-container" onClick={() => {this.setState({visibleRightMenu: true})}}><img className="right-menu" src="/img/menu.svg"/></span> */}

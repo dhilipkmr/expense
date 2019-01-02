@@ -5,9 +5,7 @@
   border-bottom-left-radius: 15px;
   border-bottom-right-radius: 15px;
   box-shadow: 0 3px 6px 0 rgba(0,0,0,0.3);
-  position: fixed;
   width: 100%;
-  height: 300px;
   z-index: -1;
 }
 
@@ -203,7 +201,8 @@
   text-align: center;
 }
 .viewMoreArrow path {
-  fill: #0757d0;
+  /* fill: #0757d0; */
+  fill: #fff;
 }
 .viewMoreArrow:hover {
   cursor: pointer;
@@ -412,4 +411,42 @@
   padding: 2px;
   text-align: center;
   border-radius: 10px;
+}
+
+
+@media screen and (min-width: 680px) {
+  .expenseDaysBtn {
+    width : 65%;
+    margin: auto;
+  }
+  .spentIncomeSection {
+    width : 80%;
+    margin: auto;
+  }
+  .expenseCard {
+    width : 80%;
+    margin: auto;
+  }
+  .transactedCard {
+    width : 80%;
+    margin: auto;
+  }
+}
+@media screen and (min-width: 996px) {
+  .expenseDaysBtn {
+    width : 45%;
+    margin: auto;
+  }
+  .spentIncomeSection {
+    width : 70%;
+    margin: auto;
+  }
+  .expenseCard {
+    width : 70%;
+    margin: auto;
+  }
+  .transactedCard {
+    width : 70%;
+    margin: auto;
+  }
 }

@@ -76,10 +76,10 @@ export default class NewExpense extends Component {
       this.setState({error: {date: 'Please provide a Valid Date!'}});
       return false;
     }
-    // else if (new Date(parseInt(year), parseInt(month), parseInt(day)) > new Date()) {
-    //   this.setState({error: {date: 'Please do not Provide Future Date!'}});
-    //   return false;
-    // }
+    else if (new Date(parseInt(year), parseInt(month), parseInt(day)) > new Date()) {
+      this.setState({error: {date: 'Please do not Provide Future Date!'}});
+      return false;
+    }
     else {
       this.date = new Date(parseInt(year), parseInt(month), parseInt(day));
       return true;
@@ -105,7 +105,14 @@ export default class NewExpense extends Component {
     const {amount, day, month, year, type, category} = this.state;
     const isValidationSuccess = this.validateParams();
     if (isValidationSuccess) {
-      const params = { amount, type, date: this.date.getTime(), category};
+      const date = this.date;
+      const mm = date.getMonth();
+      const yy = date.getFullYear();
+      const firstDayofMonth = new Date(yy, mm, 1).getDay();
+      const ww = Math.ceil((firstDayofMonth + date.getDate()) / 7);
+      const dow = date.getDay();
+      const dd = date.getDate();
+      const params = { amount, type, date, mm, yy, ww, dow, dd, category};
       new_expense(params).then((response) => {
         this.props.newExpense(false, true);
       }, (err) => {
