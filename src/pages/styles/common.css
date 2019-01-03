@@ -154,3 +154,13 @@ background-color: #0757d0 !important;
 .tc {
   text-align: center;
 }
+.fr {
+  float: right;
+}
+.padR15{
+  padding-right: 15px;
+}
+
+.fs14 {
+  font-size: 14px;
+}

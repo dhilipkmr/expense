@@ -150,7 +150,7 @@ export const getExpenseData = (request, response) => {
             _id: { type: '$type' },
             amount: { $sum: '$amount' },
             type: { '$first': '$type' },
-            transactionList: { $push: { category: '$category', amount: '$amount', date: '$date' } }
+            transactionList: { $push: { category: '$category', amount: '$amount', date: '$date', id: '$_id' } }
         }
     };
     const unwind = { $unwind: '$transactionList' };
@@ -253,4 +253,11 @@ export const getExpenseSummary = (request, response) => {
             {$project: {_id: 0}}
             ]).allowDiskUse(true).exec(execSummaryQuery);
     }
+}
+
+export const deleteExpenseDate = (request, response) => {
+    const {id} = request.body;
+    Expenses.findOneAndRemove({_id: id}).then((doc) => {
+        response.send(doc);
+    });
 }

@@ -10,7 +10,10 @@ class Login extends Component {
     this.signIn = this.signIn.bind(this);
     this.state = {
       username: '',
-      password: ''
+      password: '',
+      signinText: 'Sign In',
+      signupText: 'Sign Up',
+      continueText: 'Continue with Test Login'
     }
   }
 
@@ -31,6 +34,9 @@ class Login extends Component {
     } else {
       this.setState({...resp.data});
     }
+    if (resp.data && resp.data.error) {
+      this.resetButtonText();
+    }
   }
 
   isValid() {
@@ -45,13 +51,25 @@ class Login extends Component {
     return true;
   }
 
+  resetButtonText() {
+    this.setState({
+      signinText: 'Sign In',
+      signupText: 'Sign Up',
+      continueText: 'Continue with Test Login'
+    });
+  }
+
   signUp() {
     if (this.isValid()) {
+      this.setState({signupText: 'Signing up...'});
       signup({username: this.state.username, password: this.state.password})
       .then((resp) => {
         this.successful(resp);
       })
-      .catch((err) => console.log('Failed to Signup'));
+      .catch((err) => {
+        this.resetButtonText();
+        console.log('Failed to Signup');
+      });
     }
   }
 
@@ -62,15 +80,22 @@ class Login extends Component {
       password = 'dhilipdhilip';
     }
     if (withTestCreds || this.isValid()) {
+      if (withTestCreds) {
+        this.setState({continueText: 'Continuing with Test Login...'});
+      } else {
+        this.setState({signinText: 'Signing in...'});
+      }
       signin({username: username, password: password}).then((resp) => {
         this.successful(resp);
       }).catch((err) => {
+        this.resetButtonText();
         console.log('Failed to SignIn', err);
       }); 
     }
   }
 
   render() {
+    const {signinText, signupText, continueText} = this.state;
     return (
       <div>
         {this.head()}
@@ -87,15 +112,15 @@ class Login extends Component {
             {this.state.error && <div id="errorDiv" className="textCenter red ">{this.state.msg}</div>}
             <div className="textCenter padT20">
               <div className="new di">
-                <span className="newBtn loginBtns themeBg"onClick={() => this.signIn(false)}>Sign In</span>
+                <span className="newBtn loginBtns themeBg"onClick={() => this.signIn(false)}>{signinText}</span>
               </div>
               <div className="new di">
-                <span className="newBtn loginBtns themeBg" onClick={this.signUp}>Sign Up</span>
+                <span className="newBtn loginBtns themeBg" onClick={this.signUp}>{signupText}</span>
               </div>
             </div>
             <div className="textCenter padT20">
               <div className="new">
-                <span className="newBtn loginBtns testLogin themeBg" onClick={() => this.signIn(true)}>Continue with Test Login</span>
+                <span className="newBtn loginBtns testLogin themeBg" onClick={() => this.signIn(true)}>{continueText}</span>
               </div>
             </div>
 

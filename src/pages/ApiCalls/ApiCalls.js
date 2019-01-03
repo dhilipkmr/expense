@@ -34,3 +34,8 @@ export const get_expense_summary = (params) => {
   const url = '/get_expense_summary/' ;
   return axios.post(url, params);
 }
+
+export const deleteExpenseDate = (params) => {
+  const url = '/delete_expense_date/' ;
+  return axios.post(url, params);
+}

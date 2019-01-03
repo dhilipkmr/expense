@@ -177,7 +177,7 @@
 
 .transactedCard {
   height: auto;
-  max-height: 193px;
+  max-height: 205px;
   overflow: hidden;
   background-color: white;
   border-radius: 10px;
@@ -187,7 +187,7 @@
 
 }
 .transactedCardInner {
-  min-height: 65px;
+  min-height: 72px;
   background-color: white;
   border-radius: 10px;
   margin: 10px 10px;
@@ -216,7 +216,7 @@
 .progressBar {
   height: 7px;
   color: #fff;
-  margin: 10px;
+  margin: 7px;
   position: relative;
   font-size: 14px;
   min-width: 200px;
@@ -269,7 +269,7 @@
 .cat {
   color: #757575;
   font-weight: bold;
-  font-size: 14px;
+  font-size: 12px;
 }
 
 .trSumaryHeading {
