@@ -266,15 +266,7 @@
   position: relative;
 }
 
-.cat_name {
-  text-align: left;
-  color: #757575;
-  font-weight: bold;
-  font-size: 14px;
-}
-
-.cat_percent {
-  float: right;
+.cat {
   color: #757575;
   font-weight: bold;
   font-size: 14px;

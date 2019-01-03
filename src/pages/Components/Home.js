@@ -217,9 +217,9 @@ export default class Home extends Component {
           return (
             <div key={'transaction_type_' + index} className="transactedCardInner">
               <div className="cardInnerheading">
-                <div className="cat_name w33 in-bl tl">{transaction.category}</div>
-                <div className="w33 in-bl tc">{formatDate(transaction.date)}</div>
-                <div className="cat_percent w33 in-bl tr">{transaction.percent + ' %'}</div>
+                <div className="cat w33 in-bl tl">{transaction.category}</div>
+                <div className="cat w33 in-bl tc">{formatDate(transaction.date)}</div>
+                <div className="cat w33 in-bl tr">{transaction.percent + ' %'}</div>
                 {/* <span className="cat_name loader"></span>
                 <span className="cat_percent loader"></span> */}
               </div>
