@@ -4,7 +4,7 @@ import NewExpense from './NewExpense';
 import {get_expense_data, get_expense_summary, getUserInfo, logoutUser} from '../apiCalls/ApiCalls';
 import {MONTH, YEAR, WEEK, MONTHSNAME, MONTHSNAMESHORT} from '../constants/constants';
 import Graph from './Graph';
-import {renderOptions} from '../utils/utils';
+import {renderOptions, formatDate} from '../utils/utils';
 
 export default class Home extends Component {
   constructor(props) {
@@ -22,6 +22,7 @@ export default class Home extends Component {
       selectorWW: '',
       selectorMM: '',
       selectorYY: '',
+      activeFilter: 'spentRate'
     }
     this.viewedMore = {};
     this.userInfo();
@@ -67,7 +68,7 @@ export default class Home extends Component {
   }
 
   getParams(toggleVal) {
-    const tab = this.state.activeTab;
+    const {activeTab: tab, activeFilter} = this.state;
     let {dd, mm, yy, ww} = this.currentTabData();
 
     const currDate = (yy && typeof(mm) !== 'undefined' && dd) ? new Date(yy, mm, dd) : new Date();
@@ -86,7 +87,7 @@ export default class Home extends Component {
       month = parseInt(this.state.selectorMM);
       ww = parseInt(this.state.selectorWW);
     }
-    const params = {tab, mm: month, dow, ww, yy:year, dd:date};
+    const params = {tab, mm: month, dow, ww, yy:year, dd:date, activeFilter};
     return params;
   }
 
@@ -216,8 +217,9 @@ export default class Home extends Component {
           return (
             <div key={'transaction_type_' + index} className="transactedCardInner">
               <div className="cardInnerheading">
-                <span className="cat_name">{transaction.category}</span>
-                <span className="cat_percent ">{transaction.percent + ' %'}</span>
+                <div className="cat_name w33 in-bl tl">{transaction.category}</div>
+                <div className="w33 in-bl tc">{formatDate(transaction.date)}</div>
+                <div className="cat_percent w33 in-bl tr">{transaction.percent + ' %'}</div>
                 {/* <span className="cat_name loader"></span>
                 <span className="cat_percent loader"></span> */}
               </div>
@@ -235,9 +237,23 @@ export default class Home extends Component {
   );
   }
 
+  changeFilter(type) {
+    if (type === 'date') {
+      this.setState({activeFilter: 'date'}, () => {
+        this.getExpense(true, true);
+        this.getExpenseSummary(true, true);
+      });
+    } else if (type === 'spentRate') {
+      this.setState({activeFilter: 'spentRate'}, () => {
+        this.getExpense(true, true);
+        this.getExpenseSummary(true, true);
+      });
+    }
+  }
+
   getTransactionCard() {
     const currentTabData = this.currentTabData();
-    const {activeTab, viewMore = false, userInfo} = this.state;
+    const {activeTab, viewMore = false, userInfo, activeFilter} = this.state;
     // const hasNoData = currentTabData.expenseList && Object.keys(currentTabData.expenseList).length === 0;
     const hasListDefined = currentTabData.expenseList; // To determine if the call is completed
       return (
@@ -248,8 +264,8 @@ export default class Home extends Component {
           </div> */}
           <div ref="transactedCard" className={'transactedCard transition1a ' + (viewMore ? 'showAllTransaction' : '')}>
             <div className="textCenter mt5">
-              <span className="sortType sortTypeRight rightActiveRight">Spent Rate</span>
-              <span className="sortType sortTypeLeft rightActiveLeft">Date</span>
+              <span className={'sortType sortTypeLeft ' + (activeFilter === 'spentRate' ? ' leftActiveRight ' : '')} onClick={() => this.changeFilter('spentRate')}>Spent Rate</span>
+              <span className={'sortType sortTypeRight ' + (activeFilter === 'spentRate' ? ' leftActiveLeft ' : 'rightActiveRight')} onClick={() => this.changeFilter('date')}>Date</span>
             </div>
             <div>
               <div className="transactScroller">

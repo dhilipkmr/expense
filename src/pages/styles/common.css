@@ -142,3 +142,15 @@ background-color: #0757d0 !important;
 .red {
   color: red;
 }
+.in-bl{
+  display: inline-block
+}
+.tl {
+  text-align: left;
+}
+.tr {
+  text-align: right;
+}
+.tc {
+  text-align: center;
+}

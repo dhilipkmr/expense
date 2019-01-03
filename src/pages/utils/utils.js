@@ -26,3 +26,15 @@ export function renderOptions(type) {
   }
   return options;
 }
+
+export function formatDate(d) {
+  let date;
+  if (typeof(d) !== 'object') {
+    date = new Date(d);
+  } else {
+    date = d;
+  }
+  let result = '';
+  result += date.getDate() + ' ' +  MONTHSNAMESHORT[date.getMonth()] + ' ' + date.getFullYear();
+  return result;
+}

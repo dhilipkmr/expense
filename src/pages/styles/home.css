@@ -61,9 +61,6 @@
   height: 100vh;
   width: 60%;
 } */
-.in-bl{
-  display: inline-block
-}
 
 .right0 {
   right: 0%;
@@ -372,19 +369,32 @@
   color: white;
 }
 
-.sortTypeRight {
+.sortTypeLeft {
   padding-right: 28px;
 }
-.sortTypeLeft {
+.sortTypeRight {
   left: -25px;
 }
-.rightActiveRight {
-  background: #3276f3;
+.leftActiveRight {
+  background: #0757d0;
   z-index: 1;
   padding-right: 12px
 }
-.rightActiveLeft {
+.leftActiveLeft {
   padding-left: 28px;
+}
+.rightActiveLeft {
+  background: #dad4d4;
+}
+
+.rightActiveRight{
+  background:#0757d0;
+  z-index: 1;
+}
+
+.righttActiveLeft {
+  z-index: 1;
+  padding-right: 28px;
 }
 
 .sortType12 {
