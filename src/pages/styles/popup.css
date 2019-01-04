@@ -1,0 +1,10 @@
+.popupContainer {
+  position: relative;
+  top: 30%;
+  margin: auto;
+  min-width: 240px;
+  border-radius: 10px;
+  padding: 15px;
+  padding-bottom: 10px;
+  width: 70%;
+}

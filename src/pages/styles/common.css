@@ -164,3 +164,21 @@ background-color: #0757d0 !important;
 .fs14 {
   font-size: 14px;
 }
+.fs12 {
+  font-size: 12px !important;
+}
+.whiteBg {
+  background-color: white;
+}
+.mf5{
+  margin:5px !important;
+}
+.white {
+  color: white !important;
+}
+.padB20 {
+  padding-bottom: 20px;
+}
+.padB10 {
+  padding-bottom: 10px;
+}

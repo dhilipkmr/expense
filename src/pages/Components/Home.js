@@ -5,6 +5,7 @@ import {get_expense_data, get_expense_summary, getUserInfo, logoutUser, deleteEx
 import {MONTH, YEAR, WEEK, MONTHSNAME, MONTHSNAMESHORT} from '../constants/constants';
 import Graph from './Graph';
 import {renderOptions, formatDate} from '../utils/utils';
+import Popup from './Popup';
 
 export default class Home extends Component {
   constructor(props) {
@@ -12,6 +13,9 @@ export default class Home extends Component {
     this.leftMenuClick = this.leftMenuClick.bind(this);
     this.newExpense = this.newExpense.bind(this);
     this.navigateToSignIn = this.navigateToSignIn.bind(this);
+    this.cancelPopup = this.cancelPopup.bind(this);
+    this.confirmPopup = this.confirmPopup.bind(this);
+    this.deleteExpense = this.deleteExpense.bind(this);
     this.state = {
       activeTab: MONTH,
       showNewExpense: false,
@@ -185,13 +189,22 @@ export default class Home extends Component {
     }
   }
 
-  deleteExpense(obj) {
-    deleteExpenseDate({id: obj.id}).then((res) => {
+  cancelPopup() {
+    this.setState({showPopup: false});
+  }
+
+  confirmPopup() {
+    this.setState({showPopup: false});
+    deleteExpenseDate({id: this.state.deleteTransactionObj.id}).then((res) => {
       if (res) {
         this.getExpense(true, true);
         this.getExpenseSummary(true, true);
       }
     });
+  }
+
+  deleteExpense(obj) {
+    this.setState({showPopup: true, deleteTransactionObj:obj});
   }
 
   clickViewMore() {
@@ -462,6 +475,7 @@ export default class Home extends Component {
           <div>
              <NewExpense newExpense={this.newExpense}/>
           </div> : null}
+        {this.state.showPopup && <Popup cancelCallback={this.cancelPopup} confirmCallback={this.confirmPopup}/>}
       </div>
     );
   }
