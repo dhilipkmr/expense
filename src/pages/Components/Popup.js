@@ -7,7 +7,7 @@ export default class Popup extends Component {
   render() {
     const {cancelCallback, confirmCallback} = this.props;
     return (
-      <div className="backDrop">
+      <div className="popupBackDrop">
         <div className="popupContainer whiteBg">
           <div className="popupHeader">
             <div className="fb fs14 padB10 textCenter">
