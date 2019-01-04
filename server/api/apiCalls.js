@@ -261,3 +261,18 @@ export const deleteExpenseDate = (request, response) => {
         response.send(doc);
     });
 }
+
+export const editExpense = (request, response) => {
+    let {amount, date} = request.body;
+    const {  id, ww, dow, mm, yy, dd, type, category } = request.body;
+    amount = parseInt(amount);
+    date = new Date(date);
+    const newExpense = { amount, category, date, type, ww, dow, mm, yy, dd };
+    Expenses.findOneAndUpdate(
+        {_id: id},
+        {$set: {'amount': amount, 'category': category, 'date': date, 'type': type, 'ww': ww, 'dd': dd, 'mm': mm, 'yy': yy, 'dow': dow } },
+        {upsert:true, returnNewDocument : true}
+    ).then((doc) => {
+        response.send(doc);
+    });
+}

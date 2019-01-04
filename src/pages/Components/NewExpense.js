@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {new_expense} from '../apiCalls/ApiCalls';
+import {new_expense, edit_expense} from '../apiCalls/ApiCalls';
 import {MONTHSNAMESHORT, TODAY, YESTERDAY} from '../constants/constants';
 // import {commaFormatted} from '../utils/utils';
 
@@ -10,14 +10,26 @@ export default class NewExpense extends Component {
     super(props);
     this.selectType = this.selectType.bind(this);
     this.submitNewExpense = this.submitNewExpense.bind(this);
-    
+    let  amount = '';
+    let  category = '';
+    let  day = '';
+    let  month = '';
+    let  year = '';
+    if (props.editTransactionObj) {
+      amount = props.editTransactionObj.amount;
+      category = props.editTransactionObj.category;
+      var date = new Date(props.editTransactionObj.date)
+      day = date.getDate();
+      month = date.getMonth();
+      year = date.getFullYear();
+    }
     this.state = {
       type: 'expense',
-      amount: '',
-      category: '',
-      day: '', 
-      month: '',
-      year: '',
+      amount: amount,
+      category: category,
+      day: day, 
+      month: month,
+      year: year,
       error: {}
     }
   }
@@ -113,12 +125,22 @@ export default class NewExpense extends Component {
       const dow = date.getDay();
       const dd = date.getDate();
       const params = { amount, type, date, mm, yy, ww, dow, dd, category};
-      new_expense(params).then((response) => {
-        this.props.newExpense(false, true);
-      }, (err) => {
-        console.log('Unable to create new Expense',err);
-        this.props.newExpense(false, false);
-      });
+      if (this.props.editTransactionObj) {
+        params.id = this.props.editTransactionObj.id;
+        edit_expense(params).then((resp) => {
+          this.props.newExpense(false, true, false);
+        }, (err) => {
+          console.log('Unable to Edit Expense',err);
+          this.props.newExpense(false, false, false);
+        });
+      } else {
+        new_expense(params).then((response) => {
+          this.props.newExpense(false, true);
+        }, (err) => {
+          console.log('Unable to create new Expense',err);
+          this.props.newExpense(false, false);
+        });
+      }
     }
   }
 
