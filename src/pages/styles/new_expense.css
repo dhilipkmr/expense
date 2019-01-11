@@ -1,14 +1,17 @@
 .newExpenseContainer {
   background-color: white;
   min-height: 500px;
-  position: absolute;
-  top: 0;
+  position: fixed;
+  top: 5%;
+  left: 0;
+  right: 0;
   min-width: 285px;
   margin: 15%;
   border-radius: 20px;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
+  max-width: 70%;
 }
 .amountInput {
   margin-bottom: 10px;

@@ -136,6 +136,15 @@ background-color: #0757d0 !important;
 .w50 {
   width: 50%;
 }
+.w25 {
+  width: 25%;
+}
+.w75 {
+  width: 75%;
+}
+.w20 {
+  width: 20%;
+}
 .w85 {
   width: 85%;
 }

@@ -3,6 +3,7 @@
 
 # production
 /build/bundle.js
+env.js
 
 # misc
 package-lock.json
