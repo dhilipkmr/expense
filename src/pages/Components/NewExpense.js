@@ -144,7 +144,6 @@ export default class NewExpense extends Component {
 
   render() {
     const {type, amount, day, month, year, category, error} = this.state;
-
     return (
       <div className="newExpenseContainer zi2">
         <div className="expIncBtns textCenter mT25">
