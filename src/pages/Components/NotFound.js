@@ -25,11 +25,6 @@ class NotFound extends Component {
         </div>
         <div>
           <ul className="notfoundUL textCenter">
-            {/* <li>
-              <div className="blueBtn">
-                <NavLink to='/home' className="white"> Home </NavLink>
-              </div>
-            </li> */}
             <li>
               <div className="blueBtn">
               <NavLink to='/login' className="white"> Login </NavLink>

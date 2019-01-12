@@ -390,13 +390,6 @@ export default class Home extends Component {
     const {activeTab, showNewExpense, viewMore = false, editExpense, editTransactionObj} = this.state;
     const {standing = undefined, spent = undefined, plotData = undefined, incomeList = undefined} = this.currentTabData();
     const {togglerHeader, isPrevDisabled, isNextDisabled} = this.getTogglerHeader();
-    // if (!this.state.userInfo) {
-    //   return (
-    //     <div className='loginRedirect'>
-    //       <div>Please wait... </div>
-    //       <div>Redirecting to login...</div>
-    //     </div>);
-    // }
     return (
       <div className="">
         <div>
@@ -407,7 +400,6 @@ export default class Home extends Component {
               <div ref="firstHalfLandingTxt" className="transition0_5 first-half-landing">
                 <div className="standing">
                   <span className="left-menu-container" onClick={this.leftMenuClick}><img className="left-menu" src="/img/menu.svg"/></span>
-                  {/* <span className="right-menu-container" onClick={() => {this.setState({visibleRightMenu: true})}}><img className="right-menu" src="/img/menu.svg"/></span> */}
                 </div>
                 <div className="heading">
                   <div className="fb f11">CURRENT BALANCE</div>
@@ -441,16 +433,7 @@ export default class Home extends Component {
                     </select>
                     <label onClick={() => this.changeExpenseDayFormat(YEAR)} className={'db white padT10 padB10 ' + (activeTab === YEAR ? 'dayTypeBtn-active' : '')} htmlFor="yearSelector">Year</label>
                   </div>
-
-{/*                   
-                  <span className={'dayTypeBtn ' + (activeTab === MONTH ? 'dayTypeBtn-active' : '')} onClick={() => {this.changeExpenseDayFormat(MONTH)}}>Month</span>
-                  <span className={'dayTypeBtn ' + (activeTab === YEAR ? 'dayTypeBtn-active' : '')} onClick={() => {this.changeExpenseDayFormat(YEAR)}}>Year</span> */}
                 </div>
-                {/* <div className="expenseDaysBtn">
-                  <span className={'prevNextBtn ' + (isPrevDisabled ? 'disabled' : '')} onClick={() => {this.toggleType('previous')}}>{'<'}</span>
-                  <span className={'white mp5'}>{togglerHeader}</span>
-                  <span className={'prevNextBtn ' + (isNextDisabled ? 'disabled' : '')} onClick={() => {this.toggleType('next')}}>{'>'}</span>
-                </div> */}
                 <div className="spentIncomeSection">
                   <div className="in-bl ">
                     <div className="fl in-bl spentIcon" >
