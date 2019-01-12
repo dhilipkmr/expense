@@ -129,7 +129,7 @@
 }
 .dayTypeBtn-active {
   font-weight: bold;
-  border-bottom: 1px solid white;
+  /* border-bottom: 1px solid white; */
   
 }
 /* .dayTypeBtn:hover {
@@ -177,7 +177,7 @@
 
 .transactedCard {
   height: auto;
-  max-height: 205px;
+  max-height: 215px;
   overflow: hidden;
   background-color: white;
   border-radius: 10px;
@@ -191,7 +191,7 @@
   background-color: white;
   border-radius: 10px;
   margin: 10px 10px;
-  box-shadow: 0 3px 6px 0 rgba(0,0,0,0.3);
+  /* box-shadow: 0 3px 6px 0 rgba(0,0,0,0.3); */
 }
 
 .viewMoreArrow {
@@ -209,7 +209,7 @@
 }
 
 .showAllTransaction {
-  max-height: 60vh;
+  max-height: 55vh;
   overflow: scroll;
 }
 
@@ -452,3 +452,15 @@
     margin: auto;
   }
 }
+.cardBrdrBtm {
+  border-bottom: 2px solid #e8e9ea;
+  width: 20%;
+  margin: auto;
+} 
+
+.typeBrdrBtm {
+  border-bottom: 2px solid #fff;
+  width: 0%;
+  margin: auto;
+  transition: all 500ms;
+} 
