@@ -168,7 +168,7 @@ export const getExpenseData = (request, response) => {
         Expenses.aggregate([
             { $match: { user_id: userId} },
             { $match: { yy: parseInt(yy) } },
-            {...group1 },{ ...group2 },
+            { ...group2 },
             { ...unwind },{ ...sort },{ ...reGroup },
             { $project: { _id: 0, amount: 1, type: 1, transactionList: 1 } }
         ]).allowDiskUse(true).exec(expenseDateResponder);
@@ -176,7 +176,7 @@ export const getExpenseData = (request, response) => {
         Expenses.aggregate([
             { $match: { user_id: userId } },
             { $match: { yy: parseInt(yy) } },{ $match: { mm: parseInt(mm) } },
-            {...group1 },{ ...group2 },
+            { ...group2 },
             { ...unwind },{ ...sort },{ ...reGroup },
             { $project: { _id: 0, amount: 1, type: 1, transactionList: 1 } }
         ]).allowDiskUse(true).exec(expenseDateResponder);
@@ -184,7 +184,7 @@ export const getExpenseData = (request, response) => {
         Expenses.aggregate([
             { $match: { user_id: userId } },
             { $match: { yy: parseInt(yy) } },{ $match: { mm: parseInt(mm) } },{ $match: { ww: parseInt(ww) } },
-            {...group1 },{ ...group2 },
+            { ...group2 },
             { ...unwind },{ ...sort },{ ...reGroup },
             { $project: { _id: 0, amount: 1, type: 1, transactionList: 1 } }
         ]).allowDiskUse(true).exec(expenseDateResponder);
