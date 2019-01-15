@@ -73,11 +73,12 @@ export default class Graph extends Component {
         if (entry.division === lastDivision + 1) {
           const percent = ((entry.amount / maxAmt) * 100);
           yCoordinates.push(HEIGHT - ((HEIGHT / 100) * percent));
+          amountOnCoordinates.push(entry.amount);
         } else {
           yCoordinates.push(HEIGHT);
+          amountOnCoordinates.push('');
         }
         lastDivision++;
-        amountOnCoordinates.push(entry.amount);
       }
     });
     // to push values for remaining days
