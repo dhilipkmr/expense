@@ -29,12 +29,12 @@ module.exports = {
             }
         ]
     },
-    devtool: 'eval-source-map',
-    devServer: {
-        contentBase: './dist',
-        hot: true,
-        open: true
-    },
+    // devtool: 'eval-source-map',
+    // devServer: {
+    //     contentBase: './dist',
+    //     hot: true,
+    //     open: true
+    // },
     plugins: [
         new CleanWebpackPlugin('dist')
       ]
