@@ -194,3 +194,6 @@ background-color: #0757d0 !important;
 .w60 {
   width: 60% !important;
 }
+select {
+  text-align-last: center;
+}

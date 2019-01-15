@@ -38,3 +38,16 @@ export function formatDate(d) {
   result += date.getDate() + ' ' +  MONTHSNAMESHORT[date.getMonth()] + ' ' + date.getFullYear();
   return result;
 }
+
+export function amountOnGraph(val) {
+  if (val === '') {
+    return '';
+  } else {
+    const value = parseFloat(val, 10);
+    if (val > 1000) {
+      return Math.round(parseFloat(val/1000, 10) * 10) / 10 + 'K';
+    } else {
+      return val;
+    }
+  }
+}

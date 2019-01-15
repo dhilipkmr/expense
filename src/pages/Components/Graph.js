@@ -4,6 +4,7 @@ const HEIGHT = 115;
 
 import React, {Component} from 'react';
 import {DIVISIONLENGTH, MAXLENGTHPERTAB, MONTHSNAMESHORT, MONTH, WEEK, YEAR, WEEKNAMESHORT} from '../constants/constants';
+import {amountOnGraph} from '../utils/utils';
 
 export default class Graph extends Component {
   constructor(props) {
@@ -19,7 +20,7 @@ export default class Graph extends Component {
     }
   }
 
-  renderPoints(xCoordinates, yCoordinates) {
+  renderPoints(xCoordinates, yCoordinates, amountOnCoordinates) {
     const pointsElement = [];
     const tab = this.props.tab;
     let textIndex = 0;
@@ -38,8 +39,9 @@ export default class Graph extends Component {
       pointsElement.push(
         <g key={'group_' + index}>
           <a>
-          <text className="fb" x={xCoordinates[index]} fill="#757575" y={yCoordinates[index] - 5} fontSize="5" textAnchor="middle">{pointText}</text>
+          <text className="fb" x={xCoordinates[index]} fill="#757575" y={yCoordinates[index] - 5} fontSize="5" textAnchor="middle">{amountOnGraph(amountOnCoordinates[index])}</text>
           <circle cx={xCoordinates[index]} cy={yCoordinates[index]} stroke="#0757d0" fill="#0757d0" r="0.5" strokeWidth="1"></circle>
+          <text className="fb" x={xCoordinates[index]} fill="#757575" y={HEIGHT + 7} fontSize="5" textAnchor="middle">{pointText}</text>
           </a>
         </g>
       );
@@ -51,6 +53,7 @@ export default class Graph extends Component {
     const {plotData, tab} = this.props;
     const xCoordinates = [];
     const yCoordinates = [];
+    const amountOnCoordinates = [];
     const length = DIVISIONLENGTH[tab];
     const maxLeng = MAXLENGTHPERTAB[tab];
     const maxAmt = plotData.maxAmount;
@@ -62,6 +65,7 @@ export default class Graph extends Component {
     /* To start the graph at the Least Point */
     xCoordinates.push(0);
     yCoordinates.push(HEIGHT);
+    amountOnCoordinates.push('');
     plotData.perDivisionData.forEach((entry) => {
       while (entry.division > lastDivision) {
         const lastX = xCoordinates[xCoordinates.length - 1];
@@ -73,6 +77,7 @@ export default class Graph extends Component {
           yCoordinates.push(HEIGHT);
         }
         lastDivision++;
+        amountOnCoordinates.push(entry.amount);
       }
     });
     // to push values for remaining days
@@ -81,10 +86,12 @@ export default class Graph extends Component {
       xCoordinates.push((lastX + xCoordinateDivLength));
       yCoordinates.push(HEIGHT);
       lastDivision++;
+      amountOnCoordinates.push('');
     }
     const lastX = xCoordinates[xCoordinates.length - 1];
     xCoordinates.push((lastX + xCoordinateDivLength));
     yCoordinates.push(HEIGHT);
+    amountOnCoordinates.push('');
  
     for (let i = 0; i < xCoordinates.length; i++) {
       str += ' ' + xCoordinates[i] + ',' + yCoordinates[i] + ' ';
@@ -92,9 +99,10 @@ export default class Graph extends Component {
     if (str) {
       return (
         <div>
-          <svg viewBox={'-5 -10 ' + (WIDTH + 35) + ' ' + (HEIGHT + 15)} style={{margin: '10px'}}>
+          {/* <svg viewBox={'-5 -10 ' + (WIDTH + 35) + ' ' + (HEIGHT + 15)} style={{margin: '10px'}}> */}
+          <svg viewBox={(window && window.screen.width > 600 ? '-50 -10 285 210' : ('-15 -15 220 150'))} style={{margin: '10px'}}>
             <polyline points={str} className="graphPlotLine" />
-            {this.renderPoints(xCoordinates, yCoordinates)}
+            {this.renderPoints(xCoordinates, yCoordinates, amountOnCoordinates)}
           </svg>
         </div>
       );

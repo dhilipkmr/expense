@@ -170,9 +170,8 @@ export default class Home extends Component {
       <div className="menuBar">
         <div ref="popup"className="popup zi2 " onClick={this.leftMenuClick}>
           <div className="sideBar in-bl fl">
-            <div className="menu-option">Settings</div>
             <div className="menu-option" onClick={this.navigateToSignIn}>{(!userInfo ? 'Sign In' : 'Logout')}</div>
-            <div className="menu-option">About Me</div>
+            <div className="menu-option"><a style={{color: '#757575c9'}} href="https://dhilipkmr.github.io/materializedResume/" target="_blank">About Me</a></div>
           </div>
         </div>
       </div>
