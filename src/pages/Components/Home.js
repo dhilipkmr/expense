@@ -320,7 +320,7 @@ export default class Home extends Component {
               <div className="transactScroller">
               {typeof(hasListDefined) !== 'undefined' && Object.keys(hasListDefined).length === 0?
                 <div className="textCenter padT20 mh10p">
-                  <div>Add Transaction </div>
+                  <div className="tu " onClick={() => this.newExpense(true)}>Add Transaction </div>
                   {!userInfo && <div className="padT10 padB20"><a href="/login"><span>Sign In</span></a> for Past Transactions</div>}
                 </div>:
                 <div>
@@ -340,7 +340,7 @@ export default class Home extends Component {
           <div className="posRel">
             <div ref="addBtnContainer" className={'addBtnContainer '}>
               <div className="">
-                <span className="addBtn" onClick={() => this.newExpense(true)}> + </span>
+                <span className="addBtn themeBg" onClick={() => this.newExpense(true)}> + </span>
               </div>
             </div>
           </div>

@@ -98,7 +98,7 @@ export default class NewExpense extends Component {
   validateParams() {
     var reg = /^\d+$/;
     const {amount, category} = this.state;
-    if (!amount || !reg.test(amount)) {
+    if (!amount || amount <= 0) {
       this.setState({error: {amount: 'Please provide a Valid Amount'}});
       return false;
     }
@@ -113,6 +113,7 @@ export default class NewExpense extends Component {
   }
   submitNewExpense() {
     const {amount, day, month, year, type, category} = this.state;
+    this.setState({disableSubmit: true});
     const isValidationSuccess = this.validateParams();
     if (isValidationSuccess) {
       const date = this.date;
@@ -143,7 +144,7 @@ export default class NewExpense extends Component {
   }
 
   render() {
-    const {type, amount, day, month, year, category, error} = this.state;
+    const {type, amount, day, month, year, category, error, disableSubmit} = this.state;
     return (
       <div className="newExpenseContainer zi2">
         <div className="expIncBtns textCenter mT25">
@@ -170,7 +171,7 @@ export default class NewExpense extends Component {
           {error.date ? <div className="mt10 errorDiv">{error.date}</div> : null}
         </div>
         <div className="textCenter">
-          <div className="submitBtn themeBg" onClick={this.submitNewExpense}>Done</div>
+          <div className={'submitBtn themeBg ' + (disableSubmit ? 'disableBtn' : '')} onClick={this.submitNewExpense}>{disableSubmit ? 'Adding...' : 'Done'}</div>
         </div>
       </div>
     );
