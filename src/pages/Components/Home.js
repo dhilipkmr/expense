@@ -27,7 +27,7 @@ export default class Home extends Component {
       selectorWW: '',
       selectorMM: '',
       selectorYY: '',
-      activeFilter: 'spentRate'
+      activeFilter: 'date'
     }
     this.viewedMore = {};
     this.userInfo();

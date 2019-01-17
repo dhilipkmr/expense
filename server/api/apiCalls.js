@@ -9,8 +9,7 @@ export const signUp = (request, response) => {
     var user = new Users({
         _id: mongoose.Types.ObjectId(),
         username: username,
-        password: password,
-        emailId: emailId
+        password: password
     });
     Users.find({ username: username }).then((res) => {
         if (res.length > 0) {

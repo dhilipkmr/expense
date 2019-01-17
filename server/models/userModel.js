@@ -1,7 +1,8 @@
 import mongoose from 'mongoose';
 import Expenses from './expenseModel';
+import bcrypt from 'bcryptjs';
 
-const Users = mongoose.model('Users', {
+const UserSchema = new mongoose.Schema({
     _id: mongoose.Schema.Types.ObjectId,
     username: {
         type: String,
@@ -20,6 +21,10 @@ const Users = mongoose.model('Users', {
         minlength: 8,
         trim: true
     },
+    token: {
+        type: String,
+        required: false
+    },
     expense: [
         {
             type: mongoose.Schema.Types.ObjectId, 
@@ -27,4 +32,46 @@ const Users = mongoose.model('Users', {
         }
     ]
 });
+
+function generateToken(userDoc, next) {
+    bcrypt.genSalt(10, function(err, salt){
+        if (err) {
+            console.log('Unable to generate Salt for Token', err);
+        } else {
+            bcrypt.hash(userDoc._id.toHexString(), salt, function(err, hash) {
+                if (err) {
+                    console.log('Unable to generate Hash for Token', err);
+                } else {
+                    userDoc.token = hash;
+                    next();
+                }
+            });
+        }
+    });
+}
+
+// Specific to all entries in document, 'this' refers to a document
+UserSchema.pre('save', function(next) {
+    var userDoc = this;
+    if (userDoc.isModified('password')) {
+        bcrypt.genSalt(10, function(err, salt){
+            if (err) {
+                console.log('Unable to generate Salt', err);
+            } else {
+                bcrypt.hash(userDoc.password, salt, function(err, hash) {
+                    if (err) {
+                        console.log('Unable to generate Hash', err);
+                    } else {
+                        userDoc.password = hash;
+                        generateToken(userDoc, next);
+                    }
+                });
+            }
+        });
+    } else {
+        generateToken(userDoc, next);
+    }
+});
+
+const Users = mongoose.model('Users', UserSchema);
 export default Users;
