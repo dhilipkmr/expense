@@ -205,3 +205,7 @@ select {
   opacity: 0.5;
   pointer-events: none;
 }
+
+.requiredAshterix {
+  color: #bd0000;
+}

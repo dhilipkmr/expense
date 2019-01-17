@@ -152,12 +152,14 @@ export default class NewExpense extends Component {
           <span className={'newBtn ' + (type === 'income' ? 'selectedType' : '')} onClick={() => this.selectType('income')}>Income</span>
         </div>
         <div className="amountInput mT25 ">
-        <span>₹</span>
+          <span>₹</span>
           <input className={'padL10 w75 ' + (error.amount ? 'redBrdrBtm' : '')} auto-complete="off" type="text" id="newExpAmt" placeholder="Amount" onChange={(e) => this.changeAmount(e.target.value)} value={amount}/>
+          <span className="requiredAshterix"> * </span>
           {error.amount ? <div className="errorDiv">{error.amount}</div> : null}
         </div>
         <div  className="categoryInput mT25 ">
           <input className={'padL10 w75 ' + (error.category ? 'redBrdrBtm' : '')} auto-complete="off"  type="text" id="newCategAmt" placeholder="Category" onChange={(e) => this.changeCategory(e.target.value)} value={category}/>
+          <span className="requiredAshterix"> * </span>
           {error.category ? <div className="errorDiv">{error.category}</div> : null}
         </div>
         <div className="spentDay mT25 ">
