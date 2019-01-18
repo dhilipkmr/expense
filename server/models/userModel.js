@@ -38,7 +38,7 @@ function generateToken(userDoc, next) {
         if (err) {
             console.log('Unable to generate Salt for Token', err);
         } else {
-            bcrypt.hash(userDoc._id.toHexString(), salt, function(err, hash) {
+            bcrypt.hash(userDoc._id.toHexString() + userDoc.password.toString(), salt, function(err, hash) {
                 if (err) {
                     console.log('Unable to generate Hash for Token', err);
                 } else {

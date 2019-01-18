@@ -3,6 +3,7 @@ import app from '../server'
 import Expenses from '../models/expenseModel';
 import Users from '../models/userModel';
 import { MONTH, YEAR, WEEK } from '../../src/pages/constants/constants';
+import bcrypt from 'bcryptjs';
 
 export const signUp = (request, response) => {
     const { username = '', password = '', emailId = '' } = request.body;
@@ -16,7 +17,7 @@ export const signUp = (request, response) => {
             response.send({ error: true, msg: 'Username already Exists' });
         } else {
             user.save().then((doc) => {
-                request.session._userId = doc.id;
+                request.session.token = doc.token;
                 response.send({ error: false, msg: 'Saved Successfully' });
             }, (e) => {
                 response.status(500).send(e);
@@ -31,10 +32,16 @@ export const signUp = (request, response) => {
 export const signIn = (request, response) => {
     const { username = '', password = '', emailId = '' } = request.body;
     console.log(request.session.user);
-    Users.findOne({ username: username, password: password }).then((res) => {
-        if (res) {
-            request.session._userId = res.id;
-            response.send({ error: false, msg: 'success' });
+    Users.findOne({ username: username }).then((doc) => {
+        if (doc) {
+            bcrypt.compare(password, doc.password, function(err) {
+                if (!err) {
+                    request.session.token = doc.token;
+                    response.send({ error: false, msg: 'success' });
+                } else {
+                    response.send({ error: true, msg: 'Invalid password' });
+                }
+            });
         } else {
             response.send({ error: true, msg: 'No user account found' });
         }
@@ -45,14 +52,14 @@ export const signIn = (request, response) => {
 };
 
 export const logout = (request, response) => {
-    request.session._userId = null;
+    request.session.token = null;
     response.send({ error: false, msg: 'success' });
 };
 
 export const getUserInfo = (request, response) => {
-    if (request.session._userId) {
-        const id = mongoose.Types.ObjectId(request.session._userId);
-        Users.findOne({ _id :id}).then((res) => {
+    if (request.session.token) {
+        const token = request.session.token;
+        Users.findOne({ token: token}).then((res) => {
             if (res) {
                 const username = res.username;
                 response.send({ userInfo: {username: username} });
@@ -77,7 +84,7 @@ export const newExpense = (request, response) => {
     date = new Date(date);
     const newExpense = { amount, category, date, type, ww, dow, mm, yy, dd };
     var newExpenseInstance = new Expenses({
-        user_id: mongoose.Types.ObjectId(request.session._userId),
+        token: request.session.token,
         ...newExpense
     });
     newExpenseInstance.save().then((doc) => {
@@ -89,7 +96,7 @@ export const newExpense = (request, response) => {
 };
 
 export const getExpenseData = (request, response) => {
-    const userId = request.session._userId ? mongoose.Types.ObjectId(request.session._userId) : mongoose.Types.ObjectId("5c10ba234f8b6296c08e5818");
+    const token = request.session.token ? request.session.token : '';
     const {activeFilter} = request.body;
     function expenseDateResponder(err, data) {
         if (err) {
@@ -165,7 +172,7 @@ export const getExpenseData = (request, response) => {
     const { tab, ww, mm, yy, dow } = request.body;
     if (tab === YEAR) {
         Expenses.aggregate([
-            { $match: { user_id: userId} },
+            { $match: { token: token} },
             { $match: { yy: parseInt(yy) } },
             { ...group2 },
             { ...unwind },{ ...sort },{ ...reGroup },
@@ -173,7 +180,7 @@ export const getExpenseData = (request, response) => {
         ]).allowDiskUse(true).exec(expenseDateResponder);
     } else if (tab === MONTH) {
         Expenses.aggregate([
-            { $match: { user_id: userId } },
+            { $match: { token: token } },
             { $match: { yy: parseInt(yy) } },{ $match: { mm: parseInt(mm) } },
             { ...group2 },
             { ...unwind },{ ...sort },{ ...reGroup },
@@ -181,7 +188,7 @@ export const getExpenseData = (request, response) => {
         ]).allowDiskUse(true).exec(expenseDateResponder);
     } else if (tab === WEEK) {
         Expenses.aggregate([
-            { $match: { user_id: userId } },
+            { $match: { token: token } },
             { $match: { yy: parseInt(yy) } },{ $match: { mm: parseInt(mm) } },{ $match: { ww: parseInt(ww) } },
             { ...group2 },
             { ...unwind },{ ...sort },{ ...reGroup },
@@ -209,11 +216,11 @@ export const getExpenseSummary = (request, response) => {
             }
         }
     };
-    const userId = request.session._userId ? mongoose.Types.ObjectId(request.session._userId) : mongoose.Types.ObjectId("5c10ba234f8b6296c08e5818");
+    const token = request.session.token ? request.session.token : '';
     const {tab, yy, mm, ww} = request.body;
     if (tab === YEAR) {
         Expenses.aggregate([
-            {$match: { user_id: userId }},
+            {$match: { token: token }},
             {$match: { yy: yy}},
             {$match: { type: 'expense'}},
             {$group: { _id: { mm: '$mm'}, amount: {$sum: '$amount'}, month: {'$first': '$mm'}}},
@@ -223,7 +230,7 @@ export const getExpenseSummary = (request, response) => {
             ]).allowDiskUse(true).exec(execSummaryQuery);
     } else if (tab === MONTH) {
         Expenses.aggregate([
-            {$match: { user_id: userId }},
+            {$match: { token: token }},
             {$match: { yy: yy}},
             {$match: { mm: mm}},
             {$match: { type: 'expense'}},
@@ -234,7 +241,7 @@ export const getExpenseSummary = (request, response) => {
             ]).allowDiskUse(true).exec(execSummaryQuery);
     } else if (tab === WEEK) {
         Expenses.aggregate([
-            {$match: { user_id: userId }},
+            {$match: { token: token }},
             {$match: { yy: yy}},
             {$match: { mm: mm}},
             {$match: { ww: ww}},

@@ -157,8 +157,7 @@
   box-shadow: 0 3px 6px 0 rgba(0,0,0,0.3);
 }
 .addBtn {
-  color: #5f5e5e;
-  background-color: white;
+  color: #fff;
   border-radius: 30px;
   border-color: white;
   padding: 0px 17px;
@@ -172,7 +171,6 @@
   position: fixed;
   bottom: 100px;
   right: 10px;
-  opacity: 0.8;
 }
 
 .transactedCard {

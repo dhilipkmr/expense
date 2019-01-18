@@ -197,3 +197,15 @@ background-color: #0757d0 !important;
 select {
   text-align-last: center;
 }
+.tu{
+  text-decoration: underline;
+}
+
+.disableBtn {
+  opacity: 0.5;
+  pointer-events: none;
+}
+
+.requiredAshterix {
+  color: #bd0000;
+}

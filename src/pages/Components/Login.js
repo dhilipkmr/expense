@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import Helmet from 'react-helmet';
-import {signup, signin} from '../apiCalls/ApiCalls';
+import {signup, signin, logoutUser} from '../apiCalls/ApiCalls';
 
 class Login extends Component {
   constructor(props) {
@@ -8,13 +8,34 @@ class Login extends Component {
     this.head = this.head.bind(this);
     this.signUp = this.signUp.bind(this);
     this.signIn = this.signIn.bind(this);
+    this.signoutUser = this.signoutUser.bind(this);
     this.state = {
       username: '',
       password: '',
       signinText: 'Sign In',
       signupText: 'Sign Up',
-      continueText: 'Continue with Test Login'
+      continueText: 'Continue with Test Login',
+      load: !window.signedIn
     }
+    if (window.signedIn) {
+      this.signoutUser();
+    }
+  }
+
+  signoutUser() {
+    logoutUser().then((resp) => {
+      if (!(resp.data.error)) {
+        window.signedIn = false;
+        console.log('Signing out success');
+        window.location.reload();
+        return;
+      }
+      console.log('unable to signout user');
+      window.location.reload();
+    }).catch(() => {
+      console.log('unable to signout user');
+      window.location.reload();
+    })
   }
 
   head() {
@@ -99,6 +120,7 @@ class Login extends Component {
     return (
       <div>
         {this.head()}
+        {this.state.load &&
         <div>
           <div className="">
             <div className="fieldsDiv">
@@ -125,7 +147,7 @@ class Login extends Component {
             </div>
 
           </div>
-        </div>
+        </div>}
       </div>
     );
   }
