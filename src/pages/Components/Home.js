@@ -170,7 +170,7 @@ export default class Home extends Component {
     const {userInfo} = this.state;
     return(
       <div className="menuBar">
-        <div ref="popup"className="popup zi2 " onClick={this.leftMenuClick}>
+        <div ref="popup"className="popup zi9 " onClick={this.leftMenuClick}>
           <div className="sideBar in-bl fl">
             <div className="menu-option" onClick={this.navigateToSignIn}>{(!userInfo ? 'Sign In' : 'Logout')}</div>
             <div className="menu-option"><a style={{color: '#757575c9'}} href="https://dhilipkmr.github.io/materializedResume/" target="_blank">About Me</a></div>
@@ -401,7 +401,7 @@ export default class Home extends Component {
       <div className="">
         <Prompt message={() => "Going back will Log you out."}></Prompt>
         <div>
-          <div ref="backDrop" className={'transition2a zi1 ' + ((showNewExpense || editExpense) ? 'backDrop' : '')} onClick={() => this.newExpense(false)}></div>
+          <div ref="backDrop" className={'transition1a zi9 ' + ((showNewExpense || editExpense) ? 'backDrop' : '')} onClick={() => this.newExpense(false)}></div>
           {this.renderLeftMenuBar()}
           <div ref="mainContent" className="mainContent">
             <div className="">

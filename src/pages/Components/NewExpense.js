@@ -153,6 +153,7 @@ export default class NewExpense extends Component {
       const dow = date.getDay();
       const dd = date.getDate();
       const params = { amount, type, date, mm, yy, ww, dow, dd, category};
+      params.category= params.category.trim().substring(0,1).toUpperCase() + params.category.trim().substring(1);
       if (this.props.editTransactionObj) {
         params.id = this.props.editTransactionObj.id;
         edit_expense(params).then((resp) => {
@@ -192,7 +193,7 @@ export default class NewExpense extends Component {
   render() {
     const {type, amount, day, month, year, category, error, disableSubmit} = this.state;
     return (
-      <div className="newExpenseContainer zi2">
+      <div className="newExpenseContainer zi10">
         <div className="expIncBtns textCenter mT25">
           <span className={'newBtn ' + (type === 'expense' ? 'selectedType' : '')}  onClick={() => this.selectType('expense')}>Expense</span>
           <span className={'newBtn ' + (type === 'income' ? 'selectedType' : '')} onClick={() => this.selectType('income')}>Income</span>
