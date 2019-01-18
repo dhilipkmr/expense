@@ -44,3 +44,8 @@ export const edit_expense = (params) => {
   const url = '/edit_expense/' ;
   return axios.post(url, params);
 }
+
+export const getFrequentCategories = () => {
+  const url = '/getFrequentCategories/';
+  return axios.get(url);
+}

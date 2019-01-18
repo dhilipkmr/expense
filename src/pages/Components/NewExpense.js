@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {new_expense, edit_expense} from '../apiCalls/ApiCalls';
+import {new_expense, edit_expense, getFrequentCategories} from '../apiCalls/ApiCalls';
 import {MONTHSNAMESHORT, TODAY, YESTERDAY} from '../constants/constants';
 import {renderOptions} from '../utils/utils';
 
@@ -28,8 +28,19 @@ export default class NewExpense extends Component {
       day: day, 
       month: month,
       year: year,
-      error: {}
+      error: {},
+      frequentCategories: []
     }
+  }
+
+  componentDidMount() {
+    getFrequentCategories().then((res) => {
+      if (res.data && !res.data.err) {
+        this.setState({frequentCategories: res.data.data.slice(0,5)});
+      } else {
+        console.log('Unable to get Frequent Categories');
+      }
+    });
   }
 
   selectType(type) {
@@ -59,21 +70,39 @@ export default class NewExpense extends Component {
     }
   }
 
+  getDateData(val) {
+    let currDate = new Date();
+    if (val === YESTERDAY) {
+      let date = new Date(currDate.setDate(currDate.getDate() - 1));
+      currDate = date;
+    }
+    return { day: currDate.getDate(), month: currDate.getMonth(), year: currDate.getFullYear() };
+  }
+
   changeDate(val) {
     if (val === TODAY) {
-      const date = new Date();
-      this.setState({ todayTap:true, yesterdayTap: false, day: date.getDate(), month: date.getMonth(), year: date.getFullYear()}, () => {
+      const dateData = this.getDateData(TODAY);
+      this.setState({ todayTap:true, yesterdayTap: false, ...dateData}, () => {
         this.removeDateError();
       });
     } else if (val == YESTERDAY) {
-      let currDate = new Date();
-      let date = new Date(currDate.setDate(currDate.getDate() - 1));
-      this.setState({ todayTap: false, yesterdayTap: true, day: date.getDate(), month: date.getMonth(), year: date.getFullYear()}, () => {
+      const dateData = this.getDateData(YESTERDAY);
+      this.setState({ todayTap: false, yesterdayTap: true, ...dateData}, () => {
         this.removeDateError();
       });
     } else {
       this.setState({...val}, () => {
         this.removeDateError();
+        const dateDataToday = this.getDateData(TODAY);
+        const dateDataYesterday = this.getDateData(YESTERDAY);
+        const {day, month, year} = this.state;
+        if (day.toString() === dateDataToday.day.toString() && month.toString() === dateDataToday.month.toString() && year.toString() === dateDataToday.year.toString()) {
+          this.setState({todayTap: true, yesterdayTap: false});
+        } else if (day.toString() === dateDataYesterday.day.toString() && month.toString() === dateDataYesterday.month.toString() && year.toString() === dateDataYesterday.year.toString()) {
+          this.setState({todayTap: false, yesterdayTap: true});
+        } else {
+          this.setState({todayTap: false, yesterdayTap: false});
+        }
       });
     }
   }
@@ -96,9 +125,9 @@ export default class NewExpense extends Component {
     }
   }
   validateParams() {
-    var reg = /^\d+$/;
+    var reg = /^[1-9][0-9]*$/;
     const {amount, category} = this.state;
-    if (!amount || amount <= 0) {
+    if (!amount || !reg.test(amount)) {
       this.setState({error: {amount: 'Please provide a Valid Amount'}});
       return false;
     }
@@ -113,8 +142,8 @@ export default class NewExpense extends Component {
   }
   submitNewExpense() {
     const {amount, day, month, year, type, category} = this.state;
-    this.setState({disableSubmit: true});
     const isValidationSuccess = this.validateParams();
+    this.setState({disableSubmit: true});
     if (isValidationSuccess) {
       const date = this.date;
       const mm = date.getMonth();
@@ -130,17 +159,34 @@ export default class NewExpense extends Component {
           this.props.newExpense(false, true, false);
         }, (err) => {
           console.log('Unable to Edit Expense',err);
-          this.props.newExpense(false, false, false);
+          this.setState({disableSubmit: false});
         });
       } else {
         new_expense(params).then((response) => {
           this.props.newExpense(false, true);
         }, (err) => {
           console.log('Unable to create new Expense',err);
-          this.props.newExpense(false, false);
+          this.setState({disableSubmit: false});
         });
       }
+    } else {
+      this.setState({disableSubmit: false});
     }
+  }
+
+  renderFrequentCategories() {
+    if (this.state.frequentCategories.length === 0) {
+      return null;
+    }
+    return (
+      <div className="tapWrapper" onClick={(e) => {this.setState({ category: e.target.innerText})}}>
+        {this.state.frequentCategories.map((entry) => {
+          return (
+            <span className={'tapOptionMargin ' + (this.state.category === entry.category ? 'activeTapOption themeBg': 'tapOption themeBrdr')}>{entry.category}</span>
+          )
+        })}      
+      </div>
+    );
   }
 
   render() {
@@ -161,14 +207,15 @@ export default class NewExpense extends Component {
           <input className={'padL10 w75 ' + (error.category ? 'redBrdrBtm' : '')} auto-complete="off"  type="text" id="newCategAmt" placeholder="Category" onChange={(e) => this.changeCategory(e.target.value)} value={category}/>
           <span className="requiredAshterix"> * </span>
           {error.category ? <div className="errorDiv">{error.category}</div> : null}
+          {this.renderFrequentCategories()}
         </div>
         <div className="spentDay mT25 ">
           <select ref="day" className="w20 " onChange={(e) => this.changeDate({day: e.target.value})} value={this.state.day}>{renderOptions('day')}</select>
           <select ref="month" className="w25 " onChange={(e) => this.changeDate({month: e.target.value})} value={this.state.month}>{renderOptions('month')}</select>
           <select ref="year" className="w20 " onChange={(e) => this.changeDate({year: e.target.value})} value={this.state.year}>{renderOptions('year')}</select>
-          <div className="mt20">
-            <span className={'m10 ' + (this.state.todayTap ? 'activeTapOption themeBg': 'tapOption themeBrdr')} onClick={() => this.changeDate(TODAY)}>Today</span>
-            <span className={'m10 ' + (this.state.yesterdayTap ? 'activeTapOption themeBg': 'tapOption themeBrdr')}  onClick={() => this.changeDate(YESTERDAY)}>Yesterday</span>
+          <div className="tapWrapper">
+            <span className={'tapOptionMargin ' + (this.state.todayTap ? 'activeTapOption themeBg': 'tapOption themeBrdr')} onClick={() => this.changeDate(TODAY)}>Today</span>
+            <span className={'tapOptionMargin ' + (this.state.yesterdayTap ? 'activeTapOption themeBg': 'tapOption themeBrdr')}  onClick={() => this.changeDate(YESTERDAY)}>Yesterday</span>
           </div>
           {error.date ? <div className="mt10 errorDiv">{error.date}</div> : null}
         </div>

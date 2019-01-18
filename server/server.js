@@ -7,7 +7,7 @@ var session = require('express-session');
 
 import App from '../src/app'
 import './db/mongoose';
-import {signUp, signIn, newExpense, getExpenseData, getExpenseSummary, deleteExpenseDate, logout, getUserInfo, editExpense} from './api/apiCalls';
+import {signUp, signIn, newExpense, getExpenseData, getExpenseSummary, deleteExpenseDate, logout, getUserInfo, editExpense, getFrequentCategories} from './api/apiCalls';
 
 const MongoStore = require('connect-mongo')(session);
 const app = express();
@@ -36,6 +36,7 @@ app.post('/get_expense_data', getExpenseData);
 app.post('/get_expense_summary', getExpenseSummary);
 app.post('/delete_expense_date', deleteExpenseDate);
 app.post('/edit_expense', editExpense);
+app.get('/getFrequentCategories', getFrequentCategories);
 
 
 const loadHtml = (content) => {

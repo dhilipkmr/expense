@@ -61,7 +61,7 @@ background: #0757d0;
 .tapOption {
   border-radius: 15px;
   padding: 2px 10px;
-  font-size: 12px;
+  font-size: 10px;
   background-color: aliceblue;
 }
 .activeTapOption {
@@ -84,4 +84,15 @@ input[id=newExpAmt], input[id=newCategAmt] {
 input[id=newExpAmt]:focus,
 input[id=newCategAmt]:focus {
   border-bottom: 1px solid #0757d0;
+}
+.tapWrapper {
+  display: flex;
+  flex-flow: wrap;
+  justify-content: center;
+  margin: 12px;
+}
+
+.tapOptionMargin {
+  margin-right: 7px;
+  margin-top: 10px;
 }

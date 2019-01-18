@@ -275,3 +275,20 @@ export const editExpense = (request, response) => {
         response.send(doc);
     });
 }
+
+export const getFrequentCategories = (request, response) => {
+    const {token} = request.session;
+    Expenses.aggregate([
+        {$match: {token: token }},
+        {$match: {type: "expense"}},
+        {$group: {_id: '$category', category: {'$first': '$category'}, count: {$sum: 1}}},
+        {$sort: {'count': -1}},
+        {$project: {'_id': 0, category: 1, count: 1}}
+        ]).allowDiskUse(true).exec(function(err, data) {
+            if (err) {
+                response.status(200).send({error: true, msg: err});
+            } else {
+                response.status(200).send({error: false, data: [...data]});
+            }
+        });
+}
