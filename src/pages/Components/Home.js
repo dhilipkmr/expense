@@ -6,6 +6,7 @@ import {MONTH, YEAR, WEEK, MONTHSNAME, MONTHSNAMESHORT} from '../constants/const
 import Graph from './Graph';
 import {renderOptions, formatDate} from '../utils/utils';
 import Popup from './Popup';
+import {Prompt} from 'react-router-dom';
 
 export default class Home extends Component {
   constructor(props) {
@@ -32,6 +33,7 @@ export default class Home extends Component {
     this.viewedMore = {};
     this.userInfo();
   }
+
   componentDidMount() {
     this.getExpense();
     this.getExpenseSummary();
@@ -190,7 +192,7 @@ export default class Home extends Component {
   }
 
   cancelPopup() {
-    this.setState({showPopup: false});
+    this.setState({showPopup: false });
   }
 
   confirmPopup() {
@@ -397,6 +399,7 @@ export default class Home extends Component {
     const {togglerHeader, isPrevDisabled, isNextDisabled} = this.getTogglerHeader();
     return (
       <div className="">
+        <Prompt message={() => "Going back will Log you out."}></Prompt>
         <div>
           <div ref="backDrop" className={'transition2a zi1 ' + ((showNewExpense || editExpense) ? 'backDrop' : '')} onClick={() => this.newExpense(false)}></div>
           {this.renderLeftMenuBar()}
