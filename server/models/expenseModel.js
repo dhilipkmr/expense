@@ -2,8 +2,8 @@ import mongoose from 'mongoose';
 import Users from './userModel';
 
 const Expenses = mongoose.model('Expenses', {
-  user_id: {
-    type: mongoose.Schema.Types.ObjectId,
+  token: {
+    type: String,
     ref: 'Users'
   },
   amount: {
