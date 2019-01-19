@@ -399,7 +399,7 @@ export default class Home extends Component {
     const {togglerHeader, isPrevDisabled, isNextDisabled} = this.getTogglerHeader();
     return (
       <div className="">
-        <Prompt message={() => "Going back will Log you out."}></Prompt>
+        <Prompt when={!showNewExpense} message={() => "Going back will Log you out."}></Prompt>
         <div>
           <div ref="backDrop" className={'transition1a zi9 ' + ((showNewExpense || editExpense) ? 'backDrop' : '')} onClick={() => this.newExpense(false)}></div>
           {this.renderLeftMenuBar()}

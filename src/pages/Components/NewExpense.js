@@ -9,6 +9,7 @@ export default class NewExpense extends Component {
     this.selectType = this.selectType.bind(this);
     this.submitNewExpense = this.submitNewExpense.bind(this);
     this.renderInnerTransactioncard = this.renderInnerTransactioncard.bind(this);
+    this.onBackPress = this.onBackPress.bind(this);
     let  amount = '';
     let  category = '';
     let  day = '';
@@ -42,6 +43,13 @@ export default class NewExpense extends Component {
         console.log('Unable to get Frequent Categories');
       }
     });
+    history.pushState('MODAL', '/new_expense');
+    window.onpopstate = this.onBackPress;
+  }
+
+  onBackPress(backObj) {
+    window.onpopstate = null;
+    this.props.newExpense(false);
   }
 
   renderInnerTransactioncard() {
