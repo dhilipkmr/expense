@@ -2,7 +2,7 @@
   background-color: white;
   min-height: 500px;
   position: fixed;
-  top: 5%;
+  top: 10%;
   left: 0;
   right: 0;
   min-width: 285px;
@@ -89,7 +89,7 @@ input[id=newCategAmt]:focus {
   display: flex;
   flex-flow: wrap;
   justify-content: center;
-  margin: 12px;
+  margin: 10px 25px;
 }
 
 .tapOptionMargin {

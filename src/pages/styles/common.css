@@ -218,3 +218,12 @@ select {
 .zi9 {
   z-index: 9;
 }
+.mh62 { 
+  min-height: 62px !important;
+}
+.dflex{
+  display: flex;
+}
+.dfcenter{
+  justify-content: center;
+}

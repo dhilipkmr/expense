@@ -219,7 +219,7 @@ export default class Home extends Component {
   }
 
   renderInnerTransactioncard(hasListDefined) {
-    if (!hasListDefined) {
+    if (!hasListDefined || true) {
       const loader = [];
       for(let i = 0; i < 2; i++){
         loader.push(

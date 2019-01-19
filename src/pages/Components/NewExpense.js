@@ -8,6 +8,7 @@ export default class NewExpense extends Component {
     super(props);
     this.selectType = this.selectType.bind(this);
     this.submitNewExpense = this.submitNewExpense.bind(this);
+    this.renderInnerTransactioncard = this.renderInnerTransactioncard.bind(this);
     let  amount = '';
     let  category = '';
     let  day = '';
@@ -41,6 +42,20 @@ export default class NewExpense extends Component {
         console.log('Unable to get Frequent Categories');
       }
     });
+  }
+
+  renderInnerTransactioncard() {
+    return (
+      <div>
+        <div key="categoryLoader" className="transactedCardInner mh62">
+          <div className="cardInnerheading dflex dfcenter">
+            <span className="cat_percent progressBar fl m0 mt10"></span>
+          </div>
+          <div className="progressBar bl textCenter " >
+          </div>
+        </div>
+      </div>
+    );
   }
 
   selectType(type) {
@@ -176,9 +191,6 @@ export default class NewExpense extends Component {
   }
 
   renderFrequentCategories() {
-    if (this.state.frequentCategories.length === 0) {
-      return null;
-    }
     return (
       <div className="tapWrapper" onClick={(e) => {this.setState({ category: e.target.innerText})}}>
         {this.state.frequentCategories.map((entry) => {
@@ -208,7 +220,7 @@ export default class NewExpense extends Component {
           <input className={'padL10 w75 ' + (error.category ? 'redBrdrBtm' : '')} auto-complete="off"  type="text" id="newCategAmt" placeholder="Category" onChange={(e) => this.changeCategory(e.target.value)} value={category}/>
           <span className="requiredAshterix"> * </span>
           {error.category ? <div className="errorDiv">{error.category}</div> : null}
-          {this.renderFrequentCategories()}
+          {this.state.frequentCategories.length === 0 ? this.renderInnerTransactioncard() : this.renderFrequentCategories()}
         </div>
         <div className="spentDay mT25 ">
           <select ref="day" className="w20 " onChange={(e) => this.changeDate({day: e.target.value})} value={this.state.day}>{renderOptions('day')}</select>
