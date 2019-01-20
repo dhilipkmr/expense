@@ -342,7 +342,10 @@ export default class Home extends Component {
           <div className="posRel">
             <div ref="addBtnContainer" className={'addBtnContainer '}>
               <div className="">
-                <span className="addBtn themeBg" onClick={() => this.newExpense(true)}> + </span>
+              {/* <Ripple tag="div" classes="in-bladdBtn themeBg" clickHandler={() => this.newExpense(true)} innerText="+" /> */}
+                <span className="addBtn themeBg" ripple="ripple" onClick={() => this.newExpense(true)}> + 
+                  <div class="ripple--container"></div>
+                </span>
               </div>
             </div>
           </div>

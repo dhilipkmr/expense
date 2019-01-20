@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import {new_expense, edit_expense, getFrequentCategories} from '../apiCalls/ApiCalls';
 import {MONTHSNAMESHORT, TODAY, YESTERDAY} from '../constants/constants';
-import {renderOptions} from '../utils/utils';
+import {renderOptions, addRippleHandler, Ripple} from '../utils/utils';
 
 export default class NewExpense extends Component {
   constructor(props) {
@@ -9,6 +9,7 @@ export default class NewExpense extends Component {
     this.selectType = this.selectType.bind(this);
     this.submitNewExpense = this.submitNewExpense.bind(this);
     this.renderInnerTransactioncard = this.renderInnerTransactioncard.bind(this);
+    this.handleFrequentCategoriesTap = this.handleFrequentCategoriesTap.bind(this);
     this.onBackPress = this.onBackPress.bind(this);
     let  amount = '';
     let  category = '';
@@ -45,6 +46,14 @@ export default class NewExpense extends Component {
     });
     history.pushState('MODAL', '/new_expense');
     window.onpopstate = this.onBackPress;
+    addRippleHandler('#expenseContainer');
+  }
+
+  componentDidUpdate(prevProps, prevState){
+    if (this.state.frequentCategories.length > 0 && prevState.frequentCategories.length === 0) {
+      console.log('Adding handlers');
+      addRippleHandler('.tapWrapper');
+    }
   }
 
   onBackPress(backObj) {
@@ -198,12 +207,18 @@ export default class NewExpense extends Component {
     }
   }
 
+  handleFrequentCategoriesTap(e) {
+    if (e.target.classList.contains('ripple--container')) {
+      this.setState({ category: e.target.parentElement.innerText});
+    }
+  }
+
   renderFrequentCategories() {
     return (
-      <div className="tapWrapper" onClick={(e) => {this.setState({ category: e.target.innerText})}}>
+      <div className="tapWrapper" onClick={this.handleFrequentCategoriesTap}>
         {this.state.frequentCategories.map((entry) => {
           return (
-            <span className={'tapOptionMargin ' + (this.state.category === entry.category ? 'activeTapOption themeBg': 'tapOption themeBrdr')}>{entry.category}</span>
+            <Ripple tag="div" classes={'tapOptionMargin ' + (this.state.category.toLowerCase() === entry.category.toLowerCase() ? 'activeTapOption themeBg': 'tapOption themeBrdr')}  innerText={entry.category}/>
           )
         })}      
       </div>
@@ -213,10 +228,10 @@ export default class NewExpense extends Component {
   render() {
     const {type, amount, day, month, year, category, error, disableSubmit} = this.state;
     return (
-      <div className="newExpenseContainer zi10">
+      <div className="newExpenseContainer zi10" id="expenseContainer">
         <div className="expIncBtns textCenter mT25">
-          <span className={'newBtn ' + (type === 'expense' ? 'selectedType' : '')}  onClick={() => this.selectType('expense')}>Expense</span>
-          <span className={'newBtn ' + (type === 'income' ? 'selectedType' : '')} onClick={() => this.selectType('income')}>Income</span>
+          <Ripple tag="div" classes={'in-bl newBtn ' + (type === 'expense' ? 'selectedType' : '')} onClickHandler={() => this.selectType('expense')} innerText="Expense"/>
+          <Ripple tag="div" classes={'in-bl newBtn ' + (type === 'income' ? 'selectedType' : '')} onClickHandler={() => this.selectType('income')} innerText="Income"/>
         </div>
         <div className="amountInput mT25 ">
           <span>₹</span>
@@ -235,13 +250,13 @@ export default class NewExpense extends Component {
           <select ref="month" className="w25 " onChange={(e) => this.changeDate({month: e.target.value})} value={this.state.month}>{renderOptions('month')}</select>
           <select ref="year" className="w20 " onChange={(e) => this.changeDate({year: e.target.value})} value={this.state.year}>{renderOptions('year')}</select>
           <div className="tapWrapper">
-            <span className={'tapOptionMargin ' + (this.state.todayTap ? 'activeTapOption themeBg': 'tapOption themeBrdr')} onClick={() => this.changeDate(TODAY)}>Today</span>
-            <span className={'tapOptionMargin ' + (this.state.yesterdayTap ? 'activeTapOption themeBg': 'tapOption themeBrdr')}  onClick={() => this.changeDate(YESTERDAY)}>Yesterday</span>
+            <Ripple tag="div" classes={'tapOptionMargin ' + (this.state.todayTap ? 'activeTapOption themeBg': 'tapOption themeBrdr')} onClickHandler={() => this.changeDate(TODAY)} innerText="Today"/>
+            <Ripple tag="div" classes={'tapOptionMargin ' + (this.state.yesterdayTap ? 'activeTapOption themeBg': 'tapOption themeBrdr')} onClickHandler={() => this.changeDate(YESTERDAY)} innerText="Yesterday"/>
           </div>
           {error.date ? <div className="mt10 errorDiv">{error.date}</div> : null}
         </div>
         <div className="textCenter">
-          <div className={'submitBtn themeBg ' + (disableSubmit ? 'disableBtn' : '')} onClick={this.submitNewExpense}>{disableSubmit ? 'Adding...' : 'Done'}</div>
+          <Ripple tag="div" classes={'submitBtn themeBg ' + (disableSubmit ? 'disableBtn' : '')} onClickHandler={this.submitNewExpense} innerText={disableSubmit ? 'Adding...' : 'Done'}/>
         </div>
       </div>
     );
