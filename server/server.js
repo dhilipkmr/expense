@@ -46,8 +46,6 @@ const loadHtml = (content) => {
                 <meta name="viewport" content="width=device-width, initial-scale=1.0">
                 <link rel="manifest" href="/manifest.json">
                 <link rel="icon" href="/img/budget64.png">
-                <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.1.3/css/bootstrap.min.css">
-                <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.1.3/js/bootstrap.bundle.min.js">
                 <link rel="stylesheet" type="text/css" href="/styles/common.css">
                 <link rel="stylesheet" type="text/css" href="/styles/home.css">
                 <link rel="stylesheet" type="text/css" href="/styles/login.css">
