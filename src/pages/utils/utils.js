@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {Component} from 'react';
 import {MONTHSNAMESHORT} from '../constants/constants';
 
 export function renderOptions(type) {
@@ -52,9 +52,12 @@ export function amountOnGraph(val) {
   }
 }
 
-export function addRippleHandler(parent) {
-  var cleanUp, debounce, i, len, ripple, rippleContainer, ripples, showRipple;
-  debounce = function(func, delay) {
+export class Ripple extends Component {
+  constructor(props) {
+    super(props);
+  }
+
+  debounce(func, delay) {
     var inDebounce;
     inDebounce = undefined;
     return function() {
@@ -66,9 +69,9 @@ export function addRippleHandler(parent) {
         return func.apply(context, args);
       }, delay);
     };
-  };
+  }
 
-  showRipple = function(e) {
+  showRipple(e) {
     var pos, ripple, rippler, size, style, x, y;
     ripple = this;
     rippler = document.createElement('span');
@@ -79,31 +82,30 @@ export function addRippleHandler(parent) {
     style = 'top:' + y + 'px; left: ' + x + 'px; height: ' + size + 'px; width: ' + size + 'px;';
     ripple.rippleContainer.appendChild(rippler);
     return rippler.setAttribute('style', style);
-  };
+  }
 
-  cleanUp = function() {
+  cleanUp() {
     while (this.rippleContainer.firstChild) {
       this.rippleContainer.removeChild(this.rippleContainer.firstChild);
     }
-  };
+  }
 
-  ripples = document.querySelectorAll(parent + ' [ripple]');
-
-  for (i = 0, len = ripples.length; i < len; i++) {
-    ripple = ripples[i];
-    rippleContainer = document.createElement('div');
+  componentDidMount() {
+    const ripple = this.refs.targetElement;
+    const rippleContainer = document.createElement('div');
     rippleContainer.className = 'ripple--container';
-    ripple.addEventListener('mousedown', showRipple);
-    ripple.addEventListener('mouseup', debounce(cleanUp, 2000));
+    ripple.addEventListener('mousedown', this.showRipple);
+    ripple.addEventListener('mouseup', this.debounce(this.cleanUp, 2000));
     ripple.rippleContainer = rippleContainer;
     ripple.appendChild(rippleContainer);
   }
-}
 
-export function Ripple(props) {
-  console.log(props);
-  return (
-    <props.tag className={props.classes} onClick={props.onClickHandler} ripple="ripple">{props.innerText}
-    </props.tag>
-  );
+  render() {
+    const {classes = "", onClickHandler = null} = this.props;
+    return (
+      <div ref="targetElement" className={classes} onClick={onClickHandler} ripple="ripple">
+        {this.props.children ? this.props.children: null}
+      </div>
+    );
+  }
 }

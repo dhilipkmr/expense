@@ -92,6 +92,9 @@ min-height: 10%
 .dn {
   display: none;
 }
+.mt5{
+  margin: 5px !important;
+}
 .m10{
   margin: 10px !important;
 }
@@ -227,6 +230,15 @@ select {
 .dfcenter{
   justify-content: center;
 }
+.padR7 {
+  padding-right: 7px !important;
+}
+.br10 {
+  border-radius: 10px
+}
+.padB5 {
+padding-bottom: 5px;
+}
 
 /* Ripple */
 [ripple] {
@@ -246,7 +258,7 @@ select {
   position: absolute;
   opacity: 0.75;
   background-color: #fff;
-  animation: ripple 1000ms;
+  animation: ripple 850ms;
 }
 @-moz-keyframes ripple {
   to {

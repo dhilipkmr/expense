@@ -4,7 +4,7 @@ import NewExpense from './NewExpense';
 import {get_expense_data, get_expense_summary, getUserInfo, logoutUser, deleteExpenseDate} from '../apiCalls/ApiCalls';
 import {MONTH, YEAR, WEEK, MONTHSNAME, MONTHSNAMESHORT} from '../constants/constants';
 import Graph from './Graph';
-import {renderOptions, formatDate} from '../utils/utils';
+import {renderOptions, formatDate, Ripple} from '../utils/utils';
 import Popup from './Popup';
 import {Prompt} from 'react-router-dom';
 
@@ -172,8 +172,8 @@ export default class Home extends Component {
       <div className="menuBar">
         <div ref="popup"className="popup zi9 " onClick={this.leftMenuClick}>
           <div className="sideBar in-bl fl">
-            <div className="menu-option" onClick={this.navigateToSignIn}>{(!userInfo ? 'Sign In' : 'Logout')}</div>
-            <div className="menu-option"><a style={{color: '#757575c9'}} href="https://dhilipkmr.github.io/materializedResume/" target="_blank">About Me</a></div>
+            <Ripple classes="menu-option" onClickHandler={this.navigateToSignIn}>{(!userInfo ? 'Sign In' : 'Logout')}</Ripple>
+            <Ripple classes="menu-option" onClickHandler={() => window.open("https://dhilipkmr.github.io/materializedResume/")}>About Me</Ripple>
           </div>
         </div>
       </div>
@@ -223,8 +223,8 @@ export default class Home extends Component {
       const loader = [];
       for(let i = 0; i < 2; i++){
         loader.push(
-          <div>
-            <div key={'transaction_type_' + i} className="transactedCardInner">
+          <div key={'transaction_type_' + i}>
+            <div className="transactedCardInner">
               <div className="cardInnerheading">
                 <span className="cat_percent progressBar fl m0 mt10"></span>
               </div>
@@ -246,8 +246,8 @@ export default class Home extends Component {
             this.viewedMore[this.state.activeTab] = true; // To not remove element from DOM on clicking view More again
           }
           return (
-            <div>
-              <div key={'transaction_type_' + index} className="transactedCardInner">
+            <div key={'transaction_type_' + index}>
+              <div className="transactedCardInner">
                 <div className="cardInnerheading">
                   <div className="cat w33 in-bl tl">{transaction.category}</div>
                   <div className="cat w33 in-bl tc">{formatDate(transaction.date)}</div>
@@ -268,7 +268,8 @@ export default class Home extends Component {
                   <div className="cat w33 in-bl tc">
                     {transaction.percent + ' %'}
                   </div>
-                  <div className="padR15 cat w33 in-bl tr">
+                  <div className="padR7 cat w33 in-bl tr">
+                  
                     <svg onClick={() => this.deleteExpense({id: transaction.id})} fill="#a20404" height="15px" viewBox="-40 0 450 400" width="15px" >
                       <path d="m232.398438 154.703125c-5.523438 0-10 4.476563-10 10v189c0 5.519531 4.476562 10 10 10 5.523437 0 10-4.480469 10-10v-189c0-5.523437-4.476563-10-10-10zm0 0"/>
                       <path d="m114.398438 154.703125c-5.523438 0-10 4.476563-10 10v189c0 5.519531 4.476562 10 10 10 5.523437 0 10-4.480469 10-10v-189c0-5.523437-4.476563-10-10-10zm0 0"/>
@@ -315,8 +316,8 @@ export default class Home extends Component {
           </div> */}
           <div ref="transactedCard" className={'transactedCard transition1a ' + (viewMore ? 'showAllTransaction' : '')}>
             <div className="textCenter mt5">
-              <span className={'sortType sortTypeLeft fs14 ' + (activeFilter === 'spentRate' ? ' leftActiveRight ' : '')} onClick={() => this.changeFilter('spentRate')}>Spent Rate</span>
-              <span className={'sortType sortTypeRight fs14 ' + (activeFilter === 'spentRate' ? ' leftActiveLeft ' : 'rightActiveRight')} onClick={() => this.changeFilter('date')}>Date</span>
+              <Ripple classes={'in-bl sortType sortTypeLeft fs14 ' + (activeFilter === 'spentRate' ? ' leftActiveRight ' : '')} onClickHandler={() => this.changeFilter('spentRate')} >Spent Rate </Ripple>
+              <Ripple classes={'in-bl sortType sortTypeRight fs14 ' + (activeFilter === 'spentRate' ? ' leftActiveLeft ' : 'rightActiveRight')} onClickHandler={() => this.changeFilter('date')} > Date </Ripple>
             </div>
             <div>
               <div className="transactScroller">
@@ -334,18 +335,15 @@ export default class Home extends Component {
               </div>
             </div>
           </div>
-          <div className="viewMoreArrow" onClick={() => this.clickViewMore()}>
+          <Ripple classes="viewMoreArrow" onClickHandler={() => this.clickViewMore()}>
             <svg className={viewMore ? 'rotateViewMore' : ''} ref="svgViewMore" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
               <path d="M7.41 7.84L12 12.42l4.59-4.58L18 9.25l-6 6-6-6z"/>
             </svg>
-          </div>
+          </Ripple>
           <div className="posRel">
             <div ref="addBtnContainer" className={'addBtnContainer '}>
               <div className="">
-              {/* <Ripple tag="div" classes="in-bladdBtn themeBg" clickHandler={() => this.newExpense(true)} innerText="+" /> */}
-                <span className="addBtn themeBg" ripple="ripple" onClick={() => this.newExpense(true)}> + 
-                  <div class="ripple--container"></div>
-                </span>
+              <Ripple classes="in-bl addBtn themeBg" onClickHandler={() => this.newExpense(true)} > + </Ripple>
               </div>
             </div>
           </div>
@@ -410,7 +408,10 @@ export default class Home extends Component {
             <div className="">
               <div ref="firstHalfLandingTxt" className="transition0_5 first-half-landing">
                 <div className="standing">
-                  <span className="left-menu-container" onClick={this.leftMenuClick}><img className="left-menu" src="/img/menu.svg"/></span>
+                  <Ripple classes="left-menu-container" onClickHandler={this.leftMenuClick}>
+                    <img className="left-menu" src="/img/menu.svg" />
+                  </Ripple>
+                  {/* <span className="left-menu-container" onClick={this.leftMenuClick}></span> */}
                 </div>
                 <div className="heading">
                   <div className="fb f11">CURRENT BALANCE</div>
@@ -429,7 +430,8 @@ export default class Home extends Component {
                       <select onChange={(e) => this.toggleType(WEEK, e.target.value)} id="weekSelector db white" value={this.state.selectorWW}>
                         {renderOptions('week')}
                       </select>
-                      <label onClick={() => this.changeExpenseDayFormat(WEEK)}  className={'db white padT10 ' + (activeTab === WEEK ? 'dayTypeBtn-active' : '')} htmlFor="weekSelector">Week</label>
+                      <Ripple onClickHandler={() => this.changeExpenseDayFormat(WEEK)}  classes={'padB5 br10 db white padT10 mt5 ' + (activeTab === WEEK ? 'dayTypeBtn-active' : '')}>Week</Ripple>
+                      {/* <label onClick={() => this.changeExpenseDayFormat(WEEK)}  className={'db white padT10 ' + (activeTab === WEEK ? 'dayTypeBtn-active' : '')} htmlFor="weekSelector">Week</label> */}
                       <div className={'typeBrdrBtm ' + (activeTab === WEEK ? 'w60': '')}></div>
                     </div>
                   </div>
@@ -437,14 +439,16 @@ export default class Home extends Component {
                     <select onChange={(e) => this.toggleType(MONTH, e.target.value)} id="monthSelector db white" value={this.state.selectorMM}>
                       {renderOptions('month')}
                     </select>
-                    <label onClick={() => this.changeExpenseDayFormat(MONTH)}  className={'db white padT10 ' + (activeTab === MONTH ? 'dayTypeBtn-active' : '')} htmlFor="monthSelector">Month</label>
+                    <Ripple onClickHandler={() => this.changeExpenseDayFormat(MONTH)}  classes={'padB5 br10 db white padT10 mt5 ' + (activeTab === MONTH ? 'dayTypeBtn-active' : '')}>Month</Ripple>
+                    {/* <label onClick={() => this.changeExpenseDayFormat(MONTH)}  className={'db white padT10 ' + (activeTab === MONTH ? 'dayTypeBtn-active' : '')} htmlFor="monthSelector">Month</label> */}
                     <div className={'typeBrdrBtm ' + (activeTab === MONTH ? 'w60': '')}></div>
                   </div>
                   <div className="in-bl w33">
                     <select onChange={(e) => this.toggleType(YEAR, e.target.value)} id="yearSelector db white" value={this.state.selectorYY}>
                     {renderOptions('year')}
                     </select>
-                    <label onClick={() => this.changeExpenseDayFormat(YEAR)} className={'db white padT10 ' + (activeTab === YEAR ? 'dayTypeBtn-active' : '')} htmlFor="yearSelector">Year</label>
+                    <Ripple onClickHandler={() => this.changeExpenseDayFormat(YEAR)}  classes={'padB5 br10 db white padT10 mt5 ' + (activeTab === YEAR ? 'dayTypeBtn-active' : '')}>Year</Ripple>
+                    {/* <label onClick={() => this.changeExpenseDayFormat(YEAR)} className={'db white padT10 ' + (activeTab === YEAR ? 'dayTypeBtn-active' : '')} htmlFor="yearSelector">Year</label> */}
                     <div className={'typeBrdrBtm ' + (activeTab === YEAR ? 'w60': '')}></div>
                   </div>
                 </div>

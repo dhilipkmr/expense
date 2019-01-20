@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import Helmet from 'react-helmet';
 import {signup, signin, logoutUser} from '../apiCalls/ApiCalls';
+import { Ripple} from '../utils/utils';
 
 class Login extends Component {
   constructor(props) {
@@ -101,11 +102,11 @@ class Login extends Component {
       password = 'dhilipdhilip';
     }
     if (withTestCreds || this.isValid()) {
-      if (withTestCreds) {
-        this.setState({continueText: 'Continuing with Test Login...'});
-      } else {
-        this.setState({signinText: 'Signing in...'});
-      }
+      // if (withTestCreds) {
+      //   this.setState({continueText: 'Continuing with Test Login...'});
+      // } else {
+      //   this.setState({signinText: 'Signing in...'});
+      // }
       signin({username: username, password: password}).then((resp) => {
         this.successful(resp);
       }).catch((err) => {
@@ -123,7 +124,7 @@ class Login extends Component {
         {this.state.load &&
         <div>
           <div className="">
-            <div className="fieldsDiv">
+            <div className="fieldsDiv padB10">
               <div className="username">
                 <input className="loginInput " id="loginUsername" placeholder='Username' value={this.state.username} onChange = {(e) => this.setState({username: e.target.value})} type="text"/>
               </div>
@@ -132,17 +133,17 @@ class Login extends Component {
               </div>
             </div>
             {this.state.error && <div id="errorDiv" className="textCenter red ">{this.state.msg}</div>}
-            <div className="textCenter padT20">
+            <div className="textCenter ">
               <div className="new di">
-                <span className="newBtn loginBtns themeBg"onClick={() => this.signIn(false)}>{signinText}</span>
+                <Ripple classes="in-bl newBtn loginBtns themeBg" onClickHandler={() => this.signIn(false)}>{signinText}</Ripple>
               </div>
               <div className="new di">
-                <span className="newBtn loginBtns themeBg" onClick={this.signUp}>{signupText}</span>
+                <Ripple classes="in-bl newBtn loginBtns themeBg" onClickHandler={this.signUp}>{signupText}</Ripple>
               </div>
             </div>
-            <div className="textCenter padT20">
+            <div className="textCenter ">
               <div className="new">
-                <span className="newBtn loginBtns testLogin themeBg" onClick={() => this.signIn(true)}>{continueText}</span>
+                <Ripple classes="in-bl newBtn loginBtns testLogin themeBg" onClickHandler={() => this.signIn(true)}>{continueText}</Ripple>
               </div>
             </div>
 

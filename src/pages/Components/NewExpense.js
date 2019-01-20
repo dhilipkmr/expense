@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import {new_expense, edit_expense, getFrequentCategories} from '../apiCalls/ApiCalls';
 import {MONTHSNAMESHORT, TODAY, YESTERDAY} from '../constants/constants';
-import {renderOptions, addRippleHandler, Ripple} from '../utils/utils';
+import {renderOptions, Ripple} from '../utils/utils';
 
 export default class NewExpense extends Component {
   constructor(props) {
@@ -46,14 +46,6 @@ export default class NewExpense extends Component {
     });
     history.pushState('MODAL', '/new_expense');
     window.onpopstate = this.onBackPress;
-    addRippleHandler('#expenseContainer');
-  }
-
-  componentDidUpdate(prevProps, prevState){
-    if (this.state.frequentCategories.length > 0 && prevState.frequentCategories.length === 0) {
-      console.log('Adding handlers');
-      addRippleHandler('.tapWrapper');
-    }
   }
 
   onBackPress(backObj) {
@@ -218,7 +210,9 @@ export default class NewExpense extends Component {
       <div className="tapWrapper" onClick={this.handleFrequentCategoriesTap}>
         {this.state.frequentCategories.map((entry) => {
           return (
-            <Ripple tag="div" classes={'tapOptionMargin ' + (this.state.category.toLowerCase() === entry.category.toLowerCase() ? 'activeTapOption themeBg': 'tapOption themeBrdr')}  innerText={entry.category}/>
+            <Ripple classes={'tapOptionMargin ' + (this.state.category.toLowerCase() === entry.category.toLowerCase() ? 'activeTapOption themeBg': 'tapOption themeBrdr')}>
+              {entry.category}
+            </Ripple>
           )
         })}      
       </div>
@@ -230,8 +224,8 @@ export default class NewExpense extends Component {
     return (
       <div className="newExpenseContainer zi10" id="expenseContainer">
         <div className="expIncBtns textCenter mT25">
-          <Ripple tag="div" classes={'in-bl newBtn ' + (type === 'expense' ? 'selectedType' : '')} onClickHandler={() => this.selectType('expense')} innerText="Expense"/>
-          <Ripple tag="div" classes={'in-bl newBtn ' + (type === 'income' ? 'selectedType' : '')} onClickHandler={() => this.selectType('income')} innerText="Income"/>
+          <Ripple classes={'in-bl newBtn ' + (type === 'expense' ? 'selectedType' : '')} onClickHandler={() => this.selectType('expense')} >Expense</Ripple>
+          <Ripple classes={'in-bl newBtn ' + (type === 'income' ? 'selectedType' : '')} onClickHandler={() => this.selectType('income')} >Income</Ripple>
         </div>
         <div className="amountInput mT25 ">
           <span>₹</span>
@@ -250,13 +244,13 @@ export default class NewExpense extends Component {
           <select ref="month" className="w25 " onChange={(e) => this.changeDate({month: e.target.value})} value={this.state.month}>{renderOptions('month')}</select>
           <select ref="year" className="w20 " onChange={(e) => this.changeDate({year: e.target.value})} value={this.state.year}>{renderOptions('year')}</select>
           <div className="tapWrapper">
-            <Ripple tag="div" classes={'tapOptionMargin ' + (this.state.todayTap ? 'activeTapOption themeBg': 'tapOption themeBrdr')} onClickHandler={() => this.changeDate(TODAY)} innerText="Today"/>
-            <Ripple tag="div" classes={'tapOptionMargin ' + (this.state.yesterdayTap ? 'activeTapOption themeBg': 'tapOption themeBrdr')} onClickHandler={() => this.changeDate(YESTERDAY)} innerText="Yesterday"/>
+            <Ripple classes={'tapOptionMargin ' + (this.state.todayTap ? 'activeTapOption themeBg': 'tapOption themeBrdr')} onClickHandler={() => this.changeDate(TODAY)} >Today</Ripple>
+            <Ripple classes={'tapOptionMargin ' + (this.state.yesterdayTap ? 'activeTapOption themeBg': 'tapOption themeBrdr')} onClickHandler={() => this.changeDate(YESTERDAY)} >Yesterday</Ripple>
           </div>
           {error.date ? <div className="mt10 errorDiv">{error.date}</div> : null}
         </div>
         <div className="textCenter">
-          <Ripple tag="div" classes={'submitBtn themeBg ' + (disableSubmit ? 'disableBtn' : '')} onClickHandler={this.submitNewExpense} innerText={disableSubmit ? 'Adding...' : 'Done'}/>
+          <Ripple classes={'submitBtn themeBg ' + (disableSubmit ? 'disableBtn' : '')} onClickHandler={this.submitNewExpense} >Done</Ripple>
         </div>
       </div>
     );
