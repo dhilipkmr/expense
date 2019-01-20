@@ -1,4 +1,5 @@
 import React, {Component} from 'react';
+import { Ripple} from '../utils/utils';
 
 export default class Popup extends Component {
   constructor(props) {
@@ -14,8 +15,8 @@ export default class Popup extends Component {
               Do you want to Delete this transaction?
             </div>
             <div className="tr">
-              <div className="newBtn white themeBg in-bl tr mf5 fs12" onClick={confirmCallback}>Confirm</div>
-              <div className="newBtn white themeBg in-bl tr mf5 fs12" onClick={cancelCallback}>Cancel</div>
+              <Ripple classes="in-bl newBtn white themeBg in-bl tr mf5 fs12" onClickHandler={confirmCallback}>Confirm</Ripple>
+              <Ripple classes="in-bl newBtn white themeBg in-bl tr mf5 fs12" onClickHandler={cancelCallback}>Cancel</Ripple>
             </div>
           </div>
         </div>
