@@ -75,14 +75,15 @@ background: #0757d0;
   border-bottom: 1px solid #b71c1c !important;
 }
 
-input[id=newExpAmt], input[id=newCategAmt] {
+input[id=newExpAmt], input[id=newCategAmt], input[id=newDescription] {
   background: transparent;
   border: none;
   border-bottom: 1px solid #cccccc;
 }
 
 input[id=newExpAmt]:focus,
-input[id=newCategAmt]:focus {
+input[id=newCategAmt]:focus,
+input[id=newDescription]:focus {
   border-bottom: 1px solid #0757d0;
 }
 .tapWrapper {

@@ -79,10 +79,10 @@ export const getUserInfo = (request, response) => {
 
 export const newExpense = (request, response) => {
     let { amount, date } = request.body;
-    const {  ww, dow, mm, yy, dd, type, category } = request.body;
+    const {  ww, dow, mm, yy, dd, type, category, description } = request.body;
     amount = parseInt(amount);
     date = new Date(date);
-    const newExpense = { amount, category, date, type, ww, dow, mm, yy, dd };
+    const newExpense = { amount, category, date, type, ww, dow, mm, yy, dd, description};
     var newExpenseInstance = new Expenses({
         token: request.session.token,
         ...newExpense
@@ -149,7 +149,7 @@ export const getExpenseData = (request, response) => {
             _id: { type: '$type' },
             amount: { $sum: '$amount' },
             type: { '$first': '$type' },
-            transactionList: { $push: { category: '$category', amount: '$amount', date: '$date', id: '$_id' } }
+            transactionList: { $push: { category: '$category', amount: '$amount', date: '$date', id: '$_id', description: '$description' } }
         }
     };
     const unwind = { $unwind: '$transactionList' };
@@ -263,16 +263,16 @@ export const deleteExpenseDate = (request, response) => {
 
 export const editExpense = (request, response) => {
     let {amount, date} = request.body;
-    const {  id, ww, dow, mm, yy, dd, type, category } = request.body;
+    const {  id, ww, dow, mm, yy, dd, type, category, description } = request.body;
     amount = parseInt(amount);
     date = new Date(date);
-    const newExpense = { amount, category, date, type, ww, dow, mm, yy, dd };
+    const newExpense = { amount, category, date, type, ww, dow, mm, yy, dd, description};
     Expenses.findOneAndUpdate(
         {_id: id},
-        {$set: {'amount': amount, 'category': category, 'date': date, 'type': type, 'ww': ww, 'dd': dd, 'mm': mm, 'yy': yy, 'dow': dow } },
+        {$set: {'amount': amount, 'category': category, 'date': date, 'type': type, 'ww': ww, 'dd': dd, 'mm': mm, 'yy': yy, 'dow': dow, 'description': description } },
         {upsert:true, returnNewDocument : true}
     ).then((doc) => {
-        response.send(doc);
+        response.send({err: false});
     });
 }
 

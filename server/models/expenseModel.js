@@ -23,6 +23,11 @@ const Expenses = mongoose.model('Expenses', {
     trim: true,
     default: 'expense'
   },
+  description: {
+    type: String,
+    required: false,
+    trim: true
+  },
   date: {
     type: Date,
     required: false,

@@ -16,18 +16,22 @@ export default class NewExpense extends Component {
     let  day = '';
     let  month = '';
     let  year = '';
+    let description = '';
     if (props.editTransactionObj) {
       amount = props.editTransactionObj.amount;
       category = props.editTransactionObj.category;
+      description = props.editTransactionObj.description;
       var date = new Date(props.editTransactionObj.date)
       day = date.getDate();
       month = date.getMonth();
       year = date.getFullYear();
+
     }
     this.state = {
       type: 'expense',
       amount: amount,
       category: category,
+      description: description,
       day: day, 
       month: month,
       year: year,
@@ -165,7 +169,7 @@ export default class NewExpense extends Component {
     return true;
   }
   submitNewExpense() {
-    const {amount, day, month, year, type, category} = this.state;
+    const {amount, day, month, year, type, category, description} = this.state;
     const isValidationSuccess = this.validateParams();
     this.setState({disableSubmit: true});
     if (isValidationSuccess) {
@@ -176,7 +180,7 @@ export default class NewExpense extends Component {
       const ww = Math.ceil((firstDayofMonth + date.getDate()) / 7);
       const dow = date.getDay();
       const dd = date.getDate();
-      const params = { amount, type, date, mm, yy, ww, dow, dd, category};
+      const params = { amount, type, date, mm, yy, ww, dow, dd, category, description};
       params.category= params.category.trim().substring(0,1).toUpperCase() + params.category.trim().substring(1);
       if (this.props.editTransactionObj) {
         params.id = this.props.editTransactionObj.id;
@@ -238,6 +242,9 @@ export default class NewExpense extends Component {
           <span className="requiredAshterix"> * </span>
           {error.category ? <div className="errorDiv">{error.category}</div> : null}
           {this.state.frequentCategories.length === 0 ? this.renderInnerTransactioncard() : this.renderFrequentCategories()}
+        </div>
+        <div  className="descriptionInputWrap tc m-5 mT25 ">
+          <input id="newDescription" className="padL10 w75" placeholder="Description" onChange={(e) => this.setState({ description: e.target.value})} value={this.state.description}/>
         </div>
         <div className="spentDay mT25 ">
           <select ref="day" className="w20 " onChange={(e) => this.changeDate({day: e.target.value})} value={this.state.day}>{renderOptions('day')}</select>
