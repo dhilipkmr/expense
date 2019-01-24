@@ -52,6 +52,12 @@ export function amountOnGraph(val) {
   }
 }
 
+export function setLoader(val) {
+  if (typeof(window) !== 'undefined') {
+    window.loader = val;
+  }
+}
+
 export class Ripple extends Component {
   constructor(props) {
     super(props);

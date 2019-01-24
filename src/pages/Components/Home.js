@@ -4,7 +4,7 @@ import NewExpense from './NewExpense';
 import {get_expense_data, get_expense_summary, getUserInfo, logoutUser, deleteExpenseDate} from '../apiCalls/ApiCalls';
 import {MONTH, YEAR, WEEK, MONTHSNAME, MONTHSNAMESHORT} from '../constants/constants';
 import Graph from './Graph';
-import {renderOptions, formatDate, Ripple} from '../utils/utils';
+import {renderOptions, formatDate, Ripple, setLoader} from '../utils/utils';
 import Popup from './Popup';
 import {Prompt} from 'react-router-dom';
 import PageLoader from './PageLoader';
@@ -173,8 +173,8 @@ export default class Home extends Component {
       <div className="menuBar">
         <div ref="popup"className="popup zi9 " onClick={this.leftMenuClick}>
           <div className="sideBar in-bl fl">
-            <Ripple classes="menu-option" onClickHandler={this.navigateToSignIn}>{(!userInfo ? 'Sign In' : 'Logout')}</Ripple>
-            <Ripple classes="menu-option" onClickHandler={() => window.open("https://dhilipkmr.github.io/materializedResume/")}>About Me</Ripple>
+            <Ripple key="logout" classes="menu-option" onClickHandler={this.navigateToSignIn}>{(!userInfo ? 'Sign In' : 'Logout')}</Ripple>
+            <Ripple key="aboutMe" classes="menu-option" onClickHandler={() => window.open("https://dhilipkmr.github.io/materializedResume/")}>About Me</Ripple>
           </div>
         </div>
       </div>
@@ -400,10 +400,12 @@ export default class Home extends Component {
     const {standing = undefined, spent = undefined, plotData = undefined, incomeList = undefined} = this.currentTabData();
     const {togglerHeader, isPrevDisabled, isNextDisabled} = this.getTogglerHeader();
     if (!getExpenseSummarySuccess || !getExpenseDataSuccess) {
+      setLoader(true);
       return (
       <PageLoader/>
       );
     }
+    setLoader(false);
     return (
       <div className="">
         <Prompt when={!showNewExpense} message={() => "Going back will Log you out."}></Prompt>
@@ -433,7 +435,7 @@ export default class Home extends Component {
                 <div className="expenseDaysBtn w85 m10a">
                   <div className="in-bl w33">
                     <div>
-                      <select onChange={(e) => this.toggleType(WEEK, e.target.value)} id="weekSelector db white" value={this.state.selectorWW}>
+                      <select key="weekSelect" onChange={(e) => this.toggleType(WEEK, e.target.value)} id="weekSelector db white" value={this.state.selectorWW}>
                         {renderOptions('week')}
                       </select>
                       <Ripple onClickHandler={() => this.changeExpenseDayFormat(WEEK)}  classes={'padB5 br10 db white padT10 mt5 ' + (activeTab === WEEK ? 'dayTypeBtn-active' : '')}>Week</Ripple>
@@ -442,7 +444,7 @@ export default class Home extends Component {
                     </div>
                   </div>
                   <div className="in-bl w33">
-                    <select onChange={(e) => this.toggleType(MONTH, e.target.value)} id="monthSelector db white" value={this.state.selectorMM}>
+                    <select key="monthSelect" onChange={(e) => this.toggleType(MONTH, e.target.value)} id="monthSelector db white" value={this.state.selectorMM}>
                       {renderOptions('month')}
                     </select>
                     <Ripple onClickHandler={() => this.changeExpenseDayFormat(MONTH)}  classes={'padB5 br10 db white padT10 mt5 ' + (activeTab === MONTH ? 'dayTypeBtn-active' : '')}>Month</Ripple>
@@ -450,7 +452,7 @@ export default class Home extends Component {
                     <div className={'typeBrdrBtm ' + (activeTab === MONTH ? 'w60': '')}></div>
                   </div>
                   <div className="in-bl w33">
-                    <select onChange={(e) => this.toggleType(YEAR, e.target.value)} id="yearSelector db white" value={this.state.selectorYY}>
+                    <select key="yearSelect" onChange={(e) => this.toggleType(YEAR, e.target.value)} id="yearSelector db white" value={this.state.selectorYY}>
                     {renderOptions('year')}
                     </select>
                     <Ripple onClickHandler={() => this.changeExpenseDayFormat(YEAR)}  classes={'padB5 br10 db white padT10 mt5 ' + (activeTab === YEAR ? 'dayTypeBtn-active' : '')}>Year</Ripple>

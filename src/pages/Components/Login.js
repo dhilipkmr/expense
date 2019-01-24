@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import Helmet from 'react-helmet';
 import {signup, signin, logoutUser} from '../apiCalls/ApiCalls';
-import { Ripple} from '../utils/utils';
+import { Ripple, setLoader} from '../utils/utils';
 
 class Login extends Component {
   constructor(props) {
@@ -21,6 +21,10 @@ class Login extends Component {
     if (window.signedIn) {
       this.signoutUser();
     }
+  }
+
+  componentDidMount() {
+    setLoader(false);
   }
 
   signoutUser() {
