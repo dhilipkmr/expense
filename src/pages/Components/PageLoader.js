@@ -7,15 +7,15 @@ const icon =  {
   'color': '#fff',
   'backgroundColor': '#0757d0',
   'borderRadius': '100%',
-  'width': '35px',
-  'height': '35px',
+  'width': '60px',
+  'height': '60px',
   'textAlign': 'center',
-  'margin': '50vh auto',
+  'margin': '45vh auto',
   'zIndex': '7',
   'position': 'relative',
 };
 const val = {
-  'padding': '11px'
+  'padding': '24px'
 };
 
 const rippler =  {
@@ -27,7 +27,7 @@ const rippler =  {
   'height': '0px',
   'backgroundColor': '#0757d0',
   'borderRadius': '50%',
-  'animation': 'rippleLoader 3s ease infinite',
+  'animation': 'rippleLoader 1.5s ease infinite',
   'transform': 'translate(-50%, -50%)'
 }
 

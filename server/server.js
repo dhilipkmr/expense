@@ -65,8 +65,8 @@ const loadHtml = (content) => {
                         '<div>\
                             </div>\
                                 <div style="position: relative">\
-                                    <div style="color: #fff; background-color: #0757d0; border-radius: 100%; width: 35px; height: 35px; text-align: center; margin: 50vh auto;z-index: 7;position: relative;">\
-                                        <div style="padding: 11px"/>\
+                                    <div style="color: #fff; background-color: #0757d0; border-radius: 100%; width: 60px; height: 60px; text-align: center; margin: 45vh auto;z-index: 7;position: relative;">\
+                                        <div style="padding: 24px"/>\
                                             <svg x="0px" y="0px" width="13px" height="13px" viewBox="0 0 401.998 401.998" style={{"enable-background" :"new 0 0 401.998 401.998", "xml:space": "preserve"}}>\
                                                 <g>\
                                                     <g>\
