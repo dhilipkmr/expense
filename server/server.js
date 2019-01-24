@@ -64,7 +64,7 @@ const loadHtml = (content) => {
                             </div>\
                                 <div style="position: relative">\
                                     <div style="color: #fff; background-color: #0757d0; border-radius: 100%; width: 45px; height: 45px; text-align: center; margin: 50vh auto;z-index: 7;position: relative;">\
-                                        <div style="color: white; padding: 12px" />₹</div>\
+                                        <div style="color: white; padding: 12px" /></div>\
                                     </div>\
                                 <span style="position: absolute; top: 50%; left: 50%; width: 1px; height: 1px; background-color: #0757d0; border-radius: 50%; animation: rippleLoader 3s ease infinite;"></span>\
                             </div>\
