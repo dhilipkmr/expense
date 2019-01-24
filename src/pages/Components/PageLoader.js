@@ -23,8 +23,8 @@ const rippler =  {
   'border': '0.01px solid #0757d0',
   'top': '50%',
   'left': '50%',
-  'width': '1px',
-  'height': '1px',
+  'width': '0px',
+  'height': '0px',
   'backgroundColor': '#0757d0',
   'borderRadius': '50%',
   'animation': 'rippleLoader 3s ease infinite',
@@ -35,8 +35,9 @@ function PageLoader() {
   const styleElement = document.createElement('style');
   styleElement.innerHTML = `@keyframes rippleLoader{
     100% {
-      transform: scale(700);
       opacity: 0;
+      width: 400px;
+      height: 400px;
     }
   }`;
   document.head.appendChild(styleElement);

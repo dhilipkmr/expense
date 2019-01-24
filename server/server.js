@@ -50,7 +50,8 @@ const loadHtml = (content) => {
                 <style>
                     @keyframes rippleLoader {
                         100% {
-                            transform: scale(700);
+                           width: 400px;
+                           height: 400px;
                             opacity: 0;
                           }
                     }
@@ -75,7 +76,7 @@ const loadHtml = (content) => {
                                             </svg>\
                                         </div>\
                                     </div>\
-                                <span style="transform: translate(-50%, -50%);position: absolute; top: 50%; left: 50%; width: 1px; height: 1px; background-color: #0757d0; border-radius: 50%; animation: rippleLoader 3s ease infinite;"></span>\
+                                <span style="transform: translate(-50%, -50%);position: absolute; top: 50%; left: 50%; width: 0; height: 0; background-color: #0757d0; border-radius: 50%; animation: rippleLoader 1.5s ease infinite;"></span>\
                             </div>\
                         </div>';
                 </script>
