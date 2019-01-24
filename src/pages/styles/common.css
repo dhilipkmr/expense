@@ -242,6 +242,10 @@ select {
 .padB5 {
 padding-bottom: 5px;
 }
+.padLR5 {
+  padding-right: 5px;
+  padding-left: 5px;
+}
 
 /* Ripple */
 [ripple] {

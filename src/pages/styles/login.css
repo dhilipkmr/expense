@@ -23,6 +23,7 @@ input[id=loginUsername],input[id=loginPwd] {
   background: transparent;
   border: none;
   border-bottom: 1px solid #585858;
+  min-width:180px;
 }
 input[id=loginUsername]:focus, 
 input[id=loginPwd]:focus{

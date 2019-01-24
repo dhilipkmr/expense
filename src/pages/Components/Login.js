@@ -135,15 +135,15 @@ class Login extends Component {
             {this.state.error && <div id="errorDiv" className="textCenter red ">{this.state.msg}</div>}
             <div className="textCenter ">
               <div className="new di">
-                <Ripple classes="in-bl newBtn loginBtns themeBg" onClickHandler={() => this.signIn(false)}>{signinText}</Ripple>
+                <Ripple classes="in-bl newBtn loginBtns themeBg" onClickHandler={() => this.signIn(false)}><span className="padLR5">{signinText}</span></Ripple>
               </div>
               <div className="new di">
-                <Ripple classes="in-bl newBtn loginBtns themeBg" onClickHandler={this.signUp}>{signupText}</Ripple>
+                <Ripple classes="in-bl newBtn loginBtns themeBg" onClickHandler={this.signUp}><span className="padLR5">{signupText}</span></Ripple>
               </div>
             </div>
             <div className="textCenter ">
               <div className="new">
-                <Ripple classes="in-bl newBtn loginBtns testLogin themeBg" onClickHandler={() => this.signIn(true)}>{continueText}</Ripple>
+                <Ripple classes="in-bl newBtn loginBtns testLogin themeBg" onClickHandler={() => this.signIn(true)}><span className="padLR5">{continueText}</span></Ripple>
               </div>
             </div>
 

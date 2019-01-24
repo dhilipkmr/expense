@@ -7,6 +7,7 @@ import Graph from './Graph';
 import {renderOptions, formatDate, Ripple} from '../utils/utils';
 import Popup from './Popup';
 import {Prompt} from 'react-router-dom';
+import PageLoader from './PageLoader';
 
 export default class Home extends Component {
   constructor(props) {
@@ -117,7 +118,7 @@ export default class Home extends Component {
 
     // if (Object.keys(this.state[activeTabData]).length === 0 || loadNewSummaryData) {
       get_expense_summary(params).then((resp) => {
-        this.setState({[activeTabData] : {...this.state[activeTabData], plotData: {...resp.data}}});
+        this.setState({[activeTabData] : {...this.state[activeTabData], plotData: {...resp.data}}, getExpenseSummarySuccess: true});
       }, (err) => {
         console.log('Unable to Get Expense Summary Details', err);
       });
@@ -131,7 +132,7 @@ export default class Home extends Component {
     // if (Object.keys(this.state[activeTabData]).length === 0 || loadNewExpenseData) {
       get_expense_data(params).then((resp) => {
         const {expenseList, incomeList, standing, spent, ww, yy, mm, dd} = resp.data;
-        this.setState({[activeTabData] : {...this.state[activeTabData], expenseList, incomeList, standing, spent, ww, yy, mm,dd}, selectorMM:mm, selectorWW: ww, selectorYY: yy});
+        this.setState({[activeTabData] : {...this.state[activeTabData], expenseList, incomeList, standing, spent, ww, yy, mm,dd}, selectorMM:mm, selectorWW: ww, selectorYY: yy, getExpenseDataSuccess: true});
        }, (err) => {
          console.log('Unable to Get Expense Details', err);
        });
@@ -395,9 +396,14 @@ export default class Home extends Component {
   }
 
   render() {
-    const {activeTab, showNewExpense, viewMore = false, editExpense, editTransactionObj} = this.state;
+    const {activeTab, showNewExpense, viewMore = false, editExpense, editTransactionObj, getExpenseSummarySuccess, getExpenseDataSuccess} = this.state;
     const {standing = undefined, spent = undefined, plotData = undefined, incomeList = undefined} = this.currentTabData();
     const {togglerHeader, isPrevDisabled, isNextDisabled} = this.getTogglerHeader();
+    if (!getExpenseSummarySuccess || !getExpenseDataSuccess) {
+      return (
+      <PageLoader/>
+      );
+    }
     return (
       <div className="">
         <Prompt when={!showNewExpense} message={() => "Going back will Log you out."}></Prompt>

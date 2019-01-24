@@ -57,54 +57,41 @@ export class Ripple extends Component {
     super(props);
   }
 
-  debounce(func, delay) {
-    var inDebounce;
-    inDebounce = undefined;
-    return function() {
-      var args, context;
-      context = this;
-      args = arguments;
-      clearTimeout(inDebounce);
-      return inDebounce = setTimeout(function() {
-        return func.apply(context, args);
-      }, delay);
-    };
+  callCleanUp(cleanup, delay) {
+      var bounce;
+      return function() {
+        const target = arguments[0].currentTarget;
+        clearTimeout(bounce);
+        bounce = setTimeout(function() {
+          cleanup(target);
+        }, delay);
+      }
   }
 
   showRipple(e) {
-    var pos, ripple, rippler, size, style, x, y;
-    ripple = this;
-    rippler = document.createElement('span');
-    size = ripple.offsetWidth;
-    pos = ripple.getBoundingClientRect();
-    x = e.pageX - pos.left - (size / 2);
-    y = e.pageY - pos.top - (size / 2);
-    style = 'top:' + y + 'px; left: ' + x + 'px; height: ' + size + 'px; width: ' + size + 'px;';
-    ripple.rippleContainer.appendChild(rippler);
+    const rippleContainer = e.currentTarget;
+    const size = rippleContainer.offsetWidth;
+    const pos = rippleContainer.getBoundingClientRect();
+    const x = e.pageX - pos.x - (size / 2);
+    const y = e.pageY - pos.y - (size / 2);
+    const style = 'top:' + y + 'px; left: ' + x + 'px; height: ' + size + 'px; width: ' + size + 'px;';
+    const rippler = document.createElement('span');
+    rippleContainer.appendChild(rippler);
     return rippler.setAttribute('style', style);
   }
 
-  cleanUp() {
-    while (this.rippleContainer.firstChild) {
-      this.rippleContainer.removeChild(this.rippleContainer.firstChild);
+  cleanUp(elt) {
+    while (elt.firstChild) {
+      elt.removeChild(elt.firstChild);
     }
   }
 
-  componentDidMount() {
-    const ripple = this.refs.targetElement;
-    const rippleContainer = document.createElement('div');
-    rippleContainer.className = 'ripple--container';
-    ripple.addEventListener('mousedown', this.showRipple);
-    ripple.addEventListener('mouseup', this.debounce(this.cleanUp, 2000));
-    ripple.rippleContainer = rippleContainer;
-    ripple.appendChild(rippleContainer);
-  }
-
   render() {
-    const {classes = "", onClickHandler = null} = this.props;
+    const {children= null, classes = "", onClickHandler = null} = this.props;
     return (
       <div ref="targetElement" className={classes} onClick={onClickHandler} ripple="ripple">
-        {this.props.children ? this.props.children: null}
+        {children}
+        <div className="ripple--container" onMouseDown={this.showRipple} onMouseUp={this.callCleanUp(this.cleanUp, 2000)}></div>
       </div>
     );
   }
