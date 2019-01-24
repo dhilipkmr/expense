@@ -43,7 +43,7 @@ function PageLoader() {
     <div>
       <div style={{...wrapper}}>
         <div style={{...icon}}>
-          <div style={{...val}}>E</div>
+          <div style={{...val}}>₹</div>
         </div>
         <span style={{...rippler}}></span>
       </div>
