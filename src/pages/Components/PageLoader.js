@@ -27,7 +27,8 @@ const rippler =  {
   'height': '1px',
   'backgroundColor': '#0757d0',
   'borderRadius': '50%',
-  'animation': 'rippleLoader 3s ease infinite'
+  'animation': 'rippleLoader 3s ease infinite',
+  'transform': 'translate(-50%, -50%)'
 }
 
 function PageLoader() {
