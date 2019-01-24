@@ -399,7 +399,7 @@ export default class Home extends Component {
     const {activeTab, showNewExpense, viewMore = false, editExpense, editTransactionObj, getExpenseSummarySuccess, getExpenseDataSuccess} = this.state;
     const {standing = undefined, spent = undefined, plotData = undefined, incomeList = undefined} = this.currentTabData();
     const {togglerHeader, isPrevDisabled, isNextDisabled} = this.getTogglerHeader();
-    if (!getExpenseSummarySuccess || getExpenseDataSuccess) {
+    if (!getExpenseSummarySuccess || !getExpenseDataSuccess) {
       setLoader(true);
       return (
       <PageLoader/>
