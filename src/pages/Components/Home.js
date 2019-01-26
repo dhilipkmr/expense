@@ -412,7 +412,7 @@ export default class Home extends Component {
         <div>
           <div ref="backDrop" className={'transition1a zi9 ' + ((showNewExpense || editExpense) ? 'backDrop' : '')} onClick={() => this.newExpense(false)}></div>
           {this.renderLeftMenuBar()}
-          <div ref="mainContent" className="mainContent">
+          <div ref="mainContent" className="mainContent ">
             <div className="">
               <div ref="firstHalfLandingTxt" className="transition0_5 first-half-landing">
                 <div className="standing">
