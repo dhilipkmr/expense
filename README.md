@@ -1,7 +1,7 @@
 # Expense Manager
  A Full Stack Web Application Development to manage expenses through Mongodb, Express, ReactJS and Node[MERN].
 
-#Application Screenshot
+# Application Screenshot
 
 <p align="center">
   <img src="https://raw.githubusercontent.com/dhilipkmr/webapp-samples/master/images/expense/expense_home.png" width="350px" alt="Expense Home" title="Expense Home" height: "720px">
