@@ -3,8 +3,11 @@
 
 #Application Screenshot
 
-![alt Expense Home](https://raw.githubusercontent.com/dhilipkmr/webapp-samples/master/images/expense/expense_home.png)
-![alt Adding New Expense](https://raw.githubusercontent.com/dhilipkmr/webapp-samples/master/images/expense/add_expense.png)
+<p align="center">
+  <img src="https://raw.githubusercontent.com/dhilipkmr/webapp-samples/master/images/expense/expense_home.png" width="350px" alt="Expense Home" title="Expense Home" height: "720px">
+  <img src="https://raw.githubusercontent.com/dhilipkmr/webapp-samples/master/images/expense/add_expense.png" width="350px" alt="Add Expense" title= "Add Expense" height:"720px">
+</p>
+
 
 
 # References:
