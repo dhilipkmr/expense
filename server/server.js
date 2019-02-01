@@ -4,6 +4,7 @@ import env from './config/config';
 import express from 'express';
 import bodyParser from 'body-parser';
 var session = require('express-session');
+var compression = require('compression');
 
 import App from '../src/app'
 import './db/mongoose';
@@ -13,6 +14,7 @@ const MongoStore = require('connect-mongo')(session);
 const app = express();
 const port = process.env.PORT;
 
+app.use(compression());
 app.use(session({
     secret: 'foo',
     resave: true,
