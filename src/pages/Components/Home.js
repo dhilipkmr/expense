@@ -174,7 +174,7 @@ export default class Home extends Component {
         <div ref="popup"className="popup zi9 " onClick={this.leftMenuClick}>
           <div className="sideBar in-bl fl">
             <Ripple key="logout" classes="menu-option" onClickHandler={this.navigateToSignIn}>{(!userInfo ? 'Sign In' : 'Logout')}</Ripple>
-            <Ripple key="aboutMe" classes="menu-option" onClickHandler={() => window.open("https://dhilipkmr.github.io/materializedResume/")}>About Me</Ripple>
+            <Ripple key="aboutMe" classes="menu-option" onClickHandler={() => window.open("https://dhilipkmr.github.io/aboutDhilip/")}>About Me</Ripple>
           </div>
         </div>
       </div>
