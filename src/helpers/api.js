@@ -9,3 +9,9 @@ export const save_schedules = (params) => {
   const url = '/save_schedule';
   return axios.post(url, { block, floor, meetingRoom, startTime, endTime });
 }
+
+
+export const delete_schedule = (_id) => {
+  const url = "/delete_schedule";
+  return axios.post(url, { _id });
+};

@@ -6,7 +6,7 @@ import bodyParser from 'body-parser';
 import session from 'express-session';
 import compression from 'compression';
 import './db/mongoose';
-import { saveSchedule, getSchedule } from './api/apiCalls';
+import { saveSchedule, getSchedule, deleteSchedule } from './routes/routeHandler';
 
 const MongoStore = require('connect-mongo')(session);
 const app = express();
@@ -34,6 +34,7 @@ const loadHtml = () => {
 
 app.post('/save_schedule', saveSchedule);
 app.get('/get_schedules', getSchedule);
+app.post('/delete_schedule', deleteSchedule);
 
 app.get('*', (req, res) => {
   const template = loadHtml();
